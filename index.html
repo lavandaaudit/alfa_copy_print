@@ -1258,23 +1258,41 @@
       border-color: var(--accent-yellow); color: var(--accent-yellow);
       background: rgba(255,222,0,.07); animation: ctaGlowSoft 3.2s ease-in-out infinite;
     }
+    /* v19b: КП-кнопка в шапці — жовтий акцент, лічильник позицій КП */
+    .btn-kp {
+      border-color: rgba(255,222,0,.45); color: var(--accent-yellow);
+      background: rgba(255,222,0,.05);
+    }
+    .btn-kp:hover { background: rgba(255,222,0,.12); }
+    .btn-kp.has-items {
+      border-color: var(--accent-yellow);
+      background: rgba(255,222,0,.14);
+      animation: ctaGlowSoft 3.2s ease-in-out infinite;
+    }
     .btn-cart-badge {
       min-width: 16px; height: 16px; padding: 0 4px; background: var(--accent-yellow);
       color: #000; font-size: 10px; font-weight: 900; display: inline-flex;
       align-items: center; justify-content: center;
     }
     /* CTA-пара в ціновій картці */
-    .cart-cta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .cart-cta-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
     .btn-cart-add {
-      padding: 11px 8px; background: rgba(255,222,0,.10); border: 1px solid var(--accent-yellow);
-      color: var(--accent-yellow); font-weight: 800; font-size: 12px; cursor: pointer;
+      padding: 11px 6px; background: rgba(255,222,0,.10); border: 1px solid var(--accent-yellow);
+      color: var(--accent-yellow); font-weight: 800; font-size: 11px; cursor: pointer;
       text-transform: uppercase; letter-spacing: .02em; transition: all .15s ease;
       animation: ctaGlow 2.8s ease-in-out infinite;
     }
     .btn-cart-add:hover { background: var(--accent-yellow); color: #000; animation: none; box-shadow: 0 0 26px rgba(255,222,0,.55); }
+    /* v19b: кнопка «В КП» — на синьому акценті, окрема від кошика */
+    .btn-kp-add {
+      padding: 11px 6px; background: rgba(99, 102, 241, 0.10); border: 1px solid #6366f1;
+      color: #a5b4fc; font-weight: 800; font-size: 11px; cursor: pointer;
+      text-transform: uppercase; letter-spacing: .02em; transition: all .15s ease;
+    }
+    .btn-kp-add:hover { background: #6366f1; color: #fff; box-shadow: 0 0 22px rgba(99,102,241,.4); }
     .btn-order-now {
-      padding: 11px 8px; background: #181c29; border: 1px solid var(--border);
-      color: var(--text-main); font-weight: 700; font-size: 12px; cursor: pointer;
+      padding: 11px 6px; background: #181c29; border: 1px solid var(--border);
+      color: var(--text-main); font-weight: 700; font-size: 11px; cursor: pointer;
       text-transform: uppercase; letter-spacing: .02em; transition: all .15s ease;
     }
     .btn-order-now:hover { border-color: var(--accent-yellow); color: var(--accent-yellow); box-shadow: 0 0 14px rgba(255,222,0,.25); }
@@ -1287,6 +1305,20 @@
     .cart-line:hover { background: rgba(255,222,0,.12); }
     .cart-line strong { color: var(--accent-yellow); font-family: var(--font-mono); }
     .cart-line-hint { color: var(--text-dim); font-size: 9.5px; }
+    /* v19b: лайн під КП (аналог cart-line) */
+    .kp-line {
+      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      margin-top: 6px; padding: 6px 9px; background: rgba(99, 102, 241, 0.06);
+      border: 1px dashed rgba(99, 102, 241, 0.4); color: var(--text-main);
+      font-size: 10.5px; cursor: pointer; transition: background .15s ease;
+    }
+    .kp-line:hover { background: rgba(99, 102, 241, 0.14); }
+    .kp-line strong { color: #a5b4fc; font-family: var(--font-mono); }
+    .kp-line-hint { color: var(--text-dim); font-size: 9.5px; }
+    @media (max-width: 720px) {
+      .cart-cta-row { grid-template-columns: 1fr 1fr; }
+      .btn-order-now { grid-column: 1 / -1; }
+    }
 
     /* кошик у модалці */
     .modal-cart-list { display: flex; flex-direction: column; gap: 5px; margin: 10px 0 12px; max-height: 240px; overflow-y: auto; scrollbar-width: thin; }
@@ -1807,6 +1839,74 @@
       border: 1px solid #2a3044; letter-spacing: .5px;
     }
 
+    /* v19a: ІНФО ПРО ТІР ЦІНИ — під інпутом тиражу */
+    .qty-tier-info {
+      margin-top: 8px; padding: 8px 10px;
+      background: rgba(255, 222, 0, 0.04);
+      border: 1px solid rgba(255, 222, 0, 0.18);
+      border-radius: 4px;
+      font-size: 11px; line-height: 1.5;
+      display: none;
+    }
+    .qty-tier-info.show { display: block; }
+    .qty-tier-current {
+      display: flex; align-items: baseline; gap: 6px;
+      flex-wrap: wrap; margin-bottom: 5px;
+    }
+    .qty-tier-current .qtc-label {
+      font-size: 9.5px; font-weight: 800; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--text-dim);
+    }
+    .qty-tier-current .qtc-range {
+      font-family: var(--font-mono); font-weight: 800; color: var(--accent-yellow);
+      font-size: 12px;
+    }
+    .qty-tier-current .qtc-price {
+      color: #fff; font-weight: 700;
+    }
+    .qty-tier-current .qtc-sheets {
+      font-size: 10px; color: var(--text-muted); font-family: var(--font-mono);
+    }
+    .qty-tier-table {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+      gap: 3px; margin-top: 6px;
+    }
+    .qty-tier-cell {
+      padding: 4px 6px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 3px;
+      font-size: 9.5px; line-height: 1.35;
+      display: flex; flex-direction: column; gap: 1px;
+      cursor: pointer; transition: all .12s ease;
+    }
+    .qty-tier-cell:hover { border-color: rgba(255,222,0,.35); background: rgba(255,222,0,.04); }
+    .qty-tier-cell.active {
+      background: rgba(255, 222, 0, 0.14);
+      border-color: var(--accent-yellow);
+      box-shadow: 0 0 10px rgba(255, 222, 0, 0.12);
+    }
+    .qty-tier-cell .qtc-cell-range {
+      font-family: var(--font-mono); font-weight: 800; color: var(--text-muted);
+      font-size: 9px; letter-spacing: .3px;
+    }
+    .qty-tier-cell.active .qtc-cell-range { color: var(--accent-yellow); }
+    .qty-tier-cell .qtc-cell-price {
+      font-family: var(--font-mono); font-weight: 800; color: #fff;
+      font-size: 11px;
+    }
+    .qty-tier-next-hint {
+      margin-top: 6px; padding-top: 6px;
+      border-top: 1px dashed rgba(255,255,255,.08);
+      font-size: 10px; color: var(--text-muted); line-height: 1.5;
+    }
+    .qty-tier-next-hint b { color: #10b981; font-family: var(--font-mono); }
+    .qty-tier-next-hint .qtnh-qty { color: var(--accent-yellow); font-weight: 800; }
+    @media (max-width: 720px) {
+      .qty-tier-table { grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); }
+    }
+
     /* 4. КП — РЕЖИМ ПЕРЕГЛЯДУ ТОВАРІВ З ФОТО */
     .cp-browse {
       flex: 1; overflow: auto; background: #0b0e15; padding: 14px;
@@ -1937,7 +2037,9 @@
     </div>
 
     <div class="topbar-right">
-      <a class="phone-contact" href="tel:+380443338822" title="Зателефонувати в друкарню">📞 (044) 333-88-22</a>
+      <button class="btn-cart btn-kp" id="btnKp" onclick="openProposal()" title="Комерційна пропозиція — збір позицій у таблицю PDF">
+        <span aria-hidden="true">📊</span><span class="btn-cart-label">КП</span><span class="btn-cart-badge" id="kpBadge" style="display:none;">0</span>
+      </button>
       <button class="btn-cart" id="btnCart" onclick="openCartModal()" title="Кошик">
         <span aria-hidden="true">🛒</span><span class="btn-cart-label">Кошик</span><span class="btn-cart-badge" id="cartBadge" style="display:none;">0</span>
       </button>
@@ -2086,13 +2188,13 @@
           <div class="control-row">
             <div class="control-label">
               <span id="qtyLabel">2. Тираж (кількість)</span>
-              <span style="color: var(--text-muted);">готові вироби</span>
+              <span style="color: var(--text-muted);">будь-яке число · готові вироби</span>
             </div>
             <div class="qty-wrap">
               <div class="stepper">
-                <button type="button" class="step-btn" onclick="stepQty(-25)">−</button>
-                <input type="number" id="qtyInput" class="qty-input" value="100" min="1" step="25" oninput="onQtyInput(this.value)">
-                <button type="button" class="step-btn" onclick="stepQty(25)">+</button>
+                <button type="button" class="step-btn" onclick="stepQty(-1)" title="−1">−</button>
+                <input type="number" id="qtyInput" class="qty-input" value="100" min="1" step="1" oninput="onQtyInput(this.value)">
+                <button type="button" class="step-btn" onclick="stepQty(1)" title="+1">+</button>
               </div>
               <span style="font-weight: 700; color: var(--text-muted);">шт.</span>
               <div class="qty-live-total" id="qtyLiveTotal"></div>
@@ -2106,6 +2208,7 @@
               <button type="button" class="opt-chip" onclick="setQty(500)">500</button>
               <button type="button" class="opt-chip" onclick="setQty(1000)">1000</button>
             </div>
+            <div class="qty-tier-info" id="qtyTierInfo" aria-live="polite"></div>
             <div class="offset-note" id="qtyOffsetNote" style="display:none;">
               ⚠ Цифровий друк рахується до 1000 шт (флаєри та листівки — до 2500). Більші тиражі — офсетним
               способом і тут не рахуються. Для офсетного прорахунку: <strong>(044) 333-88-22</strong>
@@ -2304,9 +2407,11 @@
           <div class="pc-spec" id="pcSpec" aria-label="Повна інформація про вибраний виріб"></div>
           <div class="cart-cta-row">
             <button class="btn-cart-add" onclick="addToCart()" title="Додати в кошик і продовжити вибір">🛒 У кошик</button>
+            <button class="btn-kp-add" onclick="addToKp()" title="Додати в комерційну пропозицію і продовжити вибір">📊 В КП</button>
             <button class="btn-order-now" onclick="openModal()" title="Одразу оформити цю позицію">Замовити</button>
           </div>
           <button class="cart-line" id="cartLine" style="display:none;" onclick="openCartModal()"></button>
+          <button class="kp-line" id="kpLine" style="display:none;" onclick="openProposal()"></button>
           <div class="util-btn-row">
             <button class="btn-util" onclick="copySpecText()">📋 Скопіювати</button>
             <button class="btn-util btn-proposal" onclick="openProposal()" title="Комерційна пропозиція — калькулятор усіх товарів зі збереженням у PDF">📊 Комерційна пропозиція</button>
@@ -3894,6 +3999,7 @@
       populatePaperOptions();
       populateFullDbTable();
       loadCart();
+      loadKp();
       renderMockup();
       // Банер: ціна активного виробу (фікс «від 1,15 ₴» зі старого шаблону)
       const bannerPrice = document.getElementById('activeProductFromPrice');
@@ -4267,7 +4373,9 @@
       const mx18 = maxQtyForP(cfg.product);
       if (v > mx18) v = mx18; // понад ліміт — офсет, не рахуємо
       cfg.quantity = v;
-      document.getElementById('qtyInput').value = v;
+      // НЕ перезаписуємо інпут під час введення — інакше курсор стрибає
+      // (тільки клампимо, якщо значення перевищило max)
+      if (parseInt(val, 10) > mx18) document.getElementById('qtyInput').value = v;
       updateQtyChips(v);
       recalc();
     }
@@ -4276,6 +4384,162 @@
       document.querySelectorAll('#qtyPresetChips .opt-chip').forEach(b => {
         b.classList.toggle('active', parseInt(b.textContent, 10) === q);
       });
+    }
+
+    // ===================== v19a: ІНФО ПРО ТІР ЦІНИ =====================
+    // Для поточного виробу і кольоровості рахує, скільки А3-аркушів потрібно
+    // для кожного «круглого» тиражу (25, 50, 100, 250, 500, 1000) і який
+    // відповідний тієр ціни за А3 спрацює. Показує користувачу:
+    //   • поточний тієр (діапазон виробів → ціна за А3)
+    //   • таблицю всіх тієрів з підсвічуванням активного
+    //   • підказку «додайте N шт, щоб зекономити X ₴/А3»
+    function calcProductSheets(qty) {
+      if (!cfg.product || !cfg.product.defaultW) return 0;
+      const w = cfg.width || cfg.product.defaultW;
+      const h = cfg.height || cfg.product.defaultH;
+      const layout = calculateA3Layout(w, h);
+      const itemsPerSheet = layout.count || 1;
+      const pages = cfg.pages || 1;
+      if (pages > 1) {
+        const sides = isDoubleSided(cfg.color) ? 2 : 1;
+        const pagesPerSheet = itemsPerSheet * sides;
+        const sheetsPerCopy = Math.ceil(pages / pagesPerSheet);
+        return sheetsPerCopy * Math.max(1, qty);
+      }
+      return Math.ceil(qty / itemsPerSheet);
+    }
+
+    function findTierBounds(sheets, color) {
+      // Повертає {curTier, nextTier} — curTier: тієр, в який потрапляє sheets
+      const tiers = prices.printTiers[color] || prices.printTiers['4+0'];
+      let prevMax = 0;
+      for (let i = 0; i < tiers.length; i++) {
+        const t = tiers[i];
+        const tMax = (t.max === Infinity || t.max === null) ? Infinity : t.max;
+        if (sheets <= tMax) {
+          return {
+            curTier: { from: prevMax + 1, to: tMax, price: t.price, idx: i },
+            nextTier: (i + 1 < tiers.length) ? { from: tMax + 1, to: (tiers[i+1].max === Infinity ? Infinity : tiers[i+1].max), price: tiers[i+1].price, idx: i+1 } : null
+          };
+        }
+        prevMax = tMax;
+      }
+      const last = tiers[tiers.length - 1];
+      return { curTier: { from: prevMax + 1, to: Infinity, price: last.price, idx: tiers.length - 1 }, nextTier: null };
+    }
+
+    function findQtyRangeForTier(tierIdx, color) {
+      // Для тієру з індексом tierIdx знаходить мінімальний і максимальний тираж ВИРОБУ,
+      // який потрапляє в цей тієр. Діапазон у штуках виробу.
+      const tiers = prices.printTiers[color] || prices.printTiers['4+0'];
+      if (tierIdx < 0 || tierIdx >= tiers.length) return null;
+      const tFrom = tierIdx === 0 ? 1 : (tiers[tierIdx-1].max === Infinity ? 1 : tiers[tierIdx-1].max + 1);
+      const tTo = (tiers[tierIdx].max === Infinity || tiers[tierIdx].max === null) ? null : tiers[tierIdx].max;
+      // Тепер: мінімальний qty виробу, що дає хоча б tFrom аркушів А3,
+      // і максимальний qty, що дає не більше tTo аркушів А3.
+      const w = cfg.width || (cfg.product && cfg.product.defaultW) || 100;
+      const h = cfg.height || (cfg.product && cfg.product.defaultH) || 100;
+      const layout = calculateA3Layout(w, h);
+      const itemsPerSheet = layout.count || 1;
+      const pages = cfg.pages || 1;
+      let qtyMin, qtyMax;
+      if (pages > 1) {
+        const sides = isDoubleSided(cfg.color) ? 2 : 1;
+        const pagesPerSheet = itemsPerSheet * sides;
+        const sheetsPerCopy = Math.ceil(pages / pagesPerSheet);
+        qtyMin = Math.max(1, Math.ceil(tFrom / sheetsPerCopy));
+        qtyMax = tTo === null ? null : Math.floor(tTo / sheetsPerCopy);
+      } else {
+        qtyMin = Math.max(1, Math.ceil(tFrom * itemsPerSheet) === tFrom * itemsPerSheet ? (tFrom - 1) * itemsPerSheet + 1 : tFrom * itemsPerSheet);
+        // Простіше: мінімальний qty такий, що ceil(qty/ips) >= tFrom → qty = (tFrom-1)*ips + 1
+        qtyMin = Math.max(1, (tFrom - 1) * itemsPerSheet + 1);
+        qtyMax = tTo === null ? null : tTo * itemsPerSheet;
+      }
+      // Клампимо до ліміту цифрового друку
+      const maxQ = maxQtyForP(cfg.product);
+      if (qtyMax === null || qtyMax > maxQ) qtyMax = maxQ;
+      return { qtyMin, qtyMax, itemsPerSheet, sheetsFrom: tFrom, sheetsTo: tTo };
+    }
+
+    function updateQtyTierInfo(res) {
+      const host = document.getElementById('qtyTierInfo');
+      if (!host) return;
+      const kind = currentProductKind();
+      if (kind !== 'print') { host.classList.remove('show'); host.innerHTML = ''; return; }
+      // рахуємо кількість А3 аркушів для поточного тиражу
+      const sheets = (typeof res === 'object' && res && res.blockSheets) ? res.blockSheets
+                   : calcProductSheets(cfg.quantity);
+      if (!sheets || sheets < 1) { host.classList.remove('show'); host.innerHTML = ''; return; }
+      const { curTier, nextTier } = findTierBounds(sheets, cfg.color);
+      if (!curTier) { host.classList.remove('show'); host.innerHTML = ''; return; }
+      // Діапазон виробу для поточного тієру
+      const curRange = findQtyRangeForTier(curTier.idx, cfg.color);
+      const nextRange = nextTier ? findQtyRangeForTier(nextTier.idx, cfg.color) : null;
+      const tiers = prices.printTiers[cfg.color] || prices.printTiers['4+0'];
+      let prevMax = 0;
+      const allRanges = tiers.map((t, i) => {
+        const from = prevMax + 1;
+        const to = (t.max === Infinity || t.max === null) ? null : t.max;
+        prevMax = to || prevMax;
+        const rng = findQtyRangeForTier(i, cfg.color);
+        return { idx: i, from, to, price: t.price, qtyMin: rng ? rng.qtyMin : null, qtyMax: rng ? rng.qtyMax : null };
+      });
+
+      const fmtRange = (r) => {
+        if (!r) return '—';
+        if (r.qtyMax === null) return r.qtyMin + '+';
+        // Якщо ліміт цифрового друку менший за верхню межу тієру —
+        // показуємо «від» з плюсиком (наступний тієр недосяжний в цифрові)
+        if (r.qtyMax <= r.qtyMin) return r.qtyMin + '+';
+        return r.qtyMin + '–' + r.qtyMax;
+      };
+      const fmtSheetsRange = (cur) => {
+        if (!cur) return '—';
+        if (cur.to === Infinity || cur.to === null) return cur.from + '+ А3';
+        return cur.from + '–' + cur.to + ' А3';
+      };
+
+      // підказка про наступний тієр
+      let nextHintHtml = '';
+      if (nextRange && nextRange.qtyMin !== null) {
+        const need = Math.max(0, nextRange.qtyMin - cfg.quantity);
+        const save = Math.round((curTier.price - nextTier.price) * sheets * 100) / 100;
+        if (need > 0 && save > 0) {
+          nextHintHtml = '<div class="qty-tier-next-hint">' +
+            '💡 Додайте ще <span class="qtnh-qty">' + need + ' шт.</span> (' + (nextRange.qtyMin) + ' загалом) — ' +
+            'ціна знижчиться до <b>' + formatUAH(nextTier.price) + '/А3</b> ' +
+            '(економія <b>~' + formatUAH(save) + '</b> на замовленні).</div>';
+        } else if (need <= 0) {
+          // вже в наступному тієрі (не повинно трапитись, але страховка)
+        } else {
+          nextHintHtml = '<div class="qty-tier-next-hint">📊 Цей тираж — у найдешевшому тієрі цифрового друку.</div>';
+        }
+      } else {
+        nextHintHtml = '<div class="qty-tier-next-hint">📊 Цей тираж — у найдешевшому тієрі цифрового друку (' + formatUAH(curTier.price) + '/А3).</div>';
+      }
+
+      const cellsHtml = allRanges.map(r => {
+        // Недосяжні тієри (qtyMin перевищує ліміт цифрового друку) — не показуємо
+        const maxQ = maxQtyForP(cfg.product);
+        if (r.qtyMin !== null && r.qtyMin > maxQ) return '';
+        const cellQty = r.qtyMin ? Math.max(r.qtyMin, 1) : 1;
+        return '<div class="qty-tier-cell' + (r.idx === curTier.idx ? ' active' : '') + '"' +
+          (r.qtyMin ? ' onclick="setQty(' + cellQty + ')" title="Встановити ' + cellQty + ' шт."' : '') + '>' +
+          '<span class="qtc-cell-range">' + fmtRange(r) + ' шт</span>' +
+          '<span class="qtc-cell-price">' + formatUAH(r.price) + '/А3</span>' +
+        '</div>';
+      }).join('');
+
+      host.innerHTML =
+        '<div class="qty-tier-current">' +
+          '<span class="qtc-label">Ціна за А3:</span>' +
+          '<span class="qtc-range">' + formatUAH(curTier.price) + '</span>' +
+          '<span class="qtc-price">за ' + sheets + ' арк. А3</span>' +
+          '<span class="qtc-sheets">· ' + fmtSheetsRange(curTier) + '</span>' +
+        '</div>' +
+        '<div class="qty-tier-table">' + cellsHtml + '</div>' +
+        nextHintHtml;
+      host.classList.add('show');
     }
 
     // v18: ліміт тиражу виробу (все до 1000, флаєри/листівки до 2500) —
@@ -4414,6 +4678,8 @@
         var s = document.getElementById('sumA3Count');
         if (s) pcR.textContent = s.textContent;
       }
+      // v19a: оновлюємо блок тієрів ціни під інпутом тиражу
+      try { updateQtyTierInfo(res); } catch (e) { /* uninsured but non-fatal */ }
     }
 
     // --- Master Recalculate and Render ---
@@ -4969,6 +5235,63 @@
           line.innerHTML = '<span>🛒 У кошику ' + cart.length + ' поз.</span><strong>' + formatUAH(cartTotalSum()) + '</strong><span class="cart-line-hint">оформити →</span>';
         } else { line.style.display = 'none'; line.innerHTML = ''; }
       }
+    }
+
+    // ===================== v19b: КП — збір позицій (аналог кошика, але в КП) =====================
+    // cpRows живе в localStorage окремо від кошика.addToKp() додає поточний розрахунок у КП,
+    // а openProposal() відкриває збережені позиції (а не перезаписує їх кошиком).
+    let cpRows = [];
+    let cpSeq = 1;
+    let cpBrowseAddedKp = new Set(); // які вироби вже в КП (для UI-підсвічування browse-режиму)
+    const KP_LS_KEY = 'alfa-kp-v1';
+
+    function kpTotalSum() { return cpRows.reduce((s, r) => s + (r.custom ? Math.round((r.unit || 0) * (r.qty || 1) * 100) / 100 : (r.item.total || 0)), 0); }
+
+    function loadKp() {
+      try {
+        const raw = localStorage.getItem(KP_LS_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) cpRows = parsed;
+        }
+      } catch (e) { cpRows = []; }
+      // індекс ключів — щоб нові не зіткнулися з існуючими
+      const maxSeq = cpRows.reduce((m, r) => {
+        const km = r.key && r.key.match(/-(\d+)$/);
+        return km ? Math.max(m, parseInt(km[1], 10)) : m;
+      }, 0);
+      if (maxSeq >= cpSeq) cpSeq = maxSeq + 1;
+      // синхронізуємо позначки вже-доданих для browse-режиму
+      cpBrowseAddedKp = new Set(cpRows.filter(r => !r.custom && r.item && r.item.cfgSnap && r.item.cfgSnap.product).map(r => r.item.cfgSnap.product.id));
+      updateKpBadge();
+    }
+    function saveKp() {
+      try { localStorage.setItem(KP_LS_KEY, JSON.stringify(cpRows)); } catch (e) {}
+      updateKpBadge();
+    }
+    function updateKpBadge() {
+      const b = document.getElementById('kpBadge');
+      const btn = document.getElementById('btnKp');
+      const line = document.getElementById('kpLine');
+      const n = cpRows.length;
+      if (b) { b.textContent = String(n); b.style.display = n ? 'inline-flex' : 'none'; }
+      if (btn) btn.classList.toggle('has-items', n > 0);
+      if (line) {
+        if (n) {
+          line.style.display = 'flex';
+          line.innerHTML = '<span>📊 У КП ' + n + ' поз.</span><strong>' + formatUAH(kpTotalSum()) + '</strong><span class="kp-line-hint">відкрити →</span>';
+        } else { line.style.display = 'none'; line.innerHTML = ''; }
+      }
+    }
+
+    // Додає поточний розрахунок калькулятора в КП (дзеркало addToCart, але в cpRows)
+    function addToKp() {
+      const row = cpRowFromCurrent();
+      if (!row || !row.item) { showToast('Не вдалося додати в КП — виберіть виріб'); return; }
+      cpRows.push(row);
+      cpBrowseAddedKp.add(cfg.product ? cfg.product.id : null);
+      saveKp();
+      showToast('📊 ' + (cfg.product ? productCodeOf(cfg.product) : '') + ' ' + (cfg.product ? cfg.product.name : '') + ' — додано в КП (' + cpRows.length + ' поз.). Вибирайте далі');
     }
 
     function cartSpecStatic(res) {
@@ -6065,16 +6388,13 @@
     // додавай/видаляй позиції, міняй кількість (ціна рахується тим самим движком),
     // дописуй свій товар, зберігай PDF (діалог друку браузера).
     let cpOverlayEl = null;
-    let cpRows = [];
     let cpPick = '';
     let cpBrowseMode = false; // v19: режим перегляду товарів з фото
     let cpBrowseQ = '';
     let cpBrowseCat = 'all';
     let cpBrowseAddedCart = new Set(); // які вироби вже в кошику (для UI-підсвічування)
-    let cpBrowseAddedKp = new Set();   // які вироби вже в КП
     let cpDocNum = '';
     let cpDocDate = '';
-    let cpSeq = 1;
     const CP_PHONE = '(044) 333-88-22';
     const CP_EMAIL = '2294598@gmail.com';
 
@@ -6154,10 +6474,14 @@
         document.addEventListener('keydown', cpEscHandler);
       }
       const d = new Date();
-      cpDocNum = 'КП-' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '-' + String(Math.floor(Math.random() * 900) + 100);
-      cpDocDate = d.toLocaleDateString('uk-UA', { day: '2-digit', month: 'long', year: 'numeric' });
-      // Сід: позиції кошика, а якщо він порожній — поточний розрахунок калькулятора
-      cpRows = cart.length ? cart.map(cpRowFromCartItem) : [cpRowFromCurrent()];
+      if (!cpDocNum) cpDocNum = 'КП-' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '-' + String(Math.floor(Math.random() * 900) + 100);
+      if (!cpDocDate) cpDocDate = d.toLocaleDateString('uk-UA', { day: '2-digit', month: 'long', year: 'numeric' });
+      // v19b: НЕ перезаписуємо cpRows кошиком. Якщо КП порожня — додаємо поточний розрахунок
+      // як стартову позицію. Інакше відкриваємо вже збережені позиції (їх міг накопичити addToKp).
+      if (!cpRows.length) {
+        cpRows = [cpRowFromCurrent()];
+        saveKp();
+      }
       // v19: синхронізуємо позначки «вже додано» з поточним кошиком/КП
       cpBrowseAddedCart = new Set(cart.map(it => it.cfgSnap && it.cfgSnap.product && it.cfgSnap.product.id).filter(Boolean));
       cpBrowseAddedKp = new Set(cpRows.filter(r => !r.custom && r.item && r.item.cfgSnap && r.item.cfgSnap.product).map(r => r.item.cfgSnap.product.id));
@@ -6182,16 +6506,19 @@
       if (!row) return;
       cpRows.push(row);
       cpPick = '';
+      saveKp();
       cpRender();
     }
 
     function cpAddCustom() {
       cpRows.push({ key: cpNextKey(), custom: true, name: '', unit: 0, qty: 1, step: 1 });
+      saveKp();
       cpRender();
     }
 
     function cpDel(key) {
       cpRows = cpRows.filter(r => r.key !== key);
+      saveKp();
       cpRender();
     }
 
@@ -6199,8 +6526,9 @@
     function cpQty(key, delta) {
       const r = cpRows.find(x => x.key === key);
       if (!r) return;
-      if (r.custom) { r.qty = Math.max(1, (r.qty || 1) + delta); cpRender(); return; }
+      if (r.custom) { r.qty = Math.max(1, (r.qty || 1) + delta); saveKp(); cpRender(); return; }
       recalcCartRow(r.item, (r.item.qty || 1) + delta);
+      saveKp();
       cpRender();
     }
 
@@ -6208,20 +6536,22 @@
       const r = cpRows.find(x => x.key === key);
       if (!r) return;
       const q = Math.max(1, parseInt(val, 10) || 1);
-      if (r.custom) { r.qty = q; cpRender(); return; }
+      if (r.custom) { r.qty = q; saveKp(); cpRender(); return; }
       recalcCartRow(r.item, q);
+      saveKp();
       cpRender();
     }
 
     // Свій товар: назва і ціна за одиницю
     function cpCustomName(key, val) {
       const r = cpRows.find(x => x.key === key);
-      if (r) { r.name = val; cpRender(); }
+      if (r) { r.name = val; saveKp(); cpRender(); }
     }
     function cpCustomPrice(key, val) {
       const r = cpRows.find(x => x.key === key);
       if (!r) return;
       r.unit = Math.max(0, Math.round((parseFloat(String(val).replace(',', '.')) || 0) * 100) / 100);
+      saveKp();
       cpRender();
     }
 
@@ -6488,6 +6818,7 @@
       if (!row) return;
       cpRows.push(row);
       cpBrowseAddedKp.add(id);
+      saveKp();
       showToast('📊 ' + productCodeOf(p) + ' у КП — шукайте далі');
       cpRenderBrowseOnly();
     }
