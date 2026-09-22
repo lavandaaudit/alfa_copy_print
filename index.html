@@ -1883,6 +1883,306 @@
       .calc-bottom-grid > * { grid-column: 1 !important; position: static !important; }
     }
 
+    /* ============================================================
+       v19f: ПОВНА АДАПТИВНІСТЬ — фікси стисненого калькулятора
+       ============================================================ */
+
+    /* === Середні екрани (1281-1500px): типовий ноутбук ===
+       Проблема: AI 304 + Продукти 368 + padding 54 = 726px "з'їдають"
+       На 1440px головна колонка отримує лише 698px, params — 388px (тісно)
+       Рішення: AI-сайдбар стає floating FAB раніше (на 1500px замість 1100px) */
+    @media (max-width: 1500px) and (min-width: 1281px) {
+      .workspace { display: block; padding: 12px 14px 0; }
+      .ws-ai { display: contents; }
+      .ws-ai .ai-panel {
+        position: fixed; top: auto; bottom: 10px; left: 10px;
+        width: calc(100vw - 20px); max-width: 380px;
+        height: min(70vh, 560px); max-height: none; border-radius: 14px;
+      }
+      .ws-ai .ai-fab {
+        position: fixed; top: 62px; left: 14px;
+        width: 56px; height: 58px; flex-direction: column; justify-content: center;
+        gap: 3px; padding: 0;
+        animation: aiFloat 3s ease-in-out infinite, aiPulse 2.4s ease-in-out infinite;
+      }
+      /* Dashboard-grid розгортається на всю ширину */
+      .dashboard-grid { grid-template-columns: minmax(0, 1fr) 320px; gap: 12px; }
+      .calc-col { gap: 12px; }
+      /* calc-bottom-grid — ціна 280px + params 1fr, менший gap */
+      .calc-bottom-grid { grid-template-columns: minmax(260px, 280px) minmax(0, 1fr); gap: 8px; }
+      /* Розміри фото-картки трохи зменшуємо */
+      .calc-photo-card .mockup-window { height: 460px; }
+    }
+
+    /* === Малі ноутбуки (1101-1280px): все стиснуто ще більше ===
+       Каталог-сайдбар переїжджає вниз, калькулятор на повну ширину */
+    @media (max-width: 1280px) and (min-width: 1101px) {
+      .workspace { display: block; padding: 12px 14px 0; }
+      .ws-ai { display: contents; }
+      .ws-ai .ai-panel {
+        position: fixed; top: auto; bottom: 10px; left: 10px;
+        width: calc(100vw - 20px); max-width: 360px;
+        height: min(72vh, 560px); max-height: none; border-radius: 14px;
+      }
+      .ws-ai .ai-fab {
+        position: fixed; top: 62px; left: 14px;
+        width: 52px; height: 54px; flex-direction: column; justify-content: center;
+        gap: 3px; padding: 0;
+        animation: aiFloat 3s ease-in-out infinite, aiPulse 2.4s ease-in-out infinite;
+      }
+      .ws-ai .ai-fab .ai-fab-label { display: none; }
+      /* Каталог-сайдбар — під калькулятором, не sticky */
+      .dashboard-grid { grid-template-columns: 1fr; gap: 12px; }
+      .dashboard-grid > aside.panel {
+        position: static; max-height: none;
+        order: 2; /* після калькулятора */
+      }
+      .dashboard-grid > aside.panel .product-items-list { max-height: 380px; }
+      .calc-col { order: 1; }
+      /* calc-bottom-grid: ціна + params — 2 колонки */
+      .calc-bottom-grid { grid-template-columns: minmax(280px, 320px) minmax(0, 1fr); gap: 10px; }
+    }
+
+    /* === Планшети (821-1100px): 1 колонка калькулятор + каталог знизу === */
+    @media (max-width: 1100px) and (min-width: 821px) {
+      .calc-photo-card .mockup-window { height: 380px; }
+      .calc-bottom-grid { grid-template-columns: 1fr; gap: 10px; }
+      .calc-bottom-grid > * { grid-column: 1 !important; position: static !important; }
+      /* Пріоритет порядку: фото → ціна (стики) → параметри → деталі */
+      .calc-bottom-grid > .price-card { order: 1; }
+      .calc-bottom-grid > .calc-params { order: 2; }
+      .calc-bottom-grid > .rail-details { order: 3; }
+    }
+
+    /* === Великі мобільні / малі планшети (641-820px) === */
+    @media (max-width: 820px) and (min-width: 641px) {
+      .calc-photo-card .mockup-window { height: 320px; }
+      .calc-photo-card { padding: 8px 10px 10px; }
+      .calc-photo-card .photo-label { font-size: 8.5px; }
+      .photo-label-hint { font-size: 8.5px; }
+      /* CTA: 3 → 2 + 1 (У кошик | В КП / Замовити на повну) */
+      .cart-cta-row { grid-template-columns: 1fr 1fr !important; }
+      .btn-order-now { grid-column: 1 / -1; }
+      .btn-cart-add, .btn-kp-add { font-size: 10.5px; padding: 10px 6px; }
+      /* Зменшуємо параметри */
+      .calc-col .panel-header { padding: 10px 12px; }
+      .calc-col .panel-body { padding: 12px 12px 14px; }
+      .control-row { margin-bottom: 10px !important; }
+      .opt-chip { padding: 5px 8px; font-size: 10.5px; }
+      .btn-group { flex-wrap: wrap; gap: 4px; }
+      /* Тієр-таблиця — компактніше */
+      .qty-tier-table { grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)) !important; gap: 2px; }
+      .qty-tier-cell { padding: 3px 4px; font-size: 9px; }
+      .qty-tier-cell .qtc-cell-price { font-size: 10px; }
+      /* AI чіпи — компакно */
+      .ai-chips { max-height: 200px; }
+    }
+
+    /* === Мобільні (481-640px) === */
+    @media (max-width: 640px) and (min-width: 481px) {
+      .calc-photo-card .mockup-window { height: 280px; }
+      .calc-photo-card { padding: 6px 8px 8px; }
+      /* CTA: 2 колонки */
+      .cart-cta-row { grid-template-columns: 1fr 1fr; gap: 4px; }
+      .btn-cart-add, .btn-kp-add { font-size: 10px; padding: 9px 4px; letter-spacing: 0; }
+      .btn-order-now { grid-column: 1 / -1; padding: 9px 6px; font-size: 10.5px; }
+      .pc-total { font-size: 24px !important; }
+      .pc-unit { font-size: 11px !important; }
+      /* Контроли — щільніше */
+      .control-label { font-size: 10.5px !important; }
+      .opt-chip { padding: 5px 7px; font-size: 10px; }
+      .btn-group { gap: 3px; }
+      /* Лайн кошика й КП — компакно */
+      .cart-line, .kp-line { padding: 5px 7px; font-size: 10px; }
+      .cart-line strong, .kp-line strong { font-size: 11px; }
+      /* AI */
+      .ws-ai .ai-fab { top: 58px; left: 10px; width: 46px; height: 48px; }
+      .ws-ai .ai-fab .ai-fab-label { display: none; }
+      .ws-ai .ai-panel { width: calc(100vw - 16px); left: 8px; bottom: 8px; height: min(76vh, 560px); }
+      .ai-chips { max-height: 180px; padding: 6px 8px; }
+      .ai-chip { font-size: 8.5px; padding: 2px 5px; min-height: 19px; }
+    }
+
+    /* === Маленькі мобільні (≤480px) === */
+    @media (max-width: 480px) {
+      /* Робоча зона — без зайвих відступів */
+      .workspace { padding: 10px 8px 0; }
+      .ws-main { min-width: 0; }
+      .view-container { padding: 0 !important; }
+      /* Фото-картка — компактно */
+      .calc-photo-card { padding: 6px 6px 8px; gap: 6px; }
+      .calc-photo-card .photo-label { font-size: 8px; letter-spacing: 0.8px; }
+      .calc-photo-card .photo-label-hint { font-size: 8px; }
+      .calc-photo-card .mockup-window { height: 220px; }
+      .mockup-num { font-size: 8.5px; padding: 1px 4px; }
+      .mockup-ph-icon { font-size: 22px; }
+      .mockup-ph-title { font-size: 9.5px; }
+      .mockup-ph-sub { font-size: 8.5px; }
+      /* Цінова картка — компактно */
+      .calc-bottom-grid > .price-card { padding: 9px 10px; }
+      .price-card .pc-label { font-size: 9px; letter-spacing: 0.8px; }
+      .price-card .pc-label-right { font-size: 9px; }
+      .pc-total { font-size: 22px !important; }
+      .pc-unit { font-size: 10.5px !important; }
+      .pc-spec { padding: 6px 8px; max-height: 140px; }
+      .pc-spec-row { font-size: 9.5px; }
+      .pc-spec-k { font-size: 9px; }
+      .pc-spec-v { font-size: 9.5px; }
+      /* CTA-кнопки — 2 колонки */
+      .cart-cta-row { grid-template-columns: 1fr 1fr !important; gap: 4px; }
+      .btn-cart-add, .btn-kp-add {
+        font-size: 9.5px; padding: 9px 3px; letter-spacing: 0;
+        text-transform: none;
+      }
+      .btn-order-now { grid-column: 1 / -1; padding: 9px 4px; font-size: 10px; }
+      /* Утильні кнопки */
+      .util-btn-row { grid-template-columns: 1fr 1fr !important; gap: 4px; }
+      .btn-util { font-size: 9.5px; padding: 7px 5px; }
+      /* Лайн кошика/КП — компактно */
+      .cart-line, .kp-line {
+        padding: 5px 6px; font-size: 9.5px; flex-wrap: wrap;
+        gap: 3px;
+      }
+      .cart-line strong, .kp-line strong { font-size: 10.5px; }
+      .cart-line-hint, .kp-line-hint { font-size: 8.5px; }
+      /* Параметри — ще щільніше */
+      .calc-col .panel-header { padding: 8px 10px; }
+      .calc-col .panel-header .panel-title { font-size: 11px; }
+      .calc-col .panel-body { padding: 10px 10px 12px; }
+      .control-row { margin-bottom: 8px !important; }
+      .control-label { font-size: 10px !important; margin-bottom: 3px !important; }
+      .opt-chip { padding: 4px 6px; font-size: 9.5px; }
+      .btn-group { gap: 3px; }
+      .stepper { padding: 1px; }
+      .step-btn { width: 26px; height: 26px; font-size: 13px; }
+      .qty-input { width: 60px; font-size: 12px; }
+      .select-dropdown { padding: 6px 8px; font-size: 11px; }
+      .finishing-grid-dense { grid-template-columns: 1fr !important; gap: 4px; }
+      .fin-item-dense { padding: 6px 8px; }
+      .fin-label { font-size: 10.5px; }
+      .fin-cost-tag { font-size: 9px; }
+      /* Тієр-таблиця — 2 колонки */
+      .qty-tier-info { padding: 6px 7px; }
+      .qty-tier-current { flex-direction: column; align-items: flex-start; gap: 2px; }
+      .qty-tier-current .qtc-label { font-size: 8.5px; }
+      .qty-tier-current .qtc-range { font-size: 11px; }
+      .qty-tier-table { grid-template-columns: repeat(2, 1fr) !important; gap: 2px; }
+      .qty-tier-cell { padding: 3px 4px; }
+      .qty-tier-cell .qtc-cell-range { font-size: 8.5px; }
+      .qty-tier-cell .qtc-cell-price { font-size: 9.5px; }
+      .qty-tier-next-hint { font-size: 9px; }
+      /* A3 візуалізатор */
+      .a3-compact-box { padding: 6px; gap: 8px; }
+      .a3-thumb-sheet { width: 44px !important; height: 62px !important; }
+      .a3-stats-col { font-size: 9.5px; }
+      .a3-stats-col .a3-stat-highlight { font-size: 11px; }
+      /* Топбар — компактний */
+      .topbar { padding: 7px 10px; gap: 6px; flex-wrap: wrap; }
+      .brand-logo { font-size: 12px; }
+      .sites-panel { display: none; }
+      .btn-cart, .btn-kp { padding: 5px 7px; font-size: 10px; gap: 3px; }
+      .btn-cart-label, .btn-kp-label, .btn-cart .btn-cart-label { display: none; }
+      .btn-quick-order { font-size: 10px; padding: 5px 9px; }
+      .btn-cart-badge { min-width: 14px; height: 14px; font-size: 9px; }
+      /* AI FAB — ще менший */
+      .ws-ai .ai-fab { top: 56px; left: 8px; width: 42px; height: 44px; }
+      .ws-ai .ai-fab .ai-fab-label { display: none; }
+      .ws-ai .ai-panel { width: calc(100vw - 12px); left: 6px; bottom: 6px; height: min(82vh, 600px); border-radius: 12px; }
+      .ai-msg { font-size: 10.5px; padding: 6px 8px; }
+      .ai-card-name { font-size: 10px; }
+      .ai-card-meta { font-size: 8.5px; }
+      .ai-card-btn { font-size: 9px; padding: 4px 6px; }
+      .ai-chips { max-height: 160px; padding: 5px 6px; }
+      .ai-chips-label { font-size: 7px; }
+      .ai-chip { font-size: 8px; padding: 2px 4px; min-height: 18px; }
+      .ai-input { height: 26px; font-size: 10.5px; padding: 0 8px; }
+      .ai-send { width: 26px; height: 26px; font-size: 11px; }
+      /* Категорії фільтр */
+      .category-filter-list { gap: 3px; padding: 5px 8px; }
+      .cat-btn { font-size: 9px; padding: 3px 6px; }
+      /* Каталог продуктів */
+      .product-items-list { max-height: 320px; }
+      .product-list-item { padding: 6px 8px; }
+      .pli-num { width: 34px; height: 28px; }
+      .pli-num b { font-size: 11px; }
+      .pli-thumb { width: 32px; height: 32px; }
+      .pli-info-name { font-size: 10.5px; }
+      .pli-info-price { font-size: 9px; }
+      /* Модалка з фото */
+      .mockup-modal-overlay { padding: 8px; }
+      .mockup-modal-overlay img { max-width: 100vw; max-height: 80vh; }
+      .mockup-modal-cap { font-size: 10px; padding: 6px 10px; max-width: calc(100vw - 20px); }
+      .mockup-modal-close { width: 32px; height: 32px; font-size: 18px; top: 10px; right: 10px; }
+      .mockup-modal-zoom-hint { font-size: 9px; padding: 4px 8px; top: 10px; left: 10px; }
+      /* Активний продукт банер */
+      .active-product-banner { padding: 8px 10px; margin-bottom: 10px; }
+      .ap-title { font-size: 13px; }
+      .ap-meta { font-size: 10px; }
+      /* Модалка замовлення */
+      .modal-card { max-width: 100vw; max-height: 100vh; overflow-y: auto; border-radius: 0; }
+      .modal-cart-row { padding: 6px 7px; gap: 5px; }
+      .mcr-name { font-size: 10.5px; }
+      .mcr-spec { font-size: 9px; }
+      .mcr-qty-edit { transform: scale(0.92); transform-origin: right; }
+      .mcr-total { font-size: 11px; }
+      /* КП */
+      .cp-sheet { width: 100%; max-height: 100vh; border-radius: 0; }
+      .cp-chrome { padding: 8px 10px; gap: 5px; }
+      .cp-chrome-actions { gap: 3px; }
+      .cp-chip { padding: 4px 6px; font-size: 9.5px; }
+      .cp-add-select { max-width: 130px; font-size: 9.5px; }
+      .cp-paper { padding: 14px 12px; margin: 6px; font-size: 10.5px; }
+      .cp-logo-text { font-size: 18px; }
+      .cp-doc-title { font-size: 12px; }
+      .cp-table { font-size: 10px; }
+      .cp-table th { font-size: 8.5px; padding: 5px 4px; }
+      .cp-table td { padding: 6px 4px; }
+      .cp-item-name { font-size: 10px; }
+      .cp-item-spec { font-size: 8.5px; padding-left: 0; }
+      .cp-terms { font-size: 9px; }
+      /* КП-перегляд товарів */
+      .cp-browse { padding: 8px; }
+      .cp-browse-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
+      .cp-browse-thumb { height: 100px; }
+      .cp-browse-info-block { padding: 6px 7px; }
+      .cp-browse-name { font-size: 10px; }
+      .cp-browse-price { font-size: 9.5px; }
+      .cp-browse-btn { padding: 6px 2px; font-size: 9px; }
+      .cp-browse-search { padding: 6px 8px; font-size: 11px; }
+      .cp-browse-cat { max-width: 130px; font-size: 10px; padding: 6px 7px; }
+      /* Футер */
+      .site-footer-inner { flex-direction: column; gap: 14px; }
+      .sf-col { width: 100%; }
+      .sf-contacts { gap: 4px; }
+      .sf-contacts a { font-size: 10px; }
+      .site-footer-bottom { font-size: 9.5px; padding: 8px 12px; text-align: center; }
+    }
+
+    /* === Дуже малі екрани (≤360px) === */
+    @media (max-width: 360px) {
+      .calc-photo-card .mockup-window { height: 180px; }
+      .pc-total { font-size: 20px !important; }
+      .btn-cart-add, .btn-kp-add { font-size: 9px; padding: 8px 2px; }
+      .qty-tier-table { grid-template-columns: 1fr; }
+      .opt-chip { padding: 4px 5px; font-size: 9px; }
+      .cp-browse-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+    }
+
+    /* === Горизонтальна орієнтація на мобільному (висота < 500px) === */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .ws-ai .ai-fab { top: 50px; left: 8px; width: 40px; height: 42px; }
+      .ws-ai .ai-panel { height: 90vh; }
+      .calc-photo-card .mockup-window { height: 200px; }
+      .topbar { padding: 5px 10px; }
+      .brand-logo { font-size: 11px; }
+      .sites-panel { display: none; }
+    }
+
+    /* === Друк === */
+    @media print {
+      .ws-ai, .topbar, .site-footer, .calc-photo-card, .ai-fab { display: none !important; }
+    }
+
     /* 3. МОДАЛ ЗБІЛЬШЕНОГО ФОТО (замість нової вкладки) */
     .mockup-modal-overlay {
       position: fixed; inset: 0; z-index: 2200;
