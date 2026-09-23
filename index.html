@@ -1414,7 +1414,6 @@
       border: 1px solid var(--border); border-left: 3px solid var(--accent-yellow); padding: 6px 8px;
     }
     .mcr-num { flex: 0 0 auto; width: 16px; height: 16px; background: var(--accent-yellow); color: #000; font-size: 9.5px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
-    .mcr-icon { flex: 0 0 auto; font-size: 13px; }
     .mcr-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
     .mcr-name { font-size: 10.5px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .mcr-spec { font-size: 9px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1761,8 +1760,6 @@
     .cp-doc-title { font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; }
     .cp-doc-num { font-family: var(--font-mono); font-size: 11.5px; color: #b3541e; font-weight: 700; margin-top: 3px; }
     .cp-doc-date { font-size: 11px; color: #5a6172; }
-    .cp-contacts { display: flex; gap: 14px; flex-wrap: wrap; font-size: 10.5px; color: #5a6172; padding: 9px 0 0; }
-    .cp-contacts span:first-child { font-weight: 800; color: #14161d; }
     .cp-empty { padding: 40px 16px; text-align: center; color: #5a6172; font-size: 12px; line-height: 1.7; }
     .cp-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
     .cp-table th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #5a6172; border-bottom: 2px solid #101318; padding: 7px 6px; }
@@ -1771,10 +1768,9 @@
     .cp-th-n, .cp-td-n { width: 26px; color: #8a92a6; font-family: var(--font-mono); font-size: 10.5px; }
     .cp-th-del, .cp-td-del { width: 30px; }
     .cp-item-line { display: flex; align-items: center; gap: 7px; }
-    .cp-item-icon { font-size: 14px; }
     .cp-item-name { font-size: 12px; }
     .cp-item-name strong { font-family: var(--font-mono); color: #b3541e; margin-right: 4px; }
-    .cp-item-spec { font-size: 10px; color: #7a8296; margin-top: 3px; padding-left: 21px; line-height: 1.45; }
+    .cp-item-spec { font-size: 10px; color: #7a8296; margin-top: 3px; line-height: 1.45; }
     .cp-td-sum { font-weight: 800; }
     .cp-qty-edit { display: inline-flex; align-items: center; border: 1px solid #c9cede; margin-right: 6px; }
     .cp-qty-edit button { width: 20px; height: 22px; background: #f1f3f9; border: none; font-weight: 800; cursor: pointer; font-size: 12px; color: #14161d; }
@@ -1791,7 +1787,6 @@
     .cp-del:hover { background: #c0303f; color: #fff; }
     .cp-terms { margin-top: 20px; font-size: 10px; color: #5a6172; line-height: 1.65; }
     .cp-terms-title { font-weight: 900; text-transform: uppercase; letter-spacing: 0.07em; color: #14161d; margin-bottom: 4px; font-size: 10.5px; }
-    .cp-terms-contacts { margin-top: 9px; padding-top: 8px; border-top: 1px solid #e3e6ee; font-weight: 700; color: #14161d; }
     @media (max-width: 760px) {
       .cp-overlay { padding: 8px; }
       .cp-paper { margin: 8px; padding: 16px 14px; }
@@ -1805,6 +1800,7 @@
     /* ДРУК КП: зберігаємо ТІЛЬКИ білий папір (.cp-root — прямий нащадок body) */
     @media print {
       @page { size: A4 portrait; margin: 12mm; }
+      html.cp-printing, body.cp-printing { background: #fff !important; }
       body.cp-printing > *:not(.cp-root) { display: none !important; }
       body.cp-printing { overflow: visible !important; }
       .cp-root.cp-overlay { display: block !important; position: static !important; background: #fff !important; backdrop-filter: none !important; padding: 0 !important; }
@@ -2399,6 +2395,177 @@
       .cp-browse-info { width: 100%; }
     }
 
+    /* ==== v20: ЮЗАБЕЛЬНІСТЬ КП — панель додавання на папері, пікер з підказками, каталог-модал 3-в-ряду ==== */
+
+    /* Панель додавання ПРЯМО на білому папері КП */
+    .cp-toolbar { display: flex; gap: 8px; align-items: flex-start; margin: 14px 0 0; }
+    .cp-pick-wrap { flex: 1; position: relative; min-width: 200px; }
+    .cp-pick-input {
+      width: 100%; box-sizing: border-box; border: 1px solid #c9cede; background: #fff;
+      padding: 8px 11px; font-size: 12px; font-family: inherit; color: #14161d; outline: none;
+    }
+    .cp-pick-input:focus { border-color: #b3541e; box-shadow: 0 0 0 2px rgba(179, 84, 30, .12); }
+    .cp-pick-input::placeholder { color: #9aa1b2; }
+    .cp-btn-light {
+      background: #fff; border: 1px solid #c9cede; color: #14161d;
+      padding: 8px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;
+      font-family: inherit; white-space: nowrap; transition: all .14s ease;
+    }
+    .cp-btn-light:hover { border-color: #b3541e; color: #b3541e; }
+    .cp-btn-dark {
+      background: #101318; border: 1px solid #101318; color: #fff;
+      padding: 8px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;
+      font-family: inherit; white-space: nowrap; transition: all .14s ease;
+    }
+    .cp-btn-dark:hover { background: #232839; }
+    /* Випадаючий список пікера з підказками по товарах */
+    .cp-pick-drop {
+      display: none; position: absolute; top: calc(100% + 3px); left: 0; right: 0; z-index: 60;
+      background: #fff; border: 1px solid #c9cede; box-shadow: 0 14px 34px rgba(10, 14, 24, .22);
+      max-height: 300px; overflow: auto;
+    }
+    .cp-pick-drop.open { display: block; }
+    .cp-pick-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; cursor: pointer; border-bottom: 1px solid #eef0f6; }
+    .cp-pick-item:last-child { border-bottom: none; }
+    .cp-pick-item:hover, .cp-pick-item.hl { background: #fff7e0; }
+    .cp-pick-main { flex: 1; min-width: 0; }
+    .cp-pick-name { display: block; font-size: 11.5px; font-weight: 700; color: #14161d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cp-pick-name strong { font-family: var(--font-mono); color: #b3541e; margin-right: 5px; font-weight: 800; }
+    .cp-pick-desc { display: block; font-size: 9.8px; color: #7a8296; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+    .cp-pick-meta { flex: none; font-size: 10.5px; font-weight: 800; color: #14161d; font-family: var(--font-mono); white-space: nowrap; }
+    .cp-pick-meta span { color: #9aa1b2; font-weight: 600; font-family: inherit; font-size: 9px; }
+    .cp-pick-empty { padding: 12px; font-size: 11px; color: #7a8296; text-align: center; }
+    .cp-pick-hint-row { padding: 6px 10px; background: #f6f7fb; border-top: 1px solid #eef0f6; font-size: 9.5px; color: #7a8296; display: flex; gap: 6px; align-items: center; }
+
+    /* Таблиця КП: підсвітка рядків на екрані + акцент «свого товару» */
+    @media screen {
+      .cp-table tbody tr:not(.cp-total-row):hover td { background: #fbf8ee; }
+    }
+    .cp-name-input { width: 100%; }
+    .cp-price-input { width: 86px; text-align: right; }
+    .cp-qty-input { width: 52px; text-align: center; }
+
+    /* Кнопки додавання ПІД таблицею КП */
+    .cp-add-bar { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .cp-add-bar .cp-btn-light, .cp-add-bar .cp-btn-dark { flex: 1; text-align: center; padding: 10px 12px; font-size: 12px; }
+    .cp-add-bar-note { width: 100%; font-size: 9.8px; color: #9aa1b2; text-align: center; margin-top: -2px; }
+
+    /* Порожня КП — великі кнопки старту */
+    .cp-empty { padding: 34px 16px; text-align: center; color: #7a8296; font-size: 11.5px; line-height: 1.6; }
+    .cp-empty-title { font-size: 15px; font-weight: 800; color: #14161d; margin-bottom: 4px; }
+    .cp-empty-sub { margin-bottom: 16px; }
+    .cp-empty-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .cp-empty-actions .cp-btn-dark, .cp-empty-actions .cp-btn-light { padding: 11px 18px; font-size: 12.5px; }
+
+    /* Мета-лічильник у шапці КП */
+    .cp-chrome-meta { font-size: 10.5px; color: #7e879e; font-weight: 700; margin-left: 8px; white-space: nowrap; }
+    .cp-chrome-meta b { color: var(--accent-yellow); font-family: var(--font-mono); }
+
+    /* Кнопка «Каталог товарів» на фото-картці калькулятора */
+    .btn-photo-catalog {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(180deg, #ffe14d, #ffd400); color: #141001;
+      border: 1px solid #ffd400; padding: 5px 11px; border-radius: 6px;
+      font-size: 10px; font-weight: 800; letter-spacing: .4px; cursor: pointer;
+      font-family: var(--font); text-transform: none; transition: all .15s ease;
+      box-shadow: 0 2px 10px rgba(255, 212, 0, .25);
+    }
+    .btn-photo-catalog:hover { filter: brightness(1.06); box-shadow: 0 4px 16px rgba(255, 212, 0, .4); transform: translateY(-1px); }
+
+    /* ==== МОДАЛ «ПЕРЕГЛЯД ТОВАРІВ» — сітка в ряди по три ==== */
+    .cat-overlay {
+      position: fixed; inset: 0; z-index: 2150; /* над КП (2100), під зум-фото (2200) */
+      background: rgba(3, 5, 10, 0.84); backdrop-filter: blur(7px);
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .cat-overlay.open { display: flex; }
+    .cat-sheet {
+      width: min(1220px, 100%); max-height: calc(100vh - 40px);
+      display: flex; flex-direction: column;
+      background: #0d1017; border: 1px solid #232839; border-radius: 12px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, .6); overflow: hidden;
+    }
+    .cat-chrome { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #232839; flex-wrap: wrap; }
+    .cat-chrome-title { font-size: 13px; font-weight: 800; color: var(--accent-yellow); }
+    .cat-chrome-sub { font-size: 10px; color: #7e879e; margin-top: 2px; }
+    .cat-chrome-actions { margin-left: auto; display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+    .cat-body { flex: 1; overflow: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+    .cat-header { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .cat-search {
+      flex: 1; min-width: 210px; background: #0c0e15; color: #fff; border: 1px solid #2a3044;
+      padding: 8px 12px; font-size: 12.5px; outline: none; font-family: var(--font); border-radius: 6px;
+    }
+    .cat-search:focus { border-color: var(--accent-yellow); }
+    .cat-cat {
+      background: #0c0e15; color: #fff; border: 1px solid #2a3044;
+      padding: 8px 9px; font-size: 11.5px; outline: none; max-width: 230px; border-radius: 6px; font-family: var(--font);
+    }
+    .cat-cat:focus { border-color: var(--accent-yellow); }
+    .cat-info { font-size: 11px; color: #7e879e; font-weight: 700; display: flex; gap: 12px; flex-wrap: wrap; }
+    .cat-info span { display: inline-flex; gap: 4px; align-items: center; }
+    .cat-info b { color: var(--accent-yellow); font-family: var(--font-mono); }
+    /* СІТКА: рівно 3 картки в ряду на десктопі */
+    .cat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 980px) { .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 600px) { .cat-grid { grid-template-columns: 1fr; } }
+    .cat-card {
+      background: #12151f; border: 1px solid #232839; border-radius: 10px;
+      display: flex; flex-direction: column; overflow: hidden; transition: all .15s ease;
+    }
+    .cat-card:hover { border-color: rgba(255, 222, 0, .45); box-shadow: 0 6px 22px rgba(255, 222, 0, .09); transform: translateY(-2px); }
+    .cat-thumb {
+      position: relative; height: 190px; cursor: zoom-in;
+      background:
+        linear-gradient(rgba(255,222,0,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,222,0,.025) 1px, transparent 1px),
+        #0b0d13;
+      background-size: 14px 14px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; border-bottom: 1px solid #232839;
+    }
+    .cat-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .cat-num {
+      position: absolute; top: 7px; left: 7px;
+      background: var(--accent-yellow); color: #000;
+      font-size: 9px; font-weight: 900; padding: 2px 6px;
+      font-family: var(--font-mono); letter-spacing: .4px; z-index: 2;
+    }
+    .cat-zoomhint {
+      position: absolute; top: 7px; right: 7px; z-index: 2;
+      background: rgba(8, 10, 16, .72); color: #cbd5e1;
+      font-size: 9px; font-weight: 700; padding: 3px 7px; border-radius: 4px;
+      opacity: 0; transition: opacity .15s ease;
+    }
+    .cat-card:hover .cat-zoomhint { opacity: 1; }
+    .cat-infoblock { padding: 10px 12px 8px; flex: 1; display: flex; flex-direction: column; gap: 3px; min-height: 0; }
+    .cat-code { font-family: var(--font-mono); font-weight: 800; font-size: 9.5px; color: var(--accent-yellow); letter-spacing: .3px; }
+    .cat-name { font-size: 12.5px; font-weight: 700; color: #fff; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    /* ПІДКАЗКА по товару — опис під назвою */
+    .cat-desc { font-size: 10.3px; color: #8a92a6; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .cat-price { font-size: 11.5px; color: #cbd5e1; font-weight: 600; margin-top: auto; padding-top: 4px; }
+    .cat-price b { color: var(--accent-yellow); font-family: var(--font-mono); }
+    .cat-actions { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 1px; background: #232839; border-top: 1px solid #232839; }
+    .cat-actions.two { grid-template-columns: 1fr 1fr; }
+    .cat-btn {
+      background: #161a26; color: #dfe4ee; border: 0; padding: 9px 4px;
+      font-size: 10.5px; font-weight: 700; cursor: pointer; transition: all .12s ease;
+      display: flex; align-items: center; justify-content: center; gap: 4px; font-family: var(--font);
+    }
+    .cat-btn:hover { background: #1f2433; color: #fff; }
+    .cat-btn.pick { color: #141001; background: linear-gradient(180deg, #ffe14d, #ffd400); }
+    .cat-btn.pick:hover { filter: brightness(1.07); color: #141001; }
+    .cat-btn.cart:hover { background: rgba(16, 185, 129, .2); color: #34d399; }
+    .cat-btn.kp:hover { background: rgba(255, 222, 0, .2); color: var(--accent-yellow); }
+    .cat-btn.added { background: rgba(16, 185, 129, .25); color: #34d399; pointer-events: none; }
+    .cat-btn.added-kp { background: rgba(255, 222, 0, .25); color: var(--accent-yellow); pointer-events: none; }
+    .cat-empty { grid-column: 1/-1; padding: 46px 20px; text-align: center; color: #7e879e; font-size: 12.5px; }
+    @media (max-width: 760px) {
+      .cat-overlay { padding: 8px; }
+      .cat-thumb { height: 150px; }
+      .cat-info { width: 100%; }
+      .cat-btn { padding: 9px 2px; font-size: 9.5px; }
+    }
+
     /* ===================== TASK 23: СТАРТОВИЙ ЕКРАН «ВАШ ПАКУНОК» =====================
        Чистий калькулятор-пакунок: користувач завжди ПЕРШИМ бачить збір свого пакунка.
        Фото старту — файл start.jpg поруч з index.html (якщо немає — градієнт-заглушка). */
@@ -2661,7 +2828,6 @@
     .a4-td-val small { display: block; font-weight: 400; color: #8a8d98; font-size: 9.5px; margin-top: 1px; }
     .a4-num { font-family: var(--font-mono); color: #9a9da8; font-size: 10px; text-align: right; width: 26px; }
     .a4-item-cell { font-weight: 700; color: #16181f; font-size: 11.5px; white-space: nowrap; }
-    .a4-item-cell .mcr-icon { margin-right: 4px; }
     .a4-spec-cell { color: #6d707c; font-size: 9.5px; max-width: 330px; }
     .a4-qty-cell { text-align: right; white-space: nowrap; font-family: var(--font-mono); font-size: 10.5px; color: #2a2d38; }
     .a4-amt { text-align: right; font-family: var(--font-mono); font-weight: 800; font-size: 11.5px; color: #16181f; white-space: nowrap; }
@@ -2884,6 +3050,45 @@
     .mockup-modal-stage .pf-shine { z-index: 1; }
   </style>
 
+  <style id="v21">
+    /* ==== v21: МІНІМАЛІЗМ КП І КОШИКА — жодних іконок-квадратів; свої товари тим самим шрифтом,
+       без обводки; усі рядки вирівняні — лист виглядає як один документ ==== */
+
+    /* 1. Поля на папері КП — як звичайний текст: без рамки, без фону, той самий шрифт і розмір */
+    .cp-root .cp-cell-input { border: none; background: transparent; padding: 0; font-size: 12px; font-family: inherit; color: #14161d; border-radius: 0; outline: none; box-shadow: none; }
+    .cp-root .cp-cell-input::placeholder { color: #b9bfcc; font-weight: 400; }
+    .cp-root .cp-cell-input:focus { background: #fdfaf3; box-shadow: inset 0 -1px 0 #b3541e; }
+    .cp-root .cp-name-input { font-weight: 400; }
+    .cp-root .cp-item-name { font-size: 12px; }
+
+    /* 2. Степпери −/+ — тихий текстовий знак без квадратів (клікабельна зона лишається) */
+    .cp-root .cp-qty-edit { border: none; background: transparent; gap: 1px; margin-right: 6px; }
+    .cp-root .cp-qty-edit button { width: 20px; height: 20px; background: transparent; border: none; color: #a9b0bf; font-size: 13px; font-weight: 800; border-radius: 0; padding: 0; }
+    .cp-root .cp-qty-edit button:hover { color: #14161d; background: #f1f3f9; }
+
+    /* 3. Прибирання позиції × — тихий знак без червоної іконки-квадрата */
+    .cp-root .cp-del { width: 22px; height: 22px; border: none; background: transparent; color: #c3c8d4; font-size: 14px; line-height: 1; padding: 0; border-radius: 0; }
+    .cp-root .cp-del:hover { background: #fdf1f2; color: #c0303f; }
+
+    /* 4. Кошик («КП за кошиком»): ті самі тихі степпери −/+ і × без квадратів */
+    #orderModal .modal-card.a4 .mcr-qty-edit { border: none; background: transparent; gap: 2px; }
+    #orderModal .modal-card.a4 .mcr-qty-edit button { width: 19px; height: 19px; background: transparent; border: none; color: #a9b0bf; font-size: 12.5px; font-weight: 800; border-radius: 0; padding: 0; }
+    #orderModal .modal-card.a4 .mcr-qty-edit button:hover { background: #f0eee6; color: #16181f; }
+    #orderModal .modal-card.a4 .mcr-qty-edit .mcr-qty-val { border-left: none; border-right: none; }
+    #orderModal .modal-card.a4 .mcr-del { width: 21px; height: 21px; background: transparent; border: none; color: #c3c8d4; font-size: 13px; border-radius: 0; padding: 0; }
+    #orderModal .modal-card.a4 .mcr-del:hover { background: #fdf1f2; color: #c03030; }
+
+    /* 5. Кошик: телефон і пошту прибрано — єдине поле «Контактна особа» на всю ширину */
+    #orderModal .a4-client-grid .form-group:only-child { grid-column: 1 / -1; }
+
+    /* 6. Друк КП: поля — суцільний текст, без фокус-підкреслень і фонів */
+    @media print {
+      .cp-root .cp-cell-input { border: none !important; background: transparent !important; padding: 0 !important; box-shadow: none !important; }
+      .cp-root .cp-qty-edit { display: none !important; }
+      .cp-root .cp-del { visibility: hidden !important; }
+    }
+  </style>
+
 </head>
 <body>
 
@@ -2920,10 +3125,10 @@
 
     <div class="topbar-right">
       <button class="btn-cart btn-kp" id="btnKp" onclick="openProposal()" title="Комерційна пропозиція — збір позицій у таблицю PDF">
-        <span aria-hidden="true">📊</span><span class="btn-cart-label">КП</span><span class="btn-cart-badge" id="kpBadge" style="display:none;">0</span>
+        <span class="btn-cart-label">КП</span><span class="btn-cart-badge" id="kpBadge" style="display:none;">0</span>
       </button>
       <button class="btn-cart" id="btnCart" onclick="openCartModal()" title="Кошик">
-        <span aria-hidden="true">🛒</span><span class="btn-cart-label">Кошик</span><span class="btn-cart-badge" id="cartBadge" style="display:none;">0</span>
+        <span class="btn-cart-label">Кошик</span><span class="btn-cart-badge" id="cartBadge" style="display:none;">0</span>
       </button>
       <button class="btn-quick-order" onclick="openModal()">
         Замовити
@@ -3403,8 +3608,8 @@
           </div>
           <div class="pc-spec" id="pcSpec" aria-label="Повна інформація про вибраний виріб"></div>
           <div class="cart-cta-row">
-            <button class="btn-cart-add" onclick="addToCart()" title="Додати в кошик і продовжити вибір">🛒 У кошик</button>
-            <button class="btn-kp-add" onclick="addToKp()" title="Додати в комерційну пропозицію і продовжити вибір">📊 В КП</button>
+            <button class="btn-cart-add" onclick="addToCart()" title="Додати в кошик і продовжити вибір">У кошик</button>
+            <button class="btn-kp-add" onclick="addToKp()" title="Додати в комерційну пропозицію і продовжити вибір">В КП</button>
             <button class="btn-order-now" onclick="openModal()" title="Одразу оформити цю позицію">Замовити</button>
           </div>
           <button class="cart-line" id="cartLine" style="display:none;" onclick="openCartModal()"></button>
@@ -3583,7 +3788,7 @@
             <div class="a4-party">
               <span class="a4-party-label">Виконавець</span>
               <div class="a4-party-line">Друкарня alfa.copy.print</div>
-              <div class="a4-party-dim">А3-друк · оперативна поліграфія · мерч і пакунки<br><b>2294598@gmail.com</b></div>
+              <div class="a4-party-dim">А3-друк · оперативна поліграфія · мерч і пакунки</div>
             </div>
             <div class="a4-party">
               <span class="a4-party-label">Замовник — поля редагуються</span>
@@ -3591,14 +3796,6 @@
                 <div class="form-group">
                   <label>Контактна особа / Компанія *</label>
                   <input type="text" id="fName" class="input-box" placeholder="Олександр / ТОВ Альфа" required>
-                </div>
-                <div class="form-group">
-                  <label>Телефон *</label>
-                  <input type="tel" id="fPhone" class="input-box" value="+380" required>
-                </div>
-                <div class="form-group">
-                  <label>Email *</label>
-                  <input type="email" id="fEmail" class="input-box" placeholder="name@domain.com" required>
                 </div>
               </div>
             </div>
@@ -3618,7 +3815,7 @@
             <button type="submit" id="modalSubmitBtn" class="btn-submit-order-main">
               Підтвердити та відправити КП
             </button>
-            <div class="a4-valid-note">Ціни дійсні 14 днів · відправка на <b>2294598@gmail.com</b><br>без реєстрації та передоплати — рахунок після підтвердження</div>
+            <div class="a4-valid-note">Ціни дійсні 14 днів · без реєстрації та передоплати — рахунок після підтвердження</div>
           </div>
         </form>
 
@@ -4989,7 +5186,7 @@
         const photo = document.createElement('div');
         photo.className = 'calc-photo-card';
         photo.innerHTML =
-          '<div class="photo-label"><span>Прев\u2019ю виробу</span><span class="photo-label-hint">гортайте вироби по краях фото ‹ ›</span></div>' +
+          '<div class="photo-label"><span>Прев\u2019ю виробу</span><button type="button" class="btn-photo-catalog" onclick="openCatalogModal()" title="Переглянути всі товари вікном — сітка по 3 в ряду, пошук і категорії">📚 Каталог товарів</button></div>' +
           '<div class="photo-grid">' +
             '<div class="mockup-window empty" id="mockupWindow" title="Мокап виробу"></div>' +
           '</div>';
@@ -6027,14 +6224,11 @@
           _template: 'table', _captcha: 'false',
           'Номер заявки': code,
           'Контактна особа': document.getElementById('fName').value,
-          'Телефон': document.getElementById('fPhone').value,
-          'Email замовника': document.getElementById('fEmail').value,
           'Позицій у замовленні': String(cart.length),
           'Коментар': document.getElementById('fComment').value || '—'
         };
         cart.forEach((it, i) => { payload['Позиція ' + (i + 1)] = it.code + ' · ' + it.name + ' · ' + it.qtyLabel + ' · ' + it.spec + ' · ' + formatUAH(it.total); });
         payload['РАЗОМ ЗА КОШИК'] = formatUAH(cartTotalSum());
-        payload.email = document.getElementById('fEmail').value;
         return payload;
       }
       const res = calculatePriceFor(cfg.width, cfg.height, cfg.quantity, cfg.color, cfg.paperKey, cfg.laminationKey, cfg.finishing, currentCalcOpts());
@@ -6048,8 +6242,6 @@
           _template: 'table', _captcha: 'false',
           'Номер заявки': code,
           'Контактна особа': document.getElementById('fName').value,
-          'Телефон': document.getElementById('fPhone').value,
-          'Email замовника': document.getElementById('fEmail').value,
           'Код виробу': productCodeOf(cfg.product),
           'Виріб': calcProductNameS(cfg),
           'Тираж, шт': String(cfg.quantity),
@@ -6058,7 +6250,6 @@
           'Макетування': '+ (включено у ціну)',
           'РАЗОМ': formatUAH(res.total),
           'Коментар': document.getElementById('fComment').value || '—',
-          email: document.getElementById('fEmail').value
         };
       }
       if (kind === 'merch') {
@@ -6068,8 +6259,6 @@
           _template: 'table', _captcha: 'false',
           'Номер заявки': code,
           'Контактна особа': document.getElementById('fName').value,
-          'Телефон': document.getElementById('fPhone').value,
-          'Email замовника': document.getElementById('fEmail').value,
           'Код виробу': productCodeOf(cfg.product),
           'Виріб': calcProductNameS(cfg),
           'Нанесення': cfg.product.applyMethod || 'друк лого',
@@ -6079,7 +6268,6 @@
           'Ціна за 1 шт': formatUAH(res.unit),
           'РАЗОМ': formatUAH(res.total),
           'Коментар': document.getElementById('fComment').value || '—',
-          email: document.getElementById('fEmail').value
         };
       }
       if (kind === 'package') {
@@ -6089,8 +6277,6 @@
           _template: 'table', _captcha: 'false',
           'Номер заявки': code,
           'Контактна особа': document.getElementById('fName').value,
-          'Телефон': document.getElementById('fPhone').value,
-          'Email замовника': document.getElementById('fEmail').value,
           'Код виробу': productCodeOf(cfg.product),
           'Виріб': calcProductNameS(cfg),
           'Кількість комплектів': String(cfg.quantity),
@@ -6099,7 +6285,6 @@
           'Макетування': '+ (входить у комплект)',
           'РАЗОМ': formatUAH(res.total),
           'Коментар': document.getElementById('fComment').value || '—',
-          email: document.getElementById('fEmail').value
         };
       }
       return {
@@ -6108,8 +6293,6 @@
         _captcha: 'false',
         'Номер заявки': code,
         'Контактна особа': document.getElementById('fName').value,
-        'Телефон': document.getElementById('fPhone').value,
-        'Email замовника': document.getElementById('fEmail').value,
         'Код виробу': productCodeOf(cfg.product),
         'Виріб': calcProductNameS(cfg),
         'Розмір, мм': cfg.width + '×' + cfg.height,
@@ -6125,8 +6308,7 @@
         'Макетування макету': '+',
         'Ціна за 1 шт': formatUAH(res.unit),
         'РАЗОМ': formatUAH(res.total),
-        'Коментар': document.getElementById('fComment').value || '—',
-        email: document.getElementById('fEmail').value
+        'Коментар': document.getElementById('fComment').value || '—'
       };
     }
 
@@ -6167,8 +6349,6 @@
             totalUAH: cartTotalSum(),
             unitUAH: cart.length ? Math.round(cartTotalSum() / cart.length * 100) / 100 : 0,
             name: document.getElementById('fName').value,
-            phone: document.getElementById('fPhone').value,
-            email: document.getElementById('fEmail').value,
             comment: (document.getElementById('fComment').value || '') + ' || ' + cart.map((it, i) => (i + 1) + ') ' + it.code + ' ' + it.name + ' — ' + it.qtyLabel + ' — ' + it.spec + ' — ' + formatUAH(it.total)).join(' || ') + ' || РАЗОМ: ' + formatUAH(cartTotalSum()),
             emailSentByClient: false
           } : {
@@ -6179,8 +6359,6 @@
             finishing: cfg.finishing || {},
             totalUAH: res.total, unitUAH: res.unit,
             name: document.getElementById('fName').value,
-            phone: document.getElementById('fPhone').value,
-            email: document.getElementById('fEmail').value,
             comment: document.getElementById('fComment').value || '',
             emailSentByClient: false
           })
@@ -6285,7 +6463,7 @@
       if (line) {
         if (cart.length) {
           line.style.display = 'flex';
-          line.innerHTML = '<span>🛒 У кошику ' + cart.length + ' поз.</span><strong>' + formatUAH(cartTotalSum()) + '</strong><span class="cart-line-hint">оформити →</span>';
+          line.innerHTML = '<span>У кошику ' + cart.length + ' поз.</span><strong>' + formatUAH(cartTotalSum()) + '</strong><span class="cart-line-hint">оформити →</span>';
         } else { line.style.display = 'none'; line.innerHTML = ''; }
       }
     }
@@ -6326,13 +6504,15 @@
       const b = document.getElementById('kpBadge');
       const btn = document.getElementById('btnKp');
       const line = document.getElementById('kpLine');
+      const meta = document.getElementById('cpChromeMeta'); // v20: лічильник у шапці КП
       const n = cpRows.length;
       if (b) { b.textContent = String(n); b.style.display = n ? 'inline-flex' : 'none'; }
       if (btn) btn.classList.toggle('has-items', n > 0);
+      if (meta) meta.innerHTML = n ? '<b>' + n + '</b> поз. · <b>' + formatUAH(kpTotalSum()) + '</b>' : 'порожня — додайте позиції нижче';
       if (line) {
         if (n) {
           line.style.display = 'flex';
-          line.innerHTML = '<span>📊 У КП ' + n + ' поз.</span><strong>' + formatUAH(kpTotalSum()) + '</strong><span class="kp-line-hint">відкрити →</span>';
+          line.innerHTML = '<span>У КП ' + n + ' поз.</span><strong>' + formatUAH(kpTotalSum()) + '</strong><span class="kp-line-hint">відкрити →</span>';
         } else { line.style.display = 'none'; line.innerHTML = ''; }
       }
     }
@@ -6344,7 +6524,7 @@
       cpRows.push(row);
       cpBrowseAddedKp.add(cfg.product ? cfg.product.id : null);
       saveKp();
-      showToast('📊 ' + (cfg.product ? productCodeOf(cfg.product) : '') + ' ' + (cfg.product ? cfg.product.name : '') + ' — додано в КП (' + cpRows.length + ' поз.). Вибирайте далі');
+      showToast((cfg.product ? productCodeOf(cfg.product) : '') + ' ' + (cfg.product ? cfg.product.name : '') + ' — додано в КП (' + cpRows.length + ' поз.). Вибирайте далі');
     }
 
     function cartSpecStatic(res) {
@@ -6632,7 +6812,7 @@
         total: res.total
       });
       saveCart();
-      showToast('🛒 Додано в кошик! Вибирайте далі — той самий виріб можна додати ще раз');
+      showToast('Додано в кошик! Вибирайте далі — той самий виріб можна додати ще раз');
     }
 
     function removeCartItem(key) {
@@ -6717,7 +6897,7 @@
       if (specBox) specBox.style.display = 'none';
       list.style.display = 'block';
       if (!cart.length) {
-        list.innerHTML = '<div class="cart-empty-note">🛒 Кошик порожній.<br>Налаштуйте виріб у калькуляторі й натисніть «🛒 У кошик» — потім продовжуйте вибирати й оформите все разом.</div>';
+        list.innerHTML = '<div class="cart-empty-note">Кошик порожній. Налаштуйте виріб у калькуляторі й натисніть «У кошик» — потім оформите все разом.</div>';
         if (form) form.style.display = 'none';
         return;
       }
@@ -6729,7 +6909,7 @@
         cart.map((it, i) =>
           '<tr class="modal-cart-row">' +
             '<td class="a4-num">' + (i + 1) + '</td>' +
-            '<td class="a4-item-cell"><span class="mcr-icon">' + it.icon + '</span>' + it.code + ' ' + it.name + '</td>' +
+            '<td class="a4-item-cell">' + it.code + ' ' + it.name + '</td>' +
             '<td class="a4-spec-cell" title="' + String(it.spec).replace(/"/g, '&quot;') + '">' + it.spec + '</td>' +
             '<td class="a4-qty-cell">' +
               (it.cfgSnap
@@ -6755,7 +6935,7 @@
       if (sub && modalDocCode) {
         const d = new Date();
         const dateStr = d.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        sub.textContent = '№ ' + modalDocCode + ' · від ' + dateStr + ' · усі позиції одним замовленням → ' + ORDER_EMAIL;
+        sub.textContent = '№ ' + modalDocCode + ' · від ' + dateStr + ' · усі позиції одним замовленням';
       }
       renderModalCartList();
       document.getElementById('modalFormWrap').style.display = 'block';
@@ -6871,12 +7051,11 @@
       if (!win) return;
       const p = cfg.product;
       const num = p ? (PRODUCT_NUMBERS[p.id] || 0) : 0;
-      // TASK 26: тіні-зони гортання по краях фото — присутні завжди (і на фото, і на заглушці)
-      const arrowsHtml = '<button type="button" class="mockup-nav-zone mockup-nav-zone-l" onclick="calcBrowseProduct(-1)" title="Попередній виріб каталогу" aria-label="Попередній виріб"><span class="chev" aria-hidden="true">&lsaquo;</span></button>' +
-        '<button type="button" class="mockup-nav-zone mockup-nav-zone-r" onclick="calcBrowseProduct(1)" title="Наступний виріб каталогу" aria-label="Наступний виріб"><span class="chev" aria-hidden="true">&rsaquo;</span></button>';
+      // v20: стрілки ‹ › по краях фото прибрано — гортання каталогу тепер у кнопці «📚 Каталог товарів»
+      // (модальне вікно «Перегляд товарів» сіткою по 3 в ряду). Свайп по фото лишився.
       if (!num) {
         win.classList.add('empty');
-        win.innerHTML = mockupPlaceholderHtml(p, 0) + arrowsHtml;
+        win.innerHTML = mockupPlaceholderHtml(p, 0);
         win.onclick = null;
         bindMockupSwipe(win);
         return;
@@ -6885,18 +7064,17 @@
       // TASK 28: відблиск-«живе світло» поверх фото (раз на 5 хв) + автокорекція кольору через CSS
       win.innerHTML = '<img id="mockupImg" src="' + (p.photo ? p.photo : 'mockups/' + num + '.jpg') + '" alt="Мокап: ' + p.name + '">' +
         '<span class="pf-shine" aria-hidden="true"></span>' +
-        '<span class="mockup-num">№' + String(num).padStart(3, '0') + '</span>' +
-        arrowsHtml;
+        '<span class="mockup-num">№' + String(num).padStart(3, '0') + '</span>';
       const img = document.getElementById('mockupImg');
       if (img) {
         img.onerror = () => {
           win.classList.add('empty');
-          win.innerHTML = mockupPlaceholderHtml(p, num) + arrowsHtml;
+          win.innerHTML = mockupPlaceholderHtml(p, num);
         };
       }
       // TASK 26: функцію збільшення прибрано — клік на фото нічого не відкриває
       win.onclick = null;
-      win.title = 'Мокап: ' + p.name + ' — гортайте вироби по краях фото або свайпом';
+      win.title = 'Мокап: ' + p.name + ' — весь каталог у кнопці «📚 Каталог товарів»';
       bindMockupSwipe(win);
     }
 
@@ -7676,7 +7854,7 @@
         });
       });
       saveCart();
-      showToast('🛒 Набір у кошику — ' + kit.rows.length + ' поз. на ' + formatUAH(kit.total));
+      showToast('Набір у кошику — ' + kit.rows.length + ' поз. на ' + formatUAH(kit.total));
     }
 
     function aiBotReply(raw) {
@@ -8403,8 +8581,6 @@
     let cpBrowseAddedCart = new Set(); // які вироби вже в кошику (для UI-підсвічування)
     let cpDocNum = '';
     let cpDocDate = '';
-    const CP_PHONE = '(044) 333-88-22';
-    const CP_EMAIL = '2294598@gmail.com';
 
     function cpNextKey() { return 'cp' + Date.now().toString(36) + '-' + (cpSeq++); }
 
@@ -8500,6 +8676,7 @@
     }
 
     function cpClose() {
+      cpFlushKpSave(); // v20: зберігаємо недописані зміни перед закриттям
       if (cpOverlayEl) cpOverlayEl.style.display = 'none';
       document.body.classList.remove('cp-open');
       document.body.classList.remove('cp-printing');
@@ -8508,65 +8685,114 @@
 
     function cpPickChange(v) { cpPick = v; cpRender(); } // перерендер: розблоковує «+ Додати»
 
-    function cpAddCatalog() {
-      if (!cpPick) return;
-      const row = cpRowFromProduct(cpPick);
+    // ==== v20: тихе збереження без перерендеру (лікує «пише по одній букві») ====
+    // saveKp() + cpRender() на кожен oninput знищували <input> і губили фокус.
+    // Тепер: стан зберігається відкладено, DOM оновлюється точково (сума рядка, РАЗОМ).
+    let cpSaveTimer = null;
+    function cpSaveSilent() {
+      if (cpSaveTimer) clearTimeout(cpSaveTimer);
+      cpSaveTimer = setTimeout(() => {
+        try { localStorage.setItem(KP_LS_KEY, JSON.stringify(cpRows)); } catch (e) {}
+        cpSaveTimer = null;
+      }, 250);
+      updateKpBadge();
+    }
+    function cpFlushKpSave() {
+      if (!cpSaveTimer) return;
+      clearTimeout(cpSaveTimer); cpSaveTimer = null;
+      try { localStorage.setItem(KP_LS_KEY, JSON.stringify(cpRows)); } catch (e) {}
+    }
+    // Точкове оновлення суми позиції та рядка «РАЗОМ» — без перерендеру таблиці
+    function cpRefreshRowSum(key) {
+      const r = cpRows.find(x => x.key === key);
+      if (!r) return;
+      const sum = r.custom ? Math.round((r.unit || 0) * (r.qty || 1) * 100) / 100 : (r.item.total || 0);
+      const cell = document.getElementById('cpSum-' + key);
+      if (cell) cell.textContent = formatUAH(sum);
+      const total = document.getElementById('cpTotalCell');
+      if (total) total.textContent = formatUAH(cpTotal());
+    }
+
+    // v20: додавання з пікера на папері (id приходить з випадаючого списку) або зі старого select
+    function cpAddCatalog(id) {
+      const pid = id || cpPick;
+      if (!pid) return;
+      const row = cpRowFromProduct(pid);
       if (!row) return;
       cpRows.push(row);
       cpPick = '';
       saveKp();
-      cpRender();
+      cpRenderTableOnly();
+      showToast(row.item.code + ' ' + row.item.name + ' — додано в КП');
     }
 
     function cpAddCustom() {
       cpRows.push({ key: cpNextKey(), custom: true, name: '', unit: 0, qty: 1, step: 1 });
       saveKp();
-      cpRender();
+      cpRenderTableOnly();
+      // одразу фокус у поле назви нового рядка — писати можна негайно
+      const lastKey = cpRows[cpRows.length - 1].key;
+      const inp = document.getElementById('cpName-' + lastKey);
+      if (inp) {
+        inp.focus();
+        try { inp.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+      }
     }
 
     function cpDel(key) {
       cpRows = cpRows.filter(r => r.key !== key);
       saveKp();
-      cpRender();
+      cpRenderTableOnly();
     }
 
     // Кількість позиції каталогу → перерахунок тим самим движком (recalcCartRow клампить ліміт)
     function cpQty(key, delta) {
       const r = cpRows.find(x => x.key === key);
       if (!r) return;
-      if (r.custom) { r.qty = Math.max(1, (r.qty || 1) + delta); saveKp(); cpRender(); return; }
+      if (r.custom) { r.qty = Math.max(1, (r.qty || 1) + delta); saveKp(); cpRefreshRowSum(key); const qi = document.getElementById('cpQty-' + key); if (qi) qi.value = r.qty; updateKpBadge(); return; }
       recalcCartRow(r.item, (r.item.qty || 1) + delta);
       saveKp();
-      cpRender();
+      cpRefreshRowSum(key);
+      const qi = document.getElementById('cpQty-' + key);
+      if (qi) qi.value = r.item.qty;
     }
 
     function cpQtySet(key, val) {
       const r = cpRows.find(x => x.key === key);
       if (!r) return;
       const q = Math.max(1, parseInt(val, 10) || 1);
-      if (r.custom) { r.qty = q; saveKp(); cpRender(); return; }
+      if (r.custom) { r.qty = q; saveKp(); cpRefreshRowSum(key); updateKpBadge(); return; }
       recalcCartRow(r.item, q);
       saveKp();
-      cpRender();
+      cpRefreshRowSum(key);
+      const qi = document.getElementById('cpQty-' + key);
+      if (qi) qi.value = r.item.qty;
     }
 
-    // Свій товар: назва і ціна за одиницю
+    // Свій товар: назва — ТІЛЬКИ стан + тихе збереження (жодного перерендеру → фокус живий)
     function cpCustomName(key, val) {
       const r = cpRows.find(x => x.key === key);
-      if (r) { r.name = val; saveKp(); cpRender(); }
+      if (r) { r.name = val; cpSaveSilent(); }
     }
+    // Ціна за одиницю: оновлюємо суму рядка і «РАЗОМ» наживо, без перерендеру.
+    // v21: після виходу з поля показуємо число в стилі документа (кома), без рамки — як весь лист.
     function cpCustomPrice(key, val) {
       const r = cpRows.find(x => x.key === key);
       if (!r) return;
       r.unit = Math.max(0, Math.round((parseFloat(String(val).replace(',', '.')) || 0) * 100) / 100);
-      saveKp();
-      cpRender();
+      const pi = document.getElementById('cpPrice-' + key);
+      if (pi && document.activeElement !== pi) pi.value = r.unit ? String(r.unit).replace('.', ',') : '0';
+      cpRefreshRowSum(key);
+      cpSaveSilent();
     }
 
     function cpSavePdf() {
       if (!cpRows.length) { showToast('Додайте хоча б одну позицію перед збереженням'); return; }
+      cpFlushKpSave(); // v20: дописуємо несинхронізований текст «свого товару» в localStorage перед друком
+      // v21: клас і на <html> — щоб канвас сторінки друкувався білим, а не темним фоном сайту
+      document.documentElement.classList.add('cp-printing');
       document.body.classList.add('cp-printing');
-      const cleanup = () => { document.body.classList.remove('cp-printing'); window.removeEventListener('afterprint', cleanup); };
+      const cleanup = () => { document.documentElement.classList.remove('cp-printing'); document.body.classList.remove('cp-printing'); window.removeEventListener('afterprint', cleanup); };
       window.addEventListener('afterprint', cleanup);
       window.print();
       window.setTimeout(cleanup, 2000); // страховка для браузерів без afterprint
@@ -8587,7 +8813,7 @@
       });
       lines.push('');
       lines.push('РАЗОМ: ' + formatUAH(cpTotal()));
-      lines.push('Ціни дійсні 14 днів. Контакт: ' + CP_PHONE + ', ' + CP_EMAIL);
+      lines.push('Ціни дійсні 14 днів.');
       const txt = lines.join('\n');
       const done = () => showToast('Комерційну пропозицію скопійовано!');
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -8604,70 +8830,187 @@
       document.body.removeChild(ta);
     }
 
-    function cpRender() {
-      if (!cpOverlayEl) return;
-      // v19: якщо активний режим перегляду товарів з фото — рендеримо його
-      if (cpBrowseMode) { cpRenderBrowse(); return; }
-      const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-      const opts = ['<option value="">+ Виріб з каталогу…</option>'].concat(productsCatalog.map(p =>
-        '<option value="' + p.id + '"' + (cpPick === p.id ? ' selected' : '') + '>' + productCodeOf(p) + ' ' + p.icon + ' ' + esc(p.name) + ' — від ' + p.priceFrom + ' ₴</option>'
-      )).join('');
-
+    // ==== v20: побудова рядків і зони таблиці (окремо від повного рендеру — щоб не губити фокус) ====
+    function cpBuildRowsHtml(esc) {
       let rowsHtml = '';
       cpRows.forEach((r, i) => {
         if (r.custom) {
           rowsHtml += '<tr>' +
             '<td class="cp-td-n">' + (i + 1) + '</td>' +
-            '<td><div class="cp-item-line"><span class="cp-item-icon">✎</span>' +
-              '<input class="cp-cell-input cp-name-input" value="' + esc(r.name) + '" oninput="cpCustomName(\'' + r.key + '\', this.value)" placeholder="Назва вашого товару…" aria-label="Назва свого товару"></div>' +
-              '<div class="cp-item-spec">Свій товар — назву та ціну вкажіть тут</div></td>' +
+            '<td><div class="cp-item-line">' +
+              '<input id="cpName-' + r.key + '" class="cp-cell-input cp-name-input" value="' + esc(r.name) + '" oninput="cpCustomName(\'' + r.key + '\', this.value)" placeholder="Назва вашого товару…" aria-label="Назва свого товару"></div></td>' +
             '<td class="cp-td-num"><span class="cp-qty-edit cp-no-print"><button type="button" onclick="cpQty(\'' + r.key + '\', -1)">−</button>' +
-              '<input class="cp-cell-input cp-qty-input" value="' + r.qty + '" onchange="cpQtySet(\'' + r.key + '\', this.value)" aria-label="Кількість">' +
+              '<input id="cpQty-' + r.key + '" class="cp-cell-input cp-qty-input" value="' + r.qty + '" onchange="cpQtySet(\'' + r.key + '\', this.value)" aria-label="Кількість">' +
               '<button type="button" onclick="cpQty(\'' + r.key + '\', +1)">+</button></span>' +
               '<span class="cp-qty-print">' + r.qty + '</span></td>' +
-            '<td class="cp-td-num"><input class="cp-cell-input cp-price-input" value="' + (r.unit || 0) + '" onchange="cpCustomPrice(\'' + r.key + '\', this.value)" aria-label="Ціна за одиницю"></td>' +
-            '<td class="cp-td-num cp-td-sum">' + formatUAH(Math.round((r.unit || 0) * (r.qty || 1) * 100) / 100) + '</td>' +
+            '<td class="cp-td-num"><input id="cpPrice-' + r.key + '" class="cp-cell-input cp-price-input" value="' + (r.unit ? String(r.unit).replace('.', ',') : 0) + '" oninput="cpCustomPrice(\'' + r.key + '\', this.value)" onchange="cpCustomPrice(\'' + r.key + '\', this.value)" aria-label="Ціна за одиницю" title="Ціна за одиницю (грн)"></td>' +
+            '<td class="cp-td-num cp-td-sum" id="cpSum-' + r.key + '">' + formatUAH(Math.round((r.unit || 0) * (r.qty || 1) * 100) / 100) + '</td>' +
             '<td class="cp-td-del cp-no-print"><button type="button" class="cp-del" onclick="cpDel(\'' + r.key + '\')" title="Видалити позицію">✕</button></td>' +
           '</tr>';
         } else {
           const it = r.item;
-          rowsHtml += '<tr>' +
+          const snapP = (r.item.cfgSnap && r.item.cfgSnap.product) || null;
+          const hint = snapP && snapP.desc ? snapP.desc : '';
+          rowsHtml += '<tr' + (hint ? ' title="' + esc(hint) + '"' : '') + '>' +
             '<td class="cp-td-n">' + (i + 1) + '</td>' +
-            '<td><div class="cp-item-line"><span class="cp-item-icon">' + it.icon + '</span>' +
+            '<td><div class="cp-item-line">' +
               '<span class="cp-item-name"><strong>' + esc(it.code) + '</strong> ' + esc(it.name) + '</span></div>' +
               (it.spec ? '<div class="cp-item-spec">' + esc(it.spec) + '</div>' : '') + '</td>' +
             '<td class="cp-td-num"><span class="cp-qty-edit cp-no-print"><button type="button" onclick="cpQty(\'' + r.key + '\', -' + (it.step || 25) + ')">−</button>' +
-              '<input class="cp-cell-input cp-qty-input" value="' + it.qty + '" onchange="cpQtySet(\'' + r.key + '\', this.value)" aria-label="Кількість">' +
+              '<input id="cpQty-' + r.key + '" class="cp-cell-input cp-qty-input" value="' + it.qty + '" onchange="cpQtySet(\'' + r.key + '\', this.value)" aria-label="Кількість">' +
               '<button type="button" onclick="cpQty(\'' + r.key + '\', +' + (it.step || 25) + ')">+</button></span>' +
               '<span class="cp-qty-print">' + it.qty + '</span></td>' +
             '<td class="cp-td-num">' + formatUAH(it.unit) + '</td>' +
-            '<td class="cp-td-num cp-td-sum">' + formatUAH(it.total) + '</td>' +
+            '<td class="cp-td-num cp-td-sum" id="cpSum-' + r.key + '">' + formatUAH(it.total) + '</td>' +
             '<td class="cp-td-del cp-no-print"><button type="button" class="cp-del" onclick="cpDel(\'' + r.key + '\')" title="Видалити позицію">✕</button></td>' +
           '</tr>';
         }
       });
+      return rowsHtml;
+    }
 
+    // Зона таблиці + кнопки «+» ПІД нею (все, що змінюється при редагуванні позицій)
+    function cpBuildTableZone(esc) {
+      const rowsHtml = cpBuildRowsHtml(esc);
       const table = cpRows.length
         ? '<table class="cp-table"><thead><tr>' +
           '<th class="cp-th-n">№</th><th>Найменування та параметри</th>' +
           '<th class="cp-th-num">К-ть</th><th class="cp-th-num">Ціна/од.</th><th class="cp-th-num">Сума</th>' +
           '<th class="cp-th-del cp-no-print"></th></tr></thead><tbody>' + rowsHtml +
-          '<tr class="cp-total-row"><td colspan="4">РАЗОМ:</td><td class="cp-td-num">' + formatUAH(cpTotal()) + '</td><td class="cp-no-print"></td></tr>' +
-          '</tbody></table>'
-        : '<div class="cp-empty">Порожня пропозиція.<br>Додайте вироби з каталогу («+ Виріб з каталогу») або допишіть свій товар («✎ Свій товар») — кількість кожної позиції можна змінювати, ціна перерахується автоматично.</div>';
+          '<tr class="cp-total-row"><td colspan="4">РАЗОМ:</td><td class="cp-td-num" id="cpTotalCell">' + formatUAH(cpTotal()) + '</td><td class="cp-no-print"></td></tr>' +
+          '</tbody></table>' +
+          '<div class="cp-add-bar cp-no-print">' +
+            '<button type="button" class="cp-btn-light" onclick="cpFocusPick()" title="Знайти виріб у каталозі">+ Додати з каталогу</button>' +
+            '<button type="button" class="cp-btn-dark" onclick="cpAddCustom()" title="Дописати позицію вручну">+ Свій товар</button>' +
+            '<div class="cp-add-bar-note">Кількість змінюється −/+ або вводом · ціна перераховується автоматично · PDF — кнопка вгорі</div>' +
+          '</div>'
+        : '<div class="cp-empty">' +
+            '<div class="cp-empty-title">Порожня пропозиція</div>' +
+            '<div class="cp-empty-sub">Додайте вироби з каталогу або допишіть свій товар — кількість і сума перерахуються автоматично.</div>' +
+            '<div class="cp-empty-actions">' +
+              '<button type="button" class="cp-btn-dark" onclick="cpFocusPick()">Обрати з каталогу</button>' +
+              '<button type="button" class="cp-btn-light" onclick="cpAddCustom()">Свій товар</button>' +
+              '<button type="button" class="cp-btn-light" onclick="openCatalogModal()">Перегляд товарів</button>' +
+            '</div>' +
+          '</div>';
+      return table;
+    }
+
+    // Точковий рендер зони таблиці — скрол, фокус і текст у полях не зникають
+    function cpRenderTableOnly() {
+      if (!cpOverlayEl) return;
+      const zone = document.getElementById('cpTableZone');
+      if (!zone) { cpRender(); return; }
+      const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      zone.innerHTML = cpBuildTableZone(esc);
+      updateKpBadge();
+    }
+
+    // Панель додавання ПРЯМО на папері: пошуковий пікер каталогу з підказками + «Свій товар»
+    function cpBuildToolbarHtml(esc) {
+      return '<div class="cp-toolbar cp-no-print">' +
+        '<div class="cp-pick-wrap">' +
+          '<input id="cpPickSearch" class="cp-pick-input" type="text" autocomplete="off" placeholder="Знайти виріб у каталозі: назва, № або код…" value="' + esc(cpPickQ) + '" oninput="cpPickSuggest()" onfocus="cpPickSuggest()" onkeydown="cpPickKey(event)" onblur="setTimeout(cpPickHide, 160)">' +
+          '<div class="cp-pick-drop" id="cpPickDrop"></div>' +
+        '</div>' +
+        '<button type="button" class="cp-btn-dark" onclick="cpAddCustom()" title="Додати рядок свого товару з назвою і ціною">Свій товар</button>' +
+        '<button type="button" class="cp-btn-light" onclick="openCatalogModal()" title="Переглянути всі товари з фото у вікні — сітка по 3 в ряду">Каталог</button>' +
+      '</div>';
+    }
+
+    // ==== v20: пікер каталогу з підказками (випадаючий список прямо на папері) ====
+    let cpPickQ = '';
+    let cpPickLast = []; // останній список підказок (для Enter — «додати перший»)
+    function cpPickMatches() {
+      const q = cpPickQ.toLowerCase().trim();
+      return productsCatalog.filter(p => {
+        if (!q) return true;
+        const num = String(PRODUCT_NUMBERS[p.id] || 0);
+        return p.name.toLowerCase().includes(q) ||
+          (p.desc || '').toLowerCase().includes(q) ||
+          productCodeOf(p).toLowerCase().includes(q) ||
+          num === q ||
+          ('№' + num.padStart(3, '0')).includes(q);
+      }).slice(0, 60);
+    }
+    function cpPickSuggest() {
+      const inp = document.getElementById('cpPickSearch');
+      const drop = document.getElementById('cpPickDrop');
+      if (!inp || !drop) return;
+      cpPickQ = inp.value || '';
+      const list = cpPickMatches();
+      cpPickLast = list;
+      const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      if (!list.length) {
+        drop.innerHTML = '<div class="cp-pick-empty">Нічого не знайдено за «' + esc(cpPickQ) + '». Спробуйте інше слово — або натисніть «Свій товар».</div>';
+      } else {
+        drop.innerHTML = list.map((p, idx) => {
+          const num = PRODUCT_NUMBERS[p.id] || 0;
+          const numStr = num ? '№' + String(num).padStart(3, '0') : '';
+          return '<div class="cp-pick-item' + (idx === 0 ? ' hl' : '') + '" title="' + esc(p.desc || '') + '" onmousedown="event.preventDefault();cpPickAdd(\'' + p.id + '\')">' +
+            '<span class="cp-pick-main">' +
+              '<span class="cp-pick-name">' + (numStr ? '<span style="color:#9aa1b2;font-weight:700;margin-right:5px;">' + numStr + '</span>' : '') + '<strong>' + esc(productCodeOf(p)) + '</strong>' + esc(p.name) + '</span>' +
+              '<span class="cp-pick-desc">' + esc(p.desc || '') + '</span>' +
+            '</span>' +
+            '<span class="cp-pick-meta"><span>від </span>' + esc(String(p.priceFrom)) + ' ₴</span>' +
+          '</div>';
+        }).join('') +
+        '<div class="cp-pick-hint-row">Enter — додати перший · клік — додати рядок · усі ' + productsCatalog.length + ' товарів з фото — «Каталог»</div>';
+      }
+      drop.classList.add('open');
+    }
+    function cpPickAdd(id) {
+      const p = productsCatalog.find(x => x.id === id);
+      if (!p) return;
+      const row = cpRowFromProduct(id);
+      if (!row) return;
+      cpRows.push(row);
+      saveKp();
+      cpRenderTableOnly();
+      // пікер лишається у фокусі: чистимо і одразу показуємо повний список знову
+      const inp = document.getElementById('cpPickSearch');
+      cpPickQ = '';
+      if (inp) { inp.value = ''; }
+      showToast(row.item.code + ' ' + p.name + ' — додано в КП (' + cpRows.length + ' поз.)');
+      cpPickSuggest();
+    }
+    function cpPickHide() {
+      const drop = document.getElementById('cpPickDrop');
+      if (drop) drop.classList.remove('open');
+    }
+    function cpFocusPick() {
+      const inp = document.getElementById('cpPickSearch');
+      if (inp) {
+        inp.focus();
+        cpPickSuggest();
+        try { inp.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+      }
+    }
+    function cpPickKey(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (cpPickLast && cpPickLast.length) cpPickAdd(cpPickLast[0].id);
+      } else if (e.key === 'Escape') {
+        cpPickHide();
+      }
+    }
+
+    function cpRender() {
+      if (!cpOverlayEl) return;
+      // v19: якщо активний режим перегляду товарів з фото — рендеримо його
+      if (cpBrowseMode) { cpRenderBrowse(); return; }
+      const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
       cpOverlayEl.innerHTML =
         '<div class="cp-sheet">' +
           '<div class="cp-chrome">' +
-            '<div><div class="cp-chrome-title">📊 Комерційна пропозиція</div>' +
-            '<div class="cp-chrome-sub">Калькулятор усіх товарів — додайте позиції, змініть кількість, збережіть PDF</div></div>' +
+            '<div><div class="cp-chrome-title">Комерційна пропозиція</div>' +
+            '<div class="cp-chrome-sub">Додавайте позиції прямо на папері нижче — пошук, свій товар, кількість і сума живуть тут</div></div>' +
+            '<span class="cp-chrome-meta" id="cpChromeMeta"></span>' +
             '<div class="cp-chrome-actions cp-no-print">' +
-              '<button type="button" class="cp-chip" onclick="cpBrowseOpen()" title="Переглянути всі вироби з фото — додавайте в кошик 🛒 або в КП 📊 не перериваючи пошук">🔍 Перегляд товарів</button>' +
-              '<select class="cp-add-select" onchange="cpPickChange(this.value)">' + opts + '</select>' +
-              '<button type="button" class="cp-chip" onclick="cpAddCatalog()"' + (cpPick ? '' : ' disabled') + ' title="Додати вибраний виріб">+ Додати</button>' +
-              '<button type="button" class="cp-chip" onclick="cpAddCustom()" title="Дописати свій товар">✎ Свій товар</button>' +
-              '<button type="button" class="cp-chip accent" onclick="cpSavePdf()" title="Зберегти пропозицію як PDF">💾 Зберегти PDF</button>' +
-              '<button type="button" class="cp-chip" onclick="cpCopy()" title="Копіювати текстом">📋</button>' +
+              '<button type="button" class="cp-chip" onclick="openCatalogModal()" title="Переглянути всі вироби з фото у вікні — сітка по 3 в ряду">Перегляд товарів</button>' +
+              '<button type="button" class="cp-chip accent" onclick="cpSavePdf()" title="Зберегти пропозицію як PDF">Зберегти PDF</button>' +
+              '<button type="button" class="cp-chip" onclick="cpCopy()" title="Копіювати текстом">Копіювати</button>' +
               '<button type="button" class="cp-chip danger" onclick="cpClose()" aria-label="Закрити">✕</button>' +
             '</div>' +
           '</div>' +
@@ -8678,25 +9021,24 @@
               '<div class="cp-head-right"><div class="cp-doc-title">Комерційна пропозиція</div>' +
               '<div class="cp-doc-num">№ ' + cpDocNum + '</div><div class="cp-doc-date">від ' + cpDocDate + '</div></div>' +
             '</div>' +
-            '<div class="cp-contacts"><span>ALFAMEDIA — друкарня alfa.copy.print</span><span>☎ ' + CP_PHONE + '</span><span>✉ ' + CP_EMAIL + '</span></div>' +
-            table +
+            cpBuildToolbarHtml(esc) +
+            '<div id="cpTableZone">' + cpBuildTableZone(esc) + '</div>' +
             '<div class="cp-terms">' +
               '<div class="cp-terms-title">Умови:</div>' +
               '<div>• Ціни розраховано моделлю друку А3 alfa.copy.print; макетування (+) входить у кожний розрахунок.</div>' +
               '<div>• Цифровий друк рахується до 1000 шт (флаєри та листівки — до 2500); більші тиражі — офсет, за окремим прорахунком.</div>' +
               '<div>• Пропозиція дійсна 14 календарних днів. Точний прорахунок підтвердить менеджер після перевірки макетів.</div>' +
-              '<div class="cp-terms-contacts">☎ ' + CP_PHONE + ' · ✉ ' + CP_EMAIL + ' · друкарня ALFAMEDIA (alfa.copy.print)</div>' +
             '</div>' +
           '</div>' +
         '</div>';
+      updateKpBadge();
     }
 
     // ===================== v19: РЕЖИМ ПЕРЕГЛЯДУ ТОВАРІВ З ФОТО =====================
-    // Перемикає КП у режим перегляду — сітка карточок з фото, пошуком і фільтром.
-    // На кожній карточці: 🛒 У кошик і 📊 В КП — після додавання пошук не переривається.
+    // v20: перегляд товарів переїхав в окреме модальне вікно «Перегляд товарів» (openCatalogModal)
+    // — сітка в ряди по три, пошук, категорії, підказки; відкривається і з калькулятора, і з КП.
     function cpBrowseOpen() {
-      cpBrowseMode = true;
-      cpRender();
+      openCatalogModal();
     }
     function cpBrowseClose() {
       cpBrowseMode = false;
@@ -8757,10 +9099,10 @@
           '</div>' +
           '<div class="cp-browse-actions">' +
             '<button type="button" class="cp-browse-btn cart' + (inCart ? ' added' : '') + '" onclick="cpBrowseAddToCart(\'' + p.id + '\')" title="Додати в кошик і продовжити пошук">' +
-              (inCart ? '✓ У кошику' : '🛒 У кошик') +
+              (inCart ? 'У кошику' : 'У кошик') +
             '</button>' +
             '<button type="button" class="cp-browse-btn kp' + (inKp ? ' added-kp' : '') + '" onclick="cpBrowseAddToKp(\'' + p.id + '\')" title="Додати в КП і продовжити пошук">' +
-              (inKp ? '✓ У КП' : '📊 В КП') +
+              (inKp ? 'У КП' : 'В КП') +
             '</button>' +
           '</div>' +
         '</div>';
@@ -8772,23 +9114,23 @@
       if (!cpOverlayEl) return;
       const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       const catOpts = ['<option value="all"' + (cpBrowseCat === 'all' ? ' selected' : '') + '>Усі категорії</option>']
-        .concat(CATEGORY_META.map(c => '<option value="' + c.key + '"' + (cpBrowseCat === c.key ? ' selected' : '') + '>' + c.icon + ' ' + esc(c.short) + '</option>'))
+        .concat(CATEGORY_META.map(c => '<option value="' + c.key + '"' + (cpBrowseCat === c.key ? ' selected' : '') + '>' + esc(c.short) + '</option>'))
         .join('');
       const { html: cardsHtml, count } = cpBrowseBuildCards();
       cpOverlayEl.innerHTML =
         '<div class="cp-sheet">' +
           '<div class="cp-chrome">' +
-            '<div><div class="cp-chrome-title">🔍 Перегляд товарів</div>' +
-            '<div class="cp-chrome-sub">Додавайте в кошик 🛒 або в КП 📊 — пошук не переривається. Клік на фото — збільшити.</div></div>' +
+            '<div><div class="cp-chrome-title">Перегляд товарів</div>' +
+            '<div class="cp-chrome-sub">Додавайте в кошик або в КП — пошук не переривається. Клік на фото — збільшити.</div></div>' +
             '<div class="cp-chrome-actions cp-no-print">' +
               '<button type="button" class="cp-chip" onclick="cpBrowseClose()" title="Повернутись до таблиці КП">← До КП (' + cpRows.length + ')</button>' +
-              '<button type="button" class="cp-chip accent" onclick="cpBrowseCheckout()" title="Перейти до оформлення кошика"' + (cart.length ? '' : ' disabled') + '>🛒 Кошик (' + cart.length + ')</button>' +
+              '<button type="button" class="cp-chip accent" onclick="cpBrowseCheckout()" title="Перейти до оформлення кошика"' + (cart.length ? '' : ' disabled') + '>Кошик (' + cart.length + ')</button>' +
               '<button type="button" class="cp-chip danger" onclick="cpClose()" aria-label="Закрити">✕</button>' +
             '</div>' +
           '</div>' +
           '<div class="cp-browse open">' +
             '<div class="cp-browse-header">' +
-              '<input type="text" id="cpBrowseSearch" class="cp-browse-search" placeholder="🔍 Пошук виробу за назвою, № або кодом..." value="' + esc(cpBrowseQ) + '" oninput="cpBrowseFilter()">' +
+              '<input type="text" id="cpBrowseSearch" class="cp-browse-search" placeholder="Пошук виробу за назвою, № або кодом..." value="' + esc(cpBrowseQ) + '" oninput="cpBrowseFilter()">' +
               '<select id="cpBrowseCat" class="cp-browse-cat" onchange="cpBrowseFilter()">' + catOpts + '</select>' +
               '<span class="cp-browse-info" id="cpBrowseInfo">' +
                 '<span>Знайдено: <b>' + count + '</b></span>' +
@@ -8815,7 +9157,7 @@
       cart.push(row.item);
       saveCart();
       cpBrowseAddedCart.add(id);
-      showToast('🛒 ' + productCodeOf(p) + ' у кошику — шукайте далі');
+      showToast(productCodeOf(p) + ' у кошику — шукайте далі');
       cpRenderBrowseOnly();
     }
 
@@ -8827,14 +9169,224 @@
       cpRows.push(row);
       cpBrowseAddedKp.add(id);
       saveKp();
-      showToast('📊 ' + productCodeOf(p) + ' у КП — шукайте далі');
+      showToast(productCodeOf(p) + ' у КП — шукайте далі');
       cpRenderBrowseOnly();
     }
 
     // З кошика → модалка замовлення (без закриття самого КП-режиму, лише перерендер після)
     function cpBrowseCheckout() {
-      if (!cart.length) { showToast('🛒 Кошик порожній — додайте хоча б один виріб'); return; }
+      if (!cart.length) { showToast('Кошик порожній — додайте хоча б один виріб'); return; }
       cpBrowseMode = false;
+      cpClose();
+      openCartModal();
+    }
+
+    // ===================== v20: МОДАЛ «ПЕРЕГЛЯД ТОВАРІВ» — сітка в ряди по три =====================
+    // Одне вікно для перегляду всього каталогу з фото: відкривається кнопкою «📚 Каталог товарів»
+    // на фото калькулятора, кнопкою «🔍 Перегляд товарів» у КП, а також кнопкою «🔍 Каталог» на папері КП.
+    // На картці: фото (клік — збільшення), №, код, назва, ПІДКАЗКА (опис), ціна «від» і дії:
+    // «✓ Вибрати» (у калькулятор) / «🛒 У кошик» / «📊 В КП». Пошук не переривається після додавання.
+    let catOverlayEl = null;
+    let catQ = '';
+    let catCat = 'all';
+
+    function catEscHandler(e) {
+      if (e.key === 'Escape' && catOverlayEl && catOverlayEl.classList.contains('open')) closeCatalogModal();
+    }
+
+    function openCatalogModal() {
+      if (!catOverlayEl) {
+        catOverlayEl = document.createElement('div');
+        catOverlayEl.className = 'cat-overlay';
+        catOverlayEl.id = 'catOverlay';
+        catOverlayEl.addEventListener('mousedown', (e) => { if (e.target === catOverlayEl) closeCatalogModal(); });
+        document.body.appendChild(catOverlayEl);
+        document.addEventListener('keydown', catEscHandler);
+      }
+      catRender();
+      catOverlayEl.classList.add('open');
+      // фокус у пошук — одразу можна друкувати запит
+      const s = document.getElementById('catSearch');
+      if (s) setTimeout(() => { try { s.focus(); } catch (e) {} }, 60);
+    }
+
+    function closeCatalogModal() {
+      if (catOverlayEl) catOverlayEl.classList.remove('open');
+    }
+
+    function catIsKpOpen() {
+      return !!(cpOverlayEl && cpOverlayEl.style.display !== 'none' && document.body.classList.contains('cp-open'));
+    }
+
+    function catFilter() {
+      const inp = document.getElementById('catSearch');
+      const sel = document.getElementById('catCatSel');
+      if (inp) catQ = (inp.value || '').toLowerCase().trim();
+      if (sel) catCat = sel.value;
+      catRenderGridOnly();
+    }
+
+    function catList() {
+      return productsCatalog.filter(p => {
+        const matchCat = (catCat === 'all') || (p.category === catCat);
+        if (!matchCat) return false;
+        if (!catQ) return true;
+        const num = String(PRODUCT_NUMBERS[p.id] || 0);
+        return p.name.toLowerCase().includes(catQ) ||
+          (p.desc || '').toLowerCase().includes(catQ) ||
+          num === catQ ||
+          ('№' + num.padStart(3, '0')).includes(catQ) ||
+          productCodeOf(p).toLowerCase().includes(catQ);
+      });
+    }
+
+    function catBuildCards() {
+      const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const list = catList();
+      const kpOpen = catIsKpOpen();
+      const cardsHtml = list.length ? list.map(p => {
+        const num = PRODUCT_NUMBERS[p.id] || 0;
+        const numStr = num ? String(num).padStart(3, '0') : '';
+        const src = p.photo ? p.photo : (num ? 'mockups/' + num + '.jpg' : '');
+        const thumbInner = src
+          ? '<img src="' + src + '" alt="' + esc(p.name) + '" loading="lazy" onerror="this.style.display=\'none\';this.parentElement.querySelector(\'.mockup-ph\').style.display=\'flex\'">' +
+            '<div class="mockup-ph" style="display:none;"><span class="mockup-ph-icon">' + (p.icon || '📐') + '</span><span class="mockup-ph-title">№' + numStr + '</span><span class="mockup-ph-sub">немає фото</span></div>'
+          : '<div class="mockup-ph"><span class="mockup-ph-icon">' + (p.icon || '📐') + '</span><span class="mockup-ph-title">№' + numStr + '</span><span class="mockup-ph-sub">без фото</span></div>';
+        const inCart = cpBrowseAddedCart.has(p.id);
+        const inKp = cpBrowseAddedKp.has(p.id);
+        return '<div class="cat-card">' +
+          '<div class="cat-thumb" onclick="openMockupModalByProductId(\'' + p.id + '\')" title="Збільшити фото">' +
+            (numStr ? '<span class="cat-num">№' + numStr + '</span>' : '') +
+            '<span class="cat-zoomhint">збільшити</span>' +
+            thumbInner +
+          '</div>' +
+          '<div class="cat-infoblock">' +
+            '<div class="cat-code">' + productCodeOf(p) + '</div>' +
+            '<div class="cat-name" title="' + esc(p.name) + '">' + esc(p.name) + '</div>' +
+            (p.desc ? '<div class="cat-desc" title="' + esc(p.desc) + '">' + esc(p.desc) + '</div>' : '') +
+            '<div class="cat-price">від <b>' + (p.priceFrom || '—') + ' ₴</b>' + (p.kind === 'merch' && p.unitPrice ? ' · ' + p.unitPrice + ' ₴/шт' : '') + '</div>' +
+          '</div>' +
+          '<div class="cat-actions' + (kpOpen ? ' two' : '') + '">' +
+            (kpOpen ? '' : '<button type="button" class="cat-btn pick" onclick="catSelect(\'' + p.id + '\')" title="Вибрати цей виріб у калькуляторі і закрити каталог">Вибрати</button>') +
+            '<button type="button" class="cat-btn cart' + (inCart ? ' added' : '') + '" onclick="catAddToCart(\'' + p.id + '\')" title="Додати в кошик і продовжити перегляд">' +
+              (inCart ? 'У кошику' : 'У кошик') +
+            '</button>' +
+            '<button type="button" class="cat-btn kp' + (inKp ? ' added-kp' : '') + '" onclick="catAddToKp(\'' + p.id + '\')" title="Додати в комерційну пропозицію і продовжити перегляд">' +
+              (inKp ? 'У КП' : 'В КП') +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      }).join('') : '<div class="cat-empty">Нічого не знайдено. Спробуйте інший запит або категорію.</div>';
+      return { html: cardsHtml, count: list.length, kpOpen: kpOpen };
+    }
+
+    function catRenderGridOnly() {
+      if (!catOverlayEl) return;
+      const grid = document.getElementById('catGrid');
+      const info = document.getElementById('catInfo');
+      if (!grid) return;
+      const { html, count } = catBuildCards();
+      grid.innerHTML = html;
+      if (info) info.innerHTML =
+        '<span>Знайдено: <b>' + count + '</b></span>' +
+        '<span>У кошику: <b>' + cart.length + '</b></span>' +
+        '<span>У КП: <b>' + cpRows.length + '</b></span>';
+    }
+
+    function catRender() {
+      if (!catOverlayEl) return;
+      const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const catOpts = ['<option value="all"' + (catCat === 'all' ? ' selected' : '') + '>Усі категорії</option>']
+        .concat(CATEGORY_META.map(c => '<option value="' + c.key + '"' + (catCat === c.key ? ' selected' : '') + '>' + esc(c.short) + '</option>'))
+        .join('');
+      const { html: cardsHtml, count, kpOpen } = catBuildCards();
+      catOverlayEl.innerHTML =
+        '<div class="cat-sheet">' +
+          '<div class="cat-chrome">' +
+            '<div><div class="cat-chrome-title">Перегляд товарів</div>' +
+            '<div class="cat-chrome-sub">Усі ' + productsCatalog.length + ' товарів з фото · клік на фото — збільшити · додавайте не перериваючи пошук</div></div>' +
+            '<div class="cat-chrome-actions">' +
+              (kpOpen
+                ? '<button type="button" class="cp-chip" onclick="catBackToKp()" title="Повернутися до таблиці КП">← До КП (' + cpRows.length + ')</button>' +
+                  '<button type="button" class="cp-chip" onclick="catCheckout()" title="Перейти до оформлення кошика"' + (cart.length ? '' : ' disabled') + '>Кошик (' + cart.length + ')</button>'
+                : '<button type="button" class="cp-chip" onclick="catOpenKp()" title="Відкрити комерційну пропозицію">КП (' + cpRows.length + ')</button>') +
+              '<button type="button" class="cp-chip danger" onclick="closeCatalogModal()" aria-label="Закрити">✕</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cat-body">' +
+            '<div class="cat-header">' +
+              '<input type="text" id="catSearch" class="cat-search" placeholder="Пошук за назвою, № або кодом…" value="' + esc(catQ) + '" oninput="catFilter()">' +
+              '<select id="catCatSel" class="cat-cat" onchange="catFilter()">' + catOpts + '</select>' +
+              '<span class="cat-info" id="catInfo">' +
+                '<span>Знайдено: <b>' + count + '</b></span>' +
+                '<span>У кошику: <b>' + cart.length + '</b></span>' +
+                '<span>У КП: <b>' + cpRows.length + '</b></span>' +
+              '</span>' +
+            '</div>' +
+            '<div class="cat-grid" id="catGrid">' + cardsHtml + '</div>' +
+          '</div>' +
+        '</div>';
+      // фокус назад у пошук після перерендеру (пошук не переривається)
+      const s = document.getElementById('catSearch');
+      if (s && catQ) {
+        s.focus();
+        try { s.setSelectionRange(catQ.length, catQ.length); } catch (e) {}
+      }
+    }
+
+    function catAddToCart(id) {
+      const p = productsCatalog.find(x => x.id === id);
+      if (!p) return;
+      const row = cpRowFromProduct(id);
+      if (!row || !row.item) return;
+      cart.push(row.item);
+      saveCart();
+      cpBrowseAddedCart.add(id);
+      showToast(productCodeOf(p) + ' ' + p.name + ' — у кошику, шукайте далі');
+      catRenderGridOnly();
+    }
+
+    function catAddToKp(id) {
+      const p = productsCatalog.find(x => x.id === id);
+      if (!p) return;
+      const row = cpRowFromProduct(id);
+      if (!row) return;
+      cpRows.push(row);
+      cpBrowseAddedKp.add(id);
+      saveKp();
+      showToast(productCodeOf(p) + ' ' + p.name + ' — у КП (' + cpRows.length + ' поз.), шукайте далі');
+      catRenderGridOnly();
+    }
+
+    // «✓ Вибрати» — вибір виробу в калькуляторі (з тренера фото кнопкою «Каталог товарів»)
+    function catSelect(id) {
+      const p = productsCatalog.find(x => x.id === id);
+      if (!p) return;
+      closeCatalogModal();
+      selectProduct(p);
+      const active = document.querySelector('.view-container.active-view');
+      if (active && active.id !== 'viewCalc') switchMainView('calc');
+      const num = PRODUCT_NUMBERS[p.id] || 0;
+      showToast('✓ Вибрано: ' + (num ? '№' + String(num).padStart(3, '0') + ' · ' : '') + p.name);
+    }
+
+    // Навігація: з каталогу назад у відкриту КП / відкрити КП з калькулятора
+    function catBackToKp() {
+      closeCatalogModal();
+      if (catIsKpOpen()) {
+        cpRenderTableOnly(); // підтягнути позиції, додані з каталог-вікна
+        updateKpBadge();
+      } else {
+        openProposal();
+      }
+    }
+    function catOpenKp() {
+      closeCatalogModal();
+      openProposal();
+    }
+    function catCheckout() {
+      if (!cart.length) { showToast('Кошик порожній — додайте хоча б один виріб'); return; }
+      closeCatalogModal();
       cpClose();
       openCartModal();
     }
