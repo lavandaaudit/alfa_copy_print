@@ -1486,12 +1486,13 @@
       background-size: 16px 16px, 16px 16px, auto;
       border: 1px solid var(--border); overflow: hidden;
       display: flex; align-items: center; justify-content: center;
-      cursor: zoom-in;
+      cursor: default;
     }
     .mockup-window.empty { cursor: default; border-style: dashed; }
     .mockup-window img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .mockup-num {
-      position: absolute; top: 6px; left: 6px;
+      position: absolute; top: 6px; left: 6px; z-index: 6;
+      pointer-events: none;
       background: var(--accent-yellow); color: #000;
       font-size: 9.5px; font-weight: 900; padding: 2px 6px;
       letter-spacing: .5px; font-family: var(--font-mono);
@@ -2582,6 +2583,247 @@
       .pack-hero h1 { font-size: 23px; }
       .pack-hero-sub { font-size: 12px; }
     }
+
+    /* ===================== TASK 24: КОШИК → КОМЕРЦІЙНА ПРОПОЗИЦІЯ «ЛИСТ А4» =====================
+       Світлий паперовий лист, широкий (до 1060px), вся інформація на одному екрані без скрола,
+       редаговані поля замовника прямо на документі. */
+    #orderModal .modal-card.a4 {
+      background: #fbfaf6;
+      color: #16181f;
+      max-width: 1060px;
+      width: min(96vw, 1060px);
+      padding: 0;
+      border: 1px solid #d8d4c6;
+      border-radius: 10px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 2px 0 rgba(255,255,255,.6) inset;
+      max-height: calc(100vh - 32px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      font-size: 11.5px;
+    }
+    #orderModal .modal-card.a4 .modal-close {
+      background: #edebe2; color: #16181f; border: 1px solid #d8d4c6;
+    }
+    #orderModal .modal-card.a4 .modal-close:hover { background: #16181f; color: #fbfaf6; }
+
+    /* --- шапка документа --- */
+    .a4-head {
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 18px;
+      padding: 18px 28px 12px;
+      border-bottom: 2.5px solid #16181f;
+    }
+    .a4-brand-logo { font-family: var(--font-display); font-size: 19px; font-weight: 900; letter-spacing: -0.02em; color: #16181f; }
+    .a4-brand-logo em { font-style: normal; color: #b79f00; }
+    .a4-brand-sub { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: #8a8d98; margin-top: 2px; }
+    .a4-doc-meta { text-align: right; padding-right: 42px; }
+    .a4-doc-title { font-size: 14.5px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; color: #16181f; }
+    .a4-doc-sub { font-family: var(--font-mono); font-size: 10px; color: #6d707c; margin-top: 3px; }
+
+    /* --- сторони: виконавець / замовник --- */
+    .a4-parties {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px;
+      padding: 12px 28px 4px;
+    }
+    .a4-party {
+      background: #ffffff; border: 1px solid #e2dfd4; border-radius: 8px; padding: 9px 12px 10px;
+    }
+    .a4-party-label {
+      display: block; font-size: 8.5px; font-weight: 800; letter-spacing: .16em;
+      text-transform: uppercase; color: #9a9da8; margin-bottom: 5px;
+    }
+    .a4-party-line { font-size: 11.5px; font-weight: 700; color: #16181f; line-height: 1.45; }
+    .a4-party-dim { font-size: 9.5px; color: #7c7f8a; line-height: 1.5; margin-top: 1px; }
+    .a4-client-grid { display: grid; grid-template-columns: 1.4fr 1fr 1.2fr; gap: 7px; }
+    #orderModal .a4 .form-group { margin-bottom: 0; }
+    #orderModal .a4 .form-group label {
+      font-size: 8px; color: #9a9da8; margin-bottom: 3px; letter-spacing: .12em;
+    }
+    #orderModal .a4 .input-box {
+      background: #fbfaf6; border: 1px solid #ddd9cb; color: #16181f;
+      font-size: 11px; padding: 6px 8px; border-radius: 6px; width: 100%;
+    }
+    #orderModal .a4 .input-box::placeholder { color: #b3b0a4; }
+    #orderModal .a4 .input-box:focus { border-color: #16181f; outline: none; }
+
+    /* --- таблиця специфікації / позицій --- */
+    .a4-spec, .a4-items { padding: 10px 28px 2px; }
+    .a4-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e2dfd4; border-radius: 8px; overflow: hidden; }
+    .a4-table th {
+      background: #f0eee6; color: #6d707c; font-size: 8.5px; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase; text-align: left;
+      padding: 7px 10px; border-bottom: 1.5px solid #d8d4c6;
+    }
+    .a4-table td { padding: 7px 10px; border-bottom: 1px solid #eceade; font-size: 11px; color: #2a2d38; vertical-align: middle; }
+    .a4-table tr:last-child td { border-bottom: none; }
+    .a4-th-num, .a4-th-qty, .a4-th-amt { text-align: right !important; }
+    .a4-td-label { width: 190px; color: #7c7f8a !important; font-size: 9.5px !important; text-transform: uppercase; letter-spacing: .08em; }
+    .a4-td-val { font-weight: 600; color: #16181f; }
+    .a4-td-val small { display: block; font-weight: 400; color: #8a8d98; font-size: 9.5px; margin-top: 1px; }
+    .a4-num { font-family: var(--font-mono); color: #9a9da8; font-size: 10px; text-align: right; width: 26px; }
+    .a4-item-cell { font-weight: 700; color: #16181f; font-size: 11.5px; white-space: nowrap; }
+    .a4-item-cell .mcr-icon { margin-right: 4px; }
+    .a4-spec-cell { color: #6d707c; font-size: 9.5px; max-width: 330px; }
+    .a4-qty-cell { text-align: right; white-space: nowrap; font-family: var(--font-mono); font-size: 10.5px; color: #2a2d38; }
+    .a4-amt { text-align: right; font-family: var(--font-mono); font-weight: 800; font-size: 11.5px; color: #16181f; white-space: nowrap; }
+
+    /* степпер кіл-ті на листі */
+    .mcr-qty-edit { display: inline-flex; align-items: center; gap: 4px; }
+    .mcr-qty-edit button {
+      width: 19px; height: 19px; background: #f0eee6; border: 1px solid #d8d4c6;
+      color: #16181f; font-size: 11px; font-weight: 800; cursor: pointer; border-radius: 5px;
+      display: inline-flex; align-items: center; justify-content: center; line-height: 1;
+    }
+    .mcr-qty-edit button:hover { background: #16181f; color: #fbfaf6; }
+    .mcr-qty-edit .mcr-qty-val { min-width: 26px; text-align: center; font-family: var(--font-mono); font-weight: 700; }
+    .mcr-qty-edit button, .mcr-del { transition: all .12s ease; }
+    .a4-del-cell { text-align: center; width: 30px; }
+    .mcr-del {
+      width: 21px; height: 21px; background: rgba(200,48,48,.07);
+      border: 1px solid rgba(200,48,48,.3); color: #c03030; font-size: 10px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; border-radius: 5px;
+    }
+    .mcr-del:hover { background: #c03030; color: #fff; }
+
+    /* підсумок */
+    .a4-total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 10px 28px 0; padding: 10px 14px;
+      background: rgba(255, 222, 0, .25); border: 1.5px solid #16181f; border-radius: 8px;
+    }
+    .a4-total-row span { font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #3c3f4a; }
+    .a4-total-row strong { font-family: var(--font-display); font-size: 21px; font-weight: 900; color: #16181f; letter-spacing: -0.01em; }
+    .a4-tr-total td { background: #f7f5ec; border-top: 1.5px solid #16181f; }
+    .a4-tr-total .a4-total-amt { font-family: var(--font-display); font-size: 15px; font-weight: 900; color: #16181f; text-align: right; }
+
+    /* коментар + дії */
+    .a4-note-row { display: flex; align-items: center; gap: 10px; padding: 12px 28px 2px; }
+    .a4-note-row label { flex: 0 0 auto; font-size: 8.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #9a9da8; }
+    #orderModal .a4 .a4-note-input {
+      flex: 1; background: transparent; border: none; border-bottom: 1px dashed #b9b5a4;
+      color: #16181f; font-size: 11px; padding: 4px 2px;
+    }
+    #orderModal .a4 .a4-note-input:focus { outline: none; border-bottom-color: #16181f; }
+    .a4-actions { display: flex; align-items: center; gap: 14px; padding: 12px 28px 16px; }
+    #orderModal .a4 .btn-submit-order-main {
+      background: #16181f; color: #fbfaf6; border: none; border-radius: 8px;
+      font-size: 12px; font-weight: 800; letter-spacing: .04em; padding: 11px 22px; cursor: pointer;
+      transition: all .15s ease;
+    }
+    #orderModal .a4 .btn-submit-order-main:hover { background: #ffde00; color: #16181f; }
+    #orderModal .a4 .btn-submit-order-main:disabled { opacity: .55; cursor: wait; }
+    .a4-valid-note { font-size: 9px; color: #8a8d98; line-height: 1.5; }
+
+    /* футер документа */
+    .a4-foot {
+      display: flex; justify-content: space-between; gap: 14px;
+      border-top: 1px solid #ddd9cb; padding: 9px 28px 12px;
+      font-size: 9px; color: #8a8d98; line-height: 1.55;
+    }
+    .a4-foot b { color: #3c3f4a; }
+
+    /* успішна відправка — світла версія */
+    #orderModal .a4 .a4-success { color: #16181f; text-align: center; padding: 34px 20px 30px; }
+    #orderModal .a4 .a4-success h3 { font-size: 18px; font-weight: 900; margin: 8px 0 6px; }
+    #orderModal .a4 .a4-success p { font-size: 11.5px; color: #6d707c; }
+
+    /* перекриття старих стилів кошика для табличної розмітки А4 */
+    #orderModal .modal-card.a4 .modal-cart-row { display: table-row; background: transparent; border: none; border-left: none; padding: 0; gap: 0; }
+    #orderModal .modal-card.a4 .mcr-qty-edit { border: none; background: transparent; }
+    #orderModal .modal-card.a4 .mcr-qty-edit button { background: #f0eee6; border: 1px solid #d8d4c6; color: #16181f; }
+    #orderModal .modal-card.a4 .mcr-qty-edit button:hover { background: #16181f; color: #fbfaf6; }
+    #orderModal .modal-card.a4 .mcr-qty-edit .mcr-qty-val { border-left: none; border-right: none; color: #16181f; }
+    #orderModal .modal-card.a4 .cart-empty-note { color: #7c7f8a; padding: 26px 10px; }
+
+    @media (max-width: 1120px) {
+      #orderModal .modal-card.a4 { max-width: 720px; }
+      .a4-parties { grid-template-columns: 1fr; }
+      .a4-spec-cell { max-width: 200px; }
+    }
+    @media (max-width: 760px) {
+      #orderModal .modal-card.a4 { max-width: 100%; max-height: 94vh; font-size: 11px; }
+      .a4-head { flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px 16px 10px; }
+      .a4-doc-meta { text-align: left; }
+      .a4-parties, .a4-spec, .a4-items, .a4-note-row, .a4-actions, .a4-foot { padding-left: 14px; padding-right: 14px; }
+      .a4-client-grid { grid-template-columns: 1fr; }
+      .a4-total-row { margin: 8px 14px 0; }
+      .a4-spec-cell { display: none; }
+      .a4-note-row { flex-direction: column; align-items: stretch; gap: 4px; }
+      .a4-actions { flex-direction: column; align-items: stretch; }
+    }
+
+    /* ===================== TASK 26: ТІНІ-ГОРТАННЯ НА ПРЕВʼЮ (замість стрілок) =====================
+       Стрілок-кнопок не видно: по краях фото — темнуваті тіні-градієнти.
+       Наведення на фото — тіні мʼяко проявляються; наведення на сам край —
+       тінь темніє й підказує шевроном «гортати». Уся зона тіні клікабельна.
+       Свайп на тач-екранах і клавіші ←/→ працюють як і раніше. */
+    .mockup-nav-zone {
+      position: absolute; top: 0; bottom: 0; width: 78px; max-width: 30%;
+      z-index: 5; border: none; padding: 0; margin: 0;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: center;
+      opacity: 0; transition: opacity .22s ease;
+      outline: none;
+    }
+    .mockup-nav-zone-l {
+      left: 0; justify-content: flex-start; padding-left: 12px;
+      background: linear-gradient(to right, rgba(4,6,11,.66), rgba(4,6,11,0));
+    }
+    .mockup-nav-zone-r {
+      right: 0; justify-content: flex-end; padding-right: 12px;
+      background: linear-gradient(to left, rgba(4,6,11,.66), rgba(4,6,11,0));
+    }
+    .mockup-nav-zone .chev {
+      color: #fff; font-size: 30px; font-weight: 400; line-height: 1;
+      text-shadow: 0 1px 10px rgba(0,0,0,.85);
+      opacity: 0; transform: scale(.9);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    /* наведення на фото — тіні-підказки проявляються з обох боків, шеврон ледь помітний */
+    .mockup-window:hover .mockup-nav-zone { opacity: .55; }
+    .mockup-window:hover .mockup-nav-zone .chev { opacity: .5; }
+    /* наведення на сам край — тінь темніє, шеврон яскравіє: «натисни мене» */
+    .mockup-window .mockup-nav-zone:hover { opacity: 1; }
+    .mockup-window .mockup-nav-zone:hover .chev { opacity: .95; transform: scale(1); }
+    /* тач-екрани (hover немає): тіні видно завжди, зони тапаються */
+    @media (hover: none) {
+      .mockup-nav-zone { opacity: .8; }
+      .mockup-nav-zone .chev { opacity: .7; }
+    }
+    @media (max-width: 720px) {
+      .mockup-nav-zone { width: 60px; }
+      .mockup-nav-zone .chev { font-size: 26px; }
+    }
+
+    .mockup-modal-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(8, 10, 16, .78); color: #fff;
+      border: 1px solid rgba(255, 255, 255, .3);
+      font-size: 28px; font-weight: 700; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10; padding: 0 0 3px;
+      transition: all .15s ease;
+    }
+    .mockup-modal-nav:hover { background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); }
+    .mockup-modal-nav-l { left: 22px; }
+    .mockup-modal-nav-r { right: 22px; }
+    .mockup-modal-select {
+      position: absolute; bottom: 64px; left: 50%; transform: translateX(-50%);
+      background: var(--accent-yellow); color: #000; border: none;
+      font-size: 12.5px; font-weight: 900; letter-spacing: .03em;
+      padding: 10px 20px; border-radius: 9px; cursor: pointer; z-index: 10;
+      box-shadow: 0 8px 26px rgba(255, 222, 0, .35);
+      transition: all .15s ease; white-space: nowrap;
+      font-family: var(--font);
+    }
+    .mockup-modal-select:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 12px 34px rgba(255, 222, 0, .5); }
+    .mockup-modal-count { color: var(--text-muted); font-weight: 600; margin-left: 8px; font-size: 11px; }
+    @media (max-width: 760px) {
+      .mockup-modal-nav { width: 42px; height: 42px; font-size: 22px; }
+      .mockup-modal-nav-l { left: 8px; }
+      .mockup-modal-nav-r { right: 8px; }
+      .mockup-modal-select { bottom: 58px; font-size: 11.5px; padding: 9px 14px; }
+    }
   </style>
 
 </head>
@@ -3254,46 +3496,76 @@
 
   <!-- MODAL CHECKOUT -->
   <div class="modal-overlay" id="orderModal">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-card a4">
+      <button class="modal-close" onclick="closeModal()" title="Закрити">&times;</button>
       <div id="modalFormWrap">
-        <h3 id="modalTitle" style="font-size: 15px; font-weight: 800; margin-bottom: 4px;">Замовлення онлайн</h3>
-        <p id="modalSub" style="font-size: 10.5px; color: var(--text-muted); margin-bottom: 10px;">Специфікацію розраховано за моделлю А3 alfa.copy.print</p>
-
-        <div class="modal-summary-box" id="modalSpecDetails">
-          <!-- Filled by JS -->
+        <div class="a4-head">
+          <div class="a4-brand">
+            <div class="a4-brand-logo">alfa<em>.copy.</em>print</div>
+            <div class="a4-brand-sub">друкарня · А3 формат · рекламна продукція</div>
+          </div>
+          <div class="a4-doc-meta">
+            <div class="a4-doc-title" id="modalTitle">Комерційна пропозиція</div>
+            <div class="a4-doc-sub" id="modalSub">№ — · дата —</div>
+          </div>
         </div>
-        <div class="modal-cart-list" id="modalCartList" style="display:none;"></div>
 
         <form id="orderForm" onsubmit="submitOrder(event)">
-          <div class="form-group">
-            <label>Контактна особа / Компанія *</label>
-            <input type="text" id="fName" class="input-box" placeholder="Олександр / ТОВ Альфа" required>
+          <div class="a4-parties">
+            <div class="a4-party">
+              <span class="a4-party-label">Виконавець</span>
+              <div class="a4-party-line">Друкарня alfa.copy.print</div>
+              <div class="a4-party-dim">А3-друк · оперативна поліграфія · мерч і пакунки<br><b>2294598@gmail.com</b></div>
+            </div>
+            <div class="a4-party">
+              <span class="a4-party-label">Замовник — поля редагуються</span>
+              <div class="a4-client-grid">
+                <div class="form-group">
+                  <label>Контактна особа / Компанія *</label>
+                  <input type="text" id="fName" class="input-box" placeholder="Олександр / ТОВ Альфа" required>
+                </div>
+                <div class="form-group">
+                  <label>Телефон *</label>
+                  <input type="tel" id="fPhone" class="input-box" value="+380" required>
+                </div>
+                <div class="form-group">
+                  <label>Email *</label>
+                  <input type="email" id="fEmail" class="input-box" placeholder="name@domain.com" required>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Телефон для зв'язку *</label>
-            <input type="tel" id="fPhone" class="input-box" value="+380" required>
+
+          <div class="a4-spec" id="modalSpecDetails">
+            <!-- Filled by JS -->
           </div>
-          <div class="form-group">
-            <label>Email *</label>
-            <input type="email" id="fEmail" class="input-box" placeholder="name@domain.com" required>
+          <div class="a4-items" id="modalCartList" style="display:none;"></div>
+
+          <div class="a4-note-row">
+            <label>Коментар / макет</label>
+            <input type="text" id="fComment" class="a4-note-input" placeholder="Google Drive, WeTransfer або побажання — цей рядок теж редагується">
           </div>
-          <div class="form-group">
-            <label>Коментар / Посилання на макет</label>
-            <textarea id="fComment" class="input-box" style="resize: vertical; min-height: 50px;" placeholder="Google Drive, WeTransfer або побажання..."></textarea>
+
+          <div class="a4-actions">
+            <button type="submit" id="modalSubmitBtn" class="btn-submit-order-main">
+              Підтвердити та відправити КП
+            </button>
+            <div class="a4-valid-note">Ціни дійсні 14 днів · відправка на <b>2294598@gmail.com</b><br>без реєстрації та передоплати — рахунок після підтвердження</div>
           </div>
-          <button type="submit" id="modalSubmitBtn" class="btn-submit-order-main" style="margin-top: 8px;">
-            Підтвердити та відправити
-          </button>
         </form>
+
+        <div class="a4-foot">
+          <div><b>alfa.copy.print</b> — специфікація розрахована автоматично за моделлю А3</div>
+          <div>КП сформовано <b id="a4FootDate">—</b> · все на одному листі</div>
+        </div>
       </div>
 
-      <div id="modalSuccessWrap" style="display: none; text-align: center; padding: 20px 0;">
-        <p id="orderEmailStatus" style="font-size: 12px; margin-bottom: 8px;"></p>
+      <div id="modalSuccessWrap" class="a4-success" style="display: none;">
+        <p id="orderEmailStatus" style="font-size: 11.5px; margin-bottom: 8px;"></p>
         <div style="font-size: 40px; color: #10b981; margin-bottom: 8px;">✓</div>
-        <h3 style="font-size: 18px; margin-bottom: 6px;">Замовлення прийнято!</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
-          Номер заявки: <strong id="orderCode" style="color: var(--accent-yellow);">AM-2026-9041</strong>
+        <h3>Замовлення прийнято!</h3>
+        <p style="margin-bottom: 14px;">
+          Номер заявки: <strong id="orderCode" style="color: #16181f; font-family: var(--font-mono);">AM-2026-9041</strong>
         </p>
         <button class="btn-submit-order-main" onclick="closeModal()">Продовжити вибір →</button>
       </div>
@@ -3305,10 +3577,13 @@
 
   <!-- v19: МОДАЛ ЗБІЛЬШЕНОГО ФОТО (замість нової вкладки) -->
   <div class="mockup-modal-overlay" id="mockupModal" onclick="if(event.target===this) closeMockupModal()">
-    <span class="mockup-modal-zoom-hint">🔍 клік поза фото — закрити</span>
+    <span class="mockup-modal-zoom-hint">🔍 клік поза фото — закрити · ← → гортати вироби · свайп</span>
     <button class="mockup-modal-close" onclick="closeMockupModal()" aria-label="Закрити">&times;</button>
+    <button class="mockup-modal-nav mockup-modal-nav-l" onclick="event.stopPropagation(); mockNav(-1)" title="Попередній виріб (←)" aria-label="Попередній виріб">&lsaquo;</button>
+    <button class="mockup-modal-nav mockup-modal-nav-r" onclick="event.stopPropagation(); mockNav(1)" title="Наступний виріб (→)" aria-label="Наступний виріб">&rsaquo;</button>
     <img id="mockupModalImg" src="" alt="" onclick="event.stopPropagation()">
     <div class="mockup-modal-cap" id="mockupModalCap"></div>
+    <button class="mockup-modal-select" id="mockupModalSelect" onclick="event.stopPropagation(); mockSelectCurrent()" title="Вибрати цей виріб у калькуляторі">✓ Вибрати цей виріб</button>
   </div>
 
 
@@ -4643,7 +4918,7 @@
         const photo = document.createElement('div');
         photo.className = 'calc-photo-card';
         photo.innerHTML =
-          '<div class="photo-label"><span>Прев\u2019ю виробу</span><span class="photo-label-hint">клік на фото — збільшити в модальному вікні</span></div>' +
+          '<div class="photo-label"><span>Прев\u2019ю виробу</span><span class="photo-label-hint">гортайте вироби по краях фото ‹ ›</span></div>' +
           '<div class="photo-grid">' +
             '<div class="mockup-window empty" id="mockupWindow" title="Мокап виробу"></div>' +
           '</div>';
@@ -5597,8 +5872,29 @@
     }
 
     // --- Modal Handling ---
+    /* ---- TASK 24: метадані документа КП (номер + дата) ---- */
+    var modalDocCode = null;
+    function a4NewDocMeta() {
+      modalDocCode = 'AM-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+      const d = new Date();
+      const dateStr = d.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const sub = document.getElementById('modalSub');
+      if (sub) sub.textContent = '№ ' + modalDocCode + ' · від ' + dateStr;
+      const foot = document.getElementById('a4FootDate');
+      if (foot) foot.textContent = dateStr;
+    }
+    function a4SpecTable(rows, totalValue) {
+      return '<table class="a4-table"><tbody>' +
+        rows.map(function (r) {
+          return '<tr><td class="a4-td-label">' + r[0] + '</td><td class="a4-td-val">' + r[1] + '</td></tr>';
+        }).join('') +
+        '<tr class="a4-tr-total"><td class="a4-td-label">РАЗОМ до сплати</td><td class="a4-total-amt">' + totalValue + '</td></tr>' +
+        '</tbody></table>';
+    }
+
     function openModal() {
       modalModeCart = false;
+      a4NewDocMeta();
       renderModalChrome();
       const kind = currentProductKind();
       const details = document.getElementById('modalSpecDetails');
@@ -5606,22 +5902,25 @@
         const res = calcAnyProduct(cfg.product, cfg.quantity, cfg.pkgItems);
         const p = cfg.product;
         details.innerHTML = kind === 'merch'
-          ? '<div>Виріб: <strong>' + productCodeOf(p) + ' ' + calcProductNameS(cfg) + '</strong></div>' +
-            '<div>Нанесення: <strong>' + (p.applyMethod || 'друк лого') + '</strong></div>' +
-            '<div>Тираж: <strong>' + cfg.quantity + ' шт.</strong> × ' + p.unitPrice + ' ₴</div>' +
-            '<div>Макетування лого: <strong>+</strong></div>' +
-            '<div style="border-top: 1px solid #232738; margin-top: 6px; padding-top: 6px; color: var(--accent-yellow); font-size: 14px; font-weight: 800;">РАЗОМ: ' + formatUAH(res.total) + ' (' + formatUAH(res.unit) + ' / шт)</div>'
+          ? a4SpecTable([
+              ['Виріб', productCodeOf(p) + ' ' + calcProductNameS(cfg)],
+              ['Нанесення', p.applyMethod || 'друк лого'],
+              ['Тираж', cfg.quantity + ' шт. × ' + p.unitPrice + ' ₴'],
+              ['Макетування лого', '+ включено у ціну']
+            ], formatUAH(res.total) + ' &nbsp;(' + formatUAH(res.unit) + ' / шт)')
           : kind === 'simple'
-            ? '<div>Виріб: <strong>' + productCodeOf(p) + ' ' + calcProductNameS(cfg) + '</strong></div>' +
-              '<div>Тираж: <strong>' + cfg.quantity + ' шт.</strong> × ' + formatUAH(res.simpleRate) + '/шт</div>' +
-              '<div>Щаблі: <strong>' + (productTiersS(p).map(function (t) { return 'від ' + t.qty + ' шт — ' + formatUAH(t.price) + '/шт'; }).join(' · ') || '—') + '</strong></div>' +
-              '<div>Макетування: <strong>+ (включено у ціну)</strong></div>' +
-              '<div style="border-top: 1px solid #232738; margin-top: 6px; padding-top: 6px; color: var(--accent-yellow); font-size: 14px; font-weight: 800;">РАЗОМ: ' + formatUAH(res.total) + '</div>'
-          : '<div>Пакунок: <strong>' + productCodeOf(p) + ' ' + calcProductNameS(cfg) + '</strong></div>' +
-            '<div>Кількість комплектів: <strong>' + cfg.quantity + '</strong></div>' +
-            '<div style="font-size: 11px; color: var(--text-muted);">Склад: ' + pkgItemsSpecText(true) + '</div>' +
-            '<div>Макетування і постдрук: <strong>+ (входять)</strong></div>' +
-            '<div style="border-top: 1px solid #232738; margin-top: 6px; padding-top: 6px; color: var(--accent-yellow); font-size: 14px; font-weight: 800;">РАЗОМ: ' + formatUAH(res.total) + ' (' + cfg.quantity + ' × ' + formatUAH(res.unit) + ')</div>';
+            ? a4SpecTable([
+                ['Виріб', productCodeOf(p) + ' ' + calcProductNameS(cfg)],
+                ['Тираж', cfg.quantity + ' шт. × ' + formatUAH(res.simpleRate) + '/шт'],
+                ['Щаблі ціни', '<small>' + (productTiersS(p).map(function (t) { return 'від ' + t.qty + ' шт — ' + formatUAH(t.price) + '/шт'; }).join(' · ') || '—') + '</small>'],
+                ['Макетування', '+ включено у ціну']
+              ], formatUAH(res.total))
+            : a4SpecTable([
+                ['Пакунок', productCodeOf(p) + ' ' + calcProductNameS(cfg)],
+                ['Кількість комплектів', String(cfg.quantity)],
+                ['Склад пакунка', '<small>' + pkgItemsSpecText(true) + '</small>'],
+                ['Макетування і постдрук', '+ входять у ціну']
+              ], formatUAH(res.total) + ' &nbsp;(' + cfg.quantity + ' × ' + formatUAH(res.unit) + ')');
         document.getElementById('modalFormWrap').style.display = 'block';
         document.getElementById('modalSuccessWrap').style.display = 'none';
         document.getElementById('orderModal').classList.add('open');
@@ -5629,24 +5928,16 @@
       }
       const res = calculatePriceFor(cfg.width, cfg.height, cfg.quantity, cfg.color, cfg.paperKey, cfg.laminationKey, cfg.finishing, currentCalcOpts());
       const details2 = document.getElementById('modalSpecDetails');
-      const mpLine = res.isMultipage
-        ? `<div>Сторінок у виданні: <strong>${res.pages}</strong> (${res.sheetsPerCopy} арк. А3 на примірник)</div>`
-        : '';
-      const covLine = res.hasCover
-        ? `<div>Обкладинка: <strong>${res.coverColor}, ${prices.paper[cfg.coverPaperKey]?.name}${cfg.coverLamKey !== 'none' ? ' + ламінація ' + (prices.lamination[cfg.coverLamKey]?.name || '').toLowerCase() : ''}</strong></div>`
-        : '';
-      details2.innerHTML = `
-        <div>Виріб: <strong>${calcProductNameS(cfg)}</strong> (${cfg.width}×${cfg.height} мм)</div>
-        ${mpLine}
-        <div>Тираж: <strong>${cfg.quantity} шт.</strong> (${res.blockSheets} арк. А3 блок${res.hasCover ? ` + ${res.coverSheets} арк. обкладинка` : ''})</div>
-        <div>Друк блоку / Папір: <strong>${cfg.color}, ${prices.paper[cfg.paperKey]?.name}</strong></div>
-        ${covLine}
-        <div>Ламінація: <strong>${res.hasCover ? (prices.lamination[cfg.coverLamKey]?.name || 'Без ламінації') : (prices.lamination[cfg.laminationKey]?.name || 'Без ламінації')}</strong></div>
-        <div>Макетування: <strong>+</strong></div>
-        <div style="border-top: 1px solid #232738; margin-top: 6px; padding-top: 6px; color: var(--accent-yellow); font-size: 14px; font-weight: 800;">
-          РАЗОМ: ${formatUAH(res.total)} (${formatUAH(res.unit)} / шт)
-        </div>
-      `;
+      const a4rows = [
+        ['Виріб', calcProductNameS(cfg) + ' <small>' + cfg.width + '×' + cfg.height + ' мм</small>']
+      ];
+      if (res.isMultipage) a4rows.push(['Сторінок у виданні', res.pages + ' <small>(' + res.sheetsPerCopy + ' арк. А3 на примірник)</small>']);
+      a4rows.push(['Тираж', cfg.quantity + ' шт. <small>(' + res.blockSheets + ' арк. А3 блок' + (res.hasCover ? ' + ' + res.coverSheets + ' арк. обкладинка' : '') + ')</small>']);
+      a4rows.push(['Друк блоку / папір', cfg.color + ', ' + (prices.paper[cfg.paperKey]?.name || '')]);
+      if (res.hasCover) a4rows.push(['Обкладинка', res.coverColor + ', ' + (prices.paper[cfg.coverPaperKey]?.name || '') + (cfg.coverLamKey !== 'none' ? ' + ламінація ' + ((prices.lamination[cfg.coverLamKey]?.name || '') + '').toLowerCase() : '')]);
+      a4rows.push(['Ламінація', res.hasCover ? (prices.lamination[cfg.coverLamKey]?.name || 'Без ламінації') : (prices.lamination[cfg.laminationKey]?.name || 'Без ламінації')]);
+      a4rows.push(['Макетування', '+ включено']);
+      details2.innerHTML = a4SpecTable(a4rows, formatUAH(res.total) + ' &nbsp;(' + formatUAH(res.unit) + ' / шт)');
       document.getElementById('modalFormWrap').style.display = 'block';
       document.getElementById('modalSuccessWrap').style.display = 'none';
       document.getElementById('orderModal').classList.add('open');
@@ -5862,9 +6153,9 @@
     async function submitOrder(e) {
       e.preventDefault();
       if (modalModeCart && !cart.length) return;
-      const code = 'AM-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+      const code = modalDocCode || ('AM-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000));
       const btn = e.target ? e.target.querySelector('button[type="submit"], button') : null;
-      const btnOrig = modalModeCart ? 'Підтвердити замовлення — ' + formatUAH(cartTotalSum()) : 'Підтвердити та відправити';
+      const btnOrig = modalModeCart ? 'Відправити КП — ' + formatUAH(cartTotalSum()) : 'Підтвердити та відправити КП';
       if (btn) { btn.disabled = true; btn.textContent = 'Відправлення...'; }
       // 1) Сервер (БД + SMTP/FormSubmit) → 2) браузерний AJAX → 3) прихований iframe.
       // УВАГА: iframe не дає прочитати відповідь — load-подія не гарантує доставки
@@ -6329,10 +6620,14 @@
     function renderModalChrome() {
       const title = document.getElementById('modalTitle');
       const sub = document.getElementById('modalSub');
-      if (title) title.textContent = 'Замовлення онлайн';
-      if (sub) sub.textContent = 'Специфікацію розраховано за моделлю А3 alfa.copy.print';
+      if (title) title.textContent = 'Комерційна пропозиція';
+      if (sub && modalDocCode) {
+        const d = new Date();
+        const dateStr = d.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        sub.textContent = '№ ' + modalDocCode + ' · від ' + dateStr;
+      }
       const sbtn = document.getElementById('modalSubmitBtn');
-      if (sbtn) sbtn.textContent = 'Підтвердити та відправити';
+      if (sbtn) sbtn.textContent = 'Підтвердити та відправити КП';
       const form = document.getElementById('orderForm');
       if (form) form.style.display = '';
     }
@@ -6349,41 +6644,48 @@
         return;
       }
       if (specBox) specBox.style.display = 'none';
-      list.style.display = 'flex';
+      list.style.display = 'block';
       if (!cart.length) {
         list.innerHTML = '<div class="cart-empty-note">🛒 Кошик порожній.<br>Налаштуйте виріб у калькуляторі й натисніть «🛒 У кошик» — потім продовжуйте вибирати й оформите все разом.</div>';
         if (form) form.style.display = 'none';
         return;
       }
       if (form) form.style.display = '';
-      list.innerHTML = cart.map((it, i) =>
-        '<div class="modal-cart-row">' +
-          '<span class="mcr-num">' + (i + 1) + '</span>' +
-          '<span class="mcr-icon">' + it.icon + '</span>' +
-          '<div class="mcr-info">' +
-            '<span class="mcr-name">' + it.code + ' ' + it.name + '</span>' +
-            '<span class="mcr-spec" title="' + String(it.spec).replace(/"/g, '&quot;') + '">' + it.spec + '</span>' +
-          '</div>' +
-          '<div class="mcr-right">' +
-            (it.cfgSnap
-              ? '<span class="mcr-qty-edit"><button type="button" onclick="editCartQty(\'' + it.key + '\', -' + (it.step || 25) + ')" title="Менше">−</button><span class="mcr-qty-val">' + (it.qty || 1) + '</span><button type="button" onclick="editCartQty(\'' + it.key + '\', +' + (it.step || 25) + ')" title="Більше">+</button></span>'
-              : '<span class="mcr-qty">' + it.qtyLabel + '</span>') +
-            '<span class="mcr-total">' + formatUAH(it.total) + '</span>' +
-          '</div>' +
-          '<button type="button" class="mcr-del" onclick="removeCartItem(\'' + it.key + '\')" title="Видалити з кошика">✕</button>' +
-        '</div>'
-      ).join('') +
-      '<div class="mcr-total-row"><span>' + cart.length + ' поз. разом:</span><strong>' + formatUAH(cartTotalSum()) + '</strong></div>';
+      list.innerHTML =
+        '<table class="a4-table a4-items-table"><thead><tr>' +
+          '<th class="a4-th-num">№</th><th>Найменування</th><th>Специфікація</th><th class="a4-th-qty">Кіл-ть</th><th class="a4-th-amt">Сума</th><th></th>' +
+        '</tr></thead><tbody>' +
+        cart.map((it, i) =>
+          '<tr class="modal-cart-row">' +
+            '<td class="a4-num">' + (i + 1) + '</td>' +
+            '<td class="a4-item-cell"><span class="mcr-icon">' + it.icon + '</span>' + it.code + ' ' + it.name + '</td>' +
+            '<td class="a4-spec-cell" title="' + String(it.spec).replace(/"/g, '&quot;') + '">' + it.spec + '</td>' +
+            '<td class="a4-qty-cell">' +
+              (it.cfgSnap
+                ? '<span class="mcr-qty-edit"><button type="button" onclick="editCartQty(\'' + it.key + '\', -' + (it.step || 25) + ')" title="Менше">−</button><span class="mcr-qty-val">' + (it.qty || 1) + '</span><button type="button" onclick="editCartQty(\'' + it.key + '\', +' + (it.step || 25) + ')" title="Більше">+</button></span>'
+                : (it.qtyLabel || '')) +
+            '</td>' +
+            '<td class="a4-amt">' + formatUAH(it.total) + '</td>' +
+            '<td class="a4-del-cell"><button type="button" class="mcr-del" onclick="removeCartItem(\'' + it.key + '\')" title="Видалити з кошика">✕</button></td>' +
+          '</tr>'
+        ).join('') +
+        '</tbody></table>' +
+        '<div class="a4-total-row"><span>' + cart.length + ' поз. · разом до сплати</span><strong>' + formatUAH(cartTotalSum()) + '</strong></div>';
       const sbtn = document.getElementById('modalSubmitBtn');
-      if (sbtn) sbtn.textContent = 'Підтвердити замовлення — ' + formatUAH(cartTotalSum());
+      if (sbtn) sbtn.textContent = 'Відправити КП — ' + formatUAH(cartTotalSum());
     }
 
     function openCartModal() {
       modalModeCart = true;
+      a4NewDocMeta();
       const title = document.getElementById('modalTitle');
       const sub = document.getElementById('modalSub');
-      if (title) title.textContent = '🛒 Оформити кошик';
-      if (sub) sub.textContent = 'Усі позиції кошика одним замовленням — лист на ' + ORDER_EMAIL + ' без переходів';
+      if (title) title.textContent = 'КП за кошиком';
+      if (sub && modalDocCode) {
+        const d = new Date();
+        const dateStr = d.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        sub.textContent = '№ ' + modalDocCode + ' · від ' + dateStr + ' · усі позиції одним замовленням → ' + ORDER_EMAIL;
+      }
       renderModalCartList();
       document.getElementById('modalFormWrap').style.display = 'block';
       document.getElementById('modalSuccessWrap').style.display = 'none';
@@ -6498,48 +6800,142 @@
       if (!win) return;
       const p = cfg.product;
       const num = p ? (PRODUCT_NUMBERS[p.id] || 0) : 0;
+      // TASK 26: тіні-зони гортання по краях фото — присутні завжди (і на фото, і на заглушці)
+      const arrowsHtml = '<button type="button" class="mockup-nav-zone mockup-nav-zone-l" onclick="calcBrowseProduct(-1)" title="Попередній виріб каталогу" aria-label="Попередній виріб"><span class="chev" aria-hidden="true">&lsaquo;</span></button>' +
+        '<button type="button" class="mockup-nav-zone mockup-nav-zone-r" onclick="calcBrowseProduct(1)" title="Наступний виріб каталогу" aria-label="Наступний виріб"><span class="chev" aria-hidden="true">&rsaquo;</span></button>';
       if (!num) {
         win.classList.add('empty');
-        win.innerHTML = mockupPlaceholderHtml(p, 0);
+        win.innerHTML = mockupPlaceholderHtml(p, 0) + arrowsHtml;
         win.onclick = null;
+        bindMockupSwipe(win);
         return;
       }
       win.classList.remove('empty');
       win.innerHTML = '<img id="mockupImg" src="' + (p.photo ? p.photo : 'mockups/' + num + '.jpg') + '" alt="Мокап: ' + p.name + '">' +
-        '<span class="mockup-num">№' + String(num).padStart(3, '0') + '</span>';
+        '<span class="mockup-num">№' + String(num).padStart(3, '0') + '</span>' +
+        arrowsHtml;
       const img = document.getElementById('mockupImg');
       if (img) {
         img.onerror = () => {
           win.classList.add('empty');
-          win.innerHTML = mockupPlaceholderHtml(p, num);
+          win.innerHTML = mockupPlaceholderHtml(p, num) + arrowsHtml;
         };
       }
-      // v19: відкривати у модальному вікні замість нової вкладки
-      win.onclick = () => { openMockupModal(p, num); };
-      win.title = 'Мокап: ' + p.name + ' — клікніть, щоб збільшити';
+      // TASK 26: функцію збільшення прибрано — клік на фото нічого не відкриває
+      win.onclick = null;
+      win.title = 'Мокап: ' + p.name + ' — гортайте вироби по краях фото або свайпом';
+      bindMockupSwipe(win);
+    }
+
+    // TASK 25: свайп вліво/вправо по фото — гортання каталогу (одноразовий біндинг на елемент)
+    function bindMockupSwipe(win) {
+      if (!win || win.dataset.swipeBound) return;
+      let swx = 0, swy = 0, swiped = false;
+      win.addEventListener('touchstart', (e) => { swx = e.changedTouches[0].clientX; swy = e.changedTouches[0].clientY; swiped = false; }, { passive: true });
+      win.addEventListener('touchmove', (e) => {
+        const dx = e.changedTouches[0].clientX - swx;
+        const dy = e.changedTouches[0].clientY - swy;
+        if (!swiped && Math.abs(dx) > 46 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          swiped = true;
+          calcBrowseProduct(dx < 0 ? 1 : -1);
+        }
+      }, { passive: true });
+      win.addEventListener('click', (e) => { if (swiped) { e.stopPropagation(); e.preventDefault(); swiped = false; } }, true);
+      win.dataset.swipeBound = '1';
     }
 
     // ===================== v19: МОДАЛ ЗБІЛЬШЕНОГО ФОТО =====================
     // Відкриває фото продукту в повноекранному модальному вікні (замість window.open у нову вкладку).
     // Викликається: клік на фото у калькуляторі або клік на мініатюру в режимі перегляду КП.
+    // TASK 25: гортання виробів каталогу (← → / свайп) + «Вибрати цей виріб».
+
+    // Вироби, придатні для гортання: ті, що мають номер у каталозі (фото mockups/NNN.jpg)
+    function mockBrowseList() {
+      const withNum = productsCatalog.filter(p => PRODUCT_NUMBERS[p.id]);
+      return withNum.length ? withNum : productsCatalog.slice();
+    }
+    let mockBrowseP = null; // виріб, показаний у модалці зараз
+
+    function mockPlaceholderSrc(p, num) {
+      const label = '№ ' + String(num).padStart(3, '0') + ' · ' + p.name;
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420">' +
+        '<rect width="100%" height="100%" fill="#12151f"/>' +
+        '<text x="50%" y="46%" fill="#8a8f9e" font-family="monospace" font-size="26" text-anchor="middle">фото відсутнє</text>' +
+        '<text x="50%" y="58%" fill="#5c6170" font-family="monospace" font-size="18" text-anchor="middle">' + label.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</text></svg>';
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    function mockShow(p) {
+      const overlay = document.getElementById('mockupModal');
+      if (!overlay || !p) return;
+      mockBrowseP = p;
+      const img = document.getElementById('mockupModalImg');
+      const cap = document.getElementById('mockupModalCap');
+      const num = PRODUCT_NUMBERS[p.id] || 0;
+      const src = p.photo ? p.photo : (num ? 'mockups/' + num + '.jpg' : '');
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = mockPlaceholderSrc(p, num || 0);
+      };
+      img.src = src || mockPlaceholderSrc(p, num || 0);
+      img.alt = 'Мокап: ' + p.name;
+      const numStr = num ? '№' + String(num).padStart(3, '0') : '—';
+      const list = mockBrowseList();
+      const idx = list.indexOf(p);
+      const counter = '<span class="mockup-modal-count">' + (idx + 1) + ' / ' + list.length + ' · ←→ гортати</span>';
+      cap.innerHTML = (p.icon ? p.icon + ' ' : '') + '<b>' + numStr + '</b> · ' + p.name + counter;
+      // Прелоад сусідніх фото — миттєве гортання
+      if (list.length > 1) {
+        [ -1, 1 ].forEach(d => {
+          const np = list[(idx + d + list.length) % list.length];
+          if (!np) return;
+          const nnum = PRODUCT_NUMBERS[np.id] || 0;
+          const nsrc = np.photo ? np.photo : (nnum ? 'mockups/' + nnum + '.jpg' : '');
+          if (nsrc) { const im = new Image(); im.src = nsrc; }
+        });
+      }
+    }
+
+    function mockNav(dir) {
+      const list = mockBrowseList();
+      if (!list.length) return;
+      let i = list.indexOf(mockBrowseP || cfg.product);
+      if (i < 0) i = 0;
+      mockShow(list[(i + dir + list.length) % list.length]);
+    }
+
+    function mockSelectCurrent() {
+      const p = mockBrowseP;
+      if (!p) return;
+      selectProduct(p);
+      closeMockupModal();
+      const active = document.querySelector('.view-container.active-view');
+      if (active && active.id !== 'viewCalc') switchMainView('calc');
+      const num = PRODUCT_NUMBERS[p.id] || 0;
+      showToast('✓ Вибрано: ' + (num ? '№' + String(num).padStart(3, '0') + ' · ' : '') + p.name);
+    }
+
     function openMockupModal(p, num) {
       const overlay = document.getElementById('mockupModal');
       if (!overlay || !p) return;
-      const img = document.getElementById('mockupModalImg');
-      const cap = document.getElementById('mockupModalCap');
-      const src = p.photo ? p.photo : (num ? 'mockups/' + num + '.jpg' : '');
-      if (!src) { showToast('Фото відсутнє — додайте mockups/' + (num || 'N') + '.jpg'); return; }
-      img.src = src;
-      img.alt = 'Мокап: ' + p.name;
-      const numStr = num ? '№' + String(num).padStart(3, '0') : '';
-      cap.innerHTML = (p.icon ? p.icon + ' ' : '') + '<b>' + (numStr ? numStr + ' · ' : '') + '</b>' + p.name;
+      mockShow(p);
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
-      // Підтримка Esc
+      // Підтримка Esc + стрілок ←/→ + свайпів (одноразовий біндинг)
       if (!overlay.dataset.escBound) {
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && overlay.classList.contains('open')) closeMockupModal();
+          if (!overlay.classList.contains('open')) return;
+          if (e.key === 'Escape') closeMockupModal();
+          else if (e.key === 'ArrowLeft') { e.preventDefault(); mockNav(-1); }
+          else if (e.key === 'ArrowRight') { e.preventDefault(); mockNav(1); }
         });
+        let tx = 0, ty = 0;
+        overlay.addEventListener('touchstart', (e) => { tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY; }, { passive: true });
+        overlay.addEventListener('touchend', (e) => {
+          const dx = e.changedTouches[0].clientX - tx;
+          const dy = e.changedTouches[0].clientY - ty;
+          if (Math.abs(dx) > 46 && Math.abs(dx) > Math.abs(dy) * 1.4) mockNav(dx < 0 ? 1 : -1);
+        }, { passive: true });
         overlay.dataset.escBound = '1';
       }
     }
@@ -6554,6 +6950,18 @@
       if (!p) return;
       const num = PRODUCT_NUMBERS[p.id] || 0;
       openMockupModal(p, num);
+    }
+
+    // TASK 25: гортання виробів прямо у калькуляторі — стрілки на фото / свайп
+    function calcBrowseProduct(dir) {
+      const list = mockBrowseList();
+      if (!list.length) return;
+      let i = list.indexOf(cfg.product);
+      if (i < 0) i = 0;
+      const p = list[(i + dir + list.length) % list.length];
+      selectProduct(p);
+      const num = PRODUCT_NUMBERS[p.id] || 0;
+      showToast((p.icon ? p.icon + ' ' : '') + '№' + String(num).padStart(3, '0') + ' · ' + p.name);
     }
 
     function copySpecText() {
