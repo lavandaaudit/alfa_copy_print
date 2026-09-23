@@ -2824,6 +2824,11 @@
       .mockup-modal-nav-r { right: 8px; }
       .mockup-modal-select { bottom: 58px; font-size: 11.5px; padding: 9px 14px; }
     }
+
+    /* ===================== TASK 27: КВІЗ ПІДБОРУ НАБОРУ ===================== */
+    .ai-hint-chip.on { background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); box-shadow: 0 0 0 1px var(--accent-yellow) inset; }
+    .ai-hint-chip.accent { background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); font-weight: 800; }
+    .ai-hint-chip:disabled { opacity: .35; cursor: default; }
   </style>
 
 </head>
@@ -7200,11 +7205,12 @@
         'Менеджер передзвонить саме тоді, коли вам зручно — залиште заявку з номером і часом.';
     }
 
-    const AI_WELCOME = '🤖 Вітаю! Я — Лаборант, цифровий помічник друкарні ALFAMEDIA (alfa.copy.print).\nСтворений для автоматизації процесів замовлення поліграфії — без дзвінків, без очікувань менеджера, без паперової волокити.\n\nЯ знаю всі ' + AI_TOTAL + ' виробів за номерами №001–№' + String(AI_TOTAL).padStart(3, '0') + ', їхні формати, матеріали та вартість до копійки. Веду клієнта по всіх етапах — від першого питання до оформленого замовлення.\n\nЩо я вмію:\n• 📦 знайти виріб за номером або назвою — покажу карточку з ціною та описом\n• 🧮 одразу обрати його в калькуляторі, задати тираж і порахувати вартість\n• 📊 додати в кошик або в комерційну пропозицію (КП) одним словом\n• 📐 пояснити вимоги до макету, підібрати папір, ламінацію, постдрук\n• 💡 підказати, як зекономити — від формату до тиражу\n• 🔥 показати акції дня (−5–10%) та свіжі новини ринку\n• ✉️ відкрити форму замовлення — лист піде на пошту без переходів\n• 📚 розповісти про технології друку, словник термінів, формати паперу\n• 🎓 поділитися цікавим про історію друку\n\nОберіть тему нижче або напишіть питання — я на зв\'язку 24/7.';
+    const AI_WELCOME = '🤖 Вітаю! Я — Лаборант, цифровий помічник друкарні ALFAMEDIA (alfa.copy.print).\nСтворений для автоматизації процесів замовлення поліграфії — без дзвінків, без очікувань менеджера, без паперової волокити.\n\nЯ знаю всі ' + AI_TOTAL + ' виробів за номерами №001–№' + String(AI_TOTAL).padStart(3, '0') + ', їхні формати, матеріали та вартість до копійки. Веду клієнта по всіх етапах — від першого питання до оформленого замовлення.\n\nЩо я вмію:\n• 📦 знайти виріб за номером або назвою — покажу карточку з ціною та описом\n• 🧮 одразу обрати його в калькуляторі, задати тираж і порахувати вартість\n• 📊 додати в кошик або в комерційну пропозицію (КП) одним словом\n• 📐 пояснити вимоги до макету, підібрати папір, ламінацію, постдрук\n• 💡 підказати, як зекономити — від формату до тиражу\n• 🔥 показати акції дня (−5–10%) та свіжі новини ринку\n• 🧪 зібрати промо-набір: 5 питань — і готовий прорахунок під людей і бюджет\n• ✉️ відкрити форму замовлення — лист піде на пошту без переходів\n• 📚 розповісти про технології друку, словник термінів, формати паперу\n• 🎓 поділитися цікавим про історію друку\n\nОберіть тему нижче або напишіть питання — я на зв\'язку 24/7.';
     const AI_WELCOME_HINTS = [
       { label: '🔥 Акції дня', q: 'акції' },
       { label: '🛒 У кошик поточний', q: 'додай в кошик' },
       { label: '📊 У КП поточний', q: 'додай в кп' },
+      { label: '🧪 Підібрати набір', q: 'підібрати набір' },
       { label: '💡 Як зекономити', q: 'як зекономити' },
       { label: '📐 Макет', q: 'макет' },
       { label: '✉️ Як замовити?', q: 'як замовити' }
@@ -7235,6 +7241,7 @@
       { label: '🛒 У кошик', words: ['додай в кошик', 'додати в кошик', 'в кошик', 'у кошик', 'кошик', 'basket', 'cart'], dynamic: aiAddToCartText },
       { label: '📊 У КП', words: ['додай в кп', 'додати в кп', 'в кп', 'у кп', 'комерційн', 'пропозиці', 'комерційна пропозиція'], dynamic: aiAddToKpText },
       { label: '🔍 Перегляд товарів', words: ['перегляд', 'всі товари', 'каталог товарів', 'покажи все', 'галерея', 'з фото'], dynamic: aiBrowseText },
+      { label: '🧪 Підібрати набір', words: ['підібрати набір', 'зібрати набір', 'набір для', 'промо набір', 'квіз'], text: 'Зараз зберу для вас набір — відповідайте на питання вище.' },
       { label: '💰 Під бюджет', words: ['під бюджет', 'до 100', 'до 500', 'до 1000', 'до 2000', 'до 5000', 'недорог', 'бюджетний', 'дешеві'], dynamic: aiBudgetText },
       { label: '⚖️ Порівняти', words: ['порівня', 'сравни', 'кращий', 'відмінност', 'різниця'], text: '⚖️ Щоб порівняти два чи більше виробів — просто запитайте: «порівняй №015 і №018» або «візитка чи флаєр для 500 шт».\nЯ покажу: ціну за штуку, ціну за весь тираж, мітки-переваги (дешевший / швидший / преміум-вигляд) і пораду, що краще під ваше завдання.\nАбо відкрийте «🔍 Перегляд товарів» у КП — додайте кілька варіантів у таблицю й порівняйте вартість одиниці бок-о-бок.', hints: [{ label: '🔍 Перегляд товарів', q: 'перегляд' }, { label: '🛒 У кошик поточний', q: 'додай в кошик' }] },
       { label: '📦 Що в кошику', words: ['що в кошику', 'скільки в кошику', 'в кошику', 'кошик показ', 'вміст кошика'], dynamic: aiCartContentsText },
@@ -7327,8 +7334,300 @@
       return undefined;
     }
 
+    // ===================== TASK 27: ПІДБІР НАБОРУ — КВІЗ ЛАБОРАНТА =====================
+    // Лаборант питає: які промо-категорії → скільки людей → мерч так/ні →
+    // бюджет на людину → фільтр цін. Далі збирає рандомний набір з каталогу,
+    // вписує його у бюджет, показує склад і суму. «Перерахувати» — інший
+    // рандомний варіант з тими ж відповідями. Результат можна додати в кошик.
+    const AI_KIT = { active: false, step: '', cats: new Set(), people: 0, merch: null, budget: 0, filter: 'any', lastKit: null };
+    const AI_KIT_CATS = ['polygraphy', 'advertising', 'stickers', 'posters', 'booklets', 'gifts'];
+    function aiKitMeta(k) { return CATEGORY_META.find(m => m.key === k) || { icon: '📄', short: k }; }
+
+    function aiKitStart(pushUserLabel) {
+      if (pushUserLabel) aiPushMsg(pushUserLabel, 'user');
+      AI_KIT.active = true;
+      return aiKitReset();
+    }
+    function aiKitReset() {
+      AI_KIT.active = true; AI_KIT.step = 'cats';
+      AI_KIT.cats = new Set(); AI_KIT.people = 0; AI_KIT.merch = null;
+      AI_KIT.budget = 0; AI_KIT.filter = 'any'; AI_KIT.lastKit = null;
+      aiKitAskCats();
+      return { kitHandled: true };
+    }
+
+    // Пуш повідомлення лаборанта з власним рядом чіпів (toggle — для мультивибору категорій)
+    function aiKitPush(text, chips) {
+      const box = document.getElementById('aiMsgs');
+      if (!box) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'ai-bot-wrap';
+      const div = document.createElement('div');
+      div.className = 'ai-msg ai-bot';
+      div.style.whiteSpace = 'pre-line';
+      div.textContent = text;
+      wrap.appendChild(div);
+      if (chips && chips.length) {
+        const row = document.createElement('div');
+        row.className = 'ai-hint-row';
+        chips.forEach(c => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'ai-hint-chip' + (c.accent ? ' accent' : '');
+          b.textContent = c.label;
+          b.onclick = (e) => c.cb(e);
+          row.appendChild(b);
+        });
+        wrap.appendChild(row);
+      }
+      box.appendChild(wrap);
+      aiScroll();
+    }
+
+    function aiKitAskCats() {
+      AI_KIT.step = 'cats';
+      aiKitPush('Крок 1/5 · Збираю набір 🧪\nЯкі промо-категорії мають бути всередині? Тапніть одну або кілька — і натисніть «Далі →».',
+        AI_KIT_CATS.map(k => {
+          const m = aiKitMeta(k);
+          return { label: m.icon + ' ' + m.short, cb: (e) => {
+            if (AI_KIT.cats.has(k)) AI_KIT.cats.delete(k); else AI_KIT.cats.add(k);
+            if (e && e.currentTarget) e.currentTarget.classList.toggle('on', AI_KIT.cats.has(k));
+          } };
+        }).concat([
+          { label: 'Далі →', accent: true, cb: () => {
+            if (!AI_KIT.cats.size) { showToast('Оберіть хоча б одну категорію 🙂'); return; }
+            aiAsk('готово');
+          } },
+          { label: '✕ Скасувати', cb: () => aiAsk('скасувати набір') }
+        ]));
+    }
+
+    function aiKitAskPeople() {
+      AI_KIT.step = 'people';
+      aiKitPush('Крок 2/5 · На скільки людей розраховуємо набір?\nСтільки штук кожного промо-виробу я закладу в прорахунок. Оберіть варіант або впишіть свою кількість у поле нижче.',
+        [50, 100, 200, 500, 1000].map(n => ({ label: n + ' людей', cb: () => aiAsk(String(n)) })));
+    }
+
+    function aiKitAskMerch() {
+      AI_KIT.step = 'merch';
+      aiKitPush('Крок 3/5 · Мерч з логотипом — треба?\nФутболки, шопери, браслети — по 1 шт на людину. Якщо мерч не влізе у бюджет — чесно скажу і приберу його.',
+        [{ label: '👍 Так, з мерчем', cb: () => aiAsk('так, з мерчем') }, { label: '👎 Ні, без мерчу', cb: () => aiAsk('ні, без мерчу') }]);
+    }
+
+    function aiKitAskBudget() {
+      AI_KIT.step = 'budget';
+      aiKitPush('Крок 4/5 · Який бюджет на ОДНУ людину?\nНаприклад 25 ₴/люд — на 100 людей це 2 500 ₴ за весь набір. Оберіть варіант або впишіть свою суму.',
+        [10, 25, 50, 100, 250].map(n => ({ label: n + ' ₴/люд', cb: () => aiAsk(String(n)) })));
+    }
+
+    function aiKitAskFilter() {
+      AI_KIT.step = 'filter';
+      aiKitPush('Крок 5/5 · Останнє — фільтр цін позицій у наборі:\n🎲 будь-які — мікс · 💚 дешевші — економ · 💎 преміум — дорожчі й статусніші.',
+        [{ label: '🎲 Будь-які', cb: () => aiAsk('будь-які') }, { label: '💚 Дешевші', cb: () => aiAsk('дешевші') }, { label: '💎 Преміум', cb: () => aiAsk('преміум') }]);
+    }
+
+    // --- Маршрутизатор відповідей квізу (викликається з aiBotReply, поки AI_KIT.active) ---
+    function aiKitStep(raw) {
+      const q = raw.toLowerCase().trim();
+      if (/(скасув|стоп\b|вийти|виход|зупин|припини)/.test(q)) {
+        AI_KIT.active = false; AI_KIT.lastKit = null;
+        aiKitPush('Добре, зупинили підбір наборів 👌 Пишіть як завжди — рахую номери, ціни, кошик.',
+          [{ label: '🔄 Почати підбір спочатку', cb: () => aiAsk('підібрати набір') }]);
+        return { kitHandled: true };
+      }
+      if (AI_KIT.step === 'cats') {
+        if (/(готово|далі|дальше|достатньо|збирай|ок\b)/.test(q)) {
+          if (!AI_KIT.cats.size) { aiKitPush('Спочатку оберіть хоча б одну категорію чіпами вище 🙂', []); return { kitHandled: true }; }
+          aiKitAskPeople();
+          return { kitHandled: true };
+        }
+        aiKitPush('Тапніть потрібні категорії у чіпах вище, потім натисніть «Далі →» 👆', []);
+        return { kitHandled: true };
+      }
+      if (AI_KIT.step === 'people') {
+        const m = q.replace(/\s/g, '').match(/(\d{1,6})/);
+        if (m) {
+          const n = parseInt(m[1], 10);
+          if (n < 5) { aiKitPush('Мінімум, з яким є сенс збирати набір — 5 людей. Впишіть число від 5.', []); return { kitHandled: true }; }
+          if (n > 2500) {
+            aiKitPush('Цифровий друк тримає до 2500 шт по флаєрах/листівках і до 1000 по решті. Для більшої аудиторії телефонуйте ' + AI_OFFSET_PHONE + ' — порахуємо офсет, або зменшіть кількість.',
+              [100, 500, 1000, 2500].map(n2 => ({ label: n2 + ' людей', cb: () => aiAsk(String(n2)) })));
+            return { kitHandled: true };
+          }
+          AI_KIT.people = n;
+          aiKitAskMerch();
+          return { kitHandled: true };
+        }
+        aiKitPush('Впишіть кількість людей числом (наприклад 250) — або тапніть готовий варіант 👇',
+          [50, 100, 200, 500, 1000].map(n => ({ label: n + ' людей', cb: () => aiAsk(String(n)) })));
+        return { kitHandled: true };
+      }
+      if (AI_KIT.step === 'merch') {
+        if (/(так|давай|треба|потрібн|додай|додавай|ок\b|yes)/.test(q)) { AI_KIT.merch = true; aiKitAskBudget(); return { kitHandled: true }; }
+        if (/(ні|нет|без|не треба|не потрібн|no)/.test(q)) { AI_KIT.merch = false; aiKitAskBudget(); return { kitHandled: true }; }
+        aiKitPush('Оберіть варіант 👇', [{ label: '👍 Так, з мерчем', cb: () => aiAsk('так, з мерчем') }, { label: '👎 Ні, без мерчу', cb: () => aiAsk('ні, без мерчу') }]);
+        return { kitHandled: true };
+      }
+      if (AI_KIT.step === 'budget') {
+        const m = q.replace(/\s/g, '').match(/(\d{1,7})/);
+        if (m) {
+          const n = parseInt(m[1], 10);
+          if (n < 1 || n > 100000) { aiKitPush('Впишіть бюджет від 1 до 100 000 ₴ на людину, числом.', []); return { kitHandled: true }; }
+          AI_KIT.budget = n;
+          aiKitAskFilter();
+          return { kitHandled: true };
+        }
+        aiKitPush('Впишіть бюджет на одну людину числом (наприклад 25) — або тапніть готовий варіант 👇',
+          [10, 25, 50, 100, 250].map(n => ({ label: n + ' ₴/люд', cb: () => aiAsk(String(n)) })));
+        return { kitHandled: true };
+      }
+      if (AI_KIT.step === 'filter') {
+        if (/(дешев|економ|зниж|green)/.test(q)) { AI_KIT.filter = 'cheap'; aiKitShowResult(); return { kitHandled: true }; }
+        if (/(преміум|премиум|дорожч|статус|топ\b|lux)/.test(q)) { AI_KIT.filter = 'premium'; aiKitShowResult(); return { kitHandled: true }; }
+        if (/(будь-як|будь як|любі|любые|рандом|мікс|без фільтр|ок\b|так\b|все)/.test(q)) { AI_KIT.filter = 'any'; aiKitShowResult(); return { kitHandled: true }; }
+        aiKitPush('Оберіть фільтр чіпом 👇', [{ label: '🎲 Будь-які', cb: () => aiAsk('будь-які') }, { label: '💚 Дешевші', cb: () => aiAsk('дешевші') }, { label: '💎 Преміум', cb: () => aiAsk('преміум') }]);
+        return { kitHandled: true };
+      }
+      if (AI_KIT.step === 'done') {
+        if (/(перерахув|ще раз|еще раз|інший|новий набір|новий варіант|рандом)/.test(q)) { aiKitShowResult(); return { kitHandled: true }; }
+        if (/(змінит|спочатку|новий підбір|повтор|інші відповід|заново)/.test(q)) return aiKitReset();
+        AI_KIT.active = false;
+        return null; // будь-що інше — звичайний потік лаборанта
+      }
+      AI_KIT.active = false;
+      return null;
+    }
+
+    // --- Збірка рандомного набору під відповіді та бюджет ---
+    function aiKitLineFor(p) {
+      const qty = Math.max(AI_KIT.people, p.minQty || 1);
+      return { p, qty, total: calcAnyProduct(p, qty).total };
+    }
+    function aiKitPoolFor(k) {
+      return productsCatalog.filter(p => p.category === k && p.kind !== 'package' && AI_KIT.people <= maxQtyForP(p));
+    }
+    function aiKitPick(pool) {
+      const priced = pool.map(aiKitLineFor).sort((a, b) => a.total - b.total);
+      const half = Math.max(1, Math.ceil(priced.length / 2));
+      let cand = priced;
+      if (AI_KIT.filter === 'cheap') cand = priced.slice(0, half);
+      else if (AI_KIT.filter === 'premium') cand = priced.slice(-half);
+      return cand[Math.floor(Math.random() * cand.length)];
+    }
+    function aiKitAssemble() {
+      const people = AI_KIT.people, budgetTotal = AI_KIT.budget * people;
+      const notes = [];
+      let rows = [];
+      [...AI_KIT.cats].forEach(k => {
+        const pool = aiKitPoolFor(k);
+        if (pool.length) rows.push({ cat: k, line: aiKitPick(pool) });
+      });
+      if (AI_KIT.merch) {
+        const mp = productsCatalog.filter(p => p.category === 'merch' && p.kind === 'merch' && AI_KIT.people <= maxQtyForP(p));
+        if (mp.length) rows.push({ cat: 'merch', line: aiKitPick(mp) });
+        else notes.push('👎 мерч пропустив — тиражі мерчу обмежені 1000 шт');
+      }
+      if (!rows.length) return null;
+      const sum = () => rows.reduce((s, r) => s + r.line.total, 0);
+      // не влазить у бюджет → прибираємо найдорожчі позиції (мерч зазвичай найдорожчий)
+      while (sum() > budgetTotal && rows.length > 1) {
+        rows.sort((a, b) => b.line.total - a.line.total);
+        const dropped = rows.shift();
+        notes.push(dropped.cat === 'merch'
+          ? '👎 ' + productNo(dropped.line.p) + ' ' + dropped.line.p.name + ' — мерч не вліз у бюджет, прибрав'
+          : '✂️ прибрав ' + productNo(dropped.line.p) + ' ' + dropped.line.p.name + ' — не вліз у бюджет');
+      }
+      // запас більше 45% → спробую додати бонусну позицію, якщо влазить
+      if (sum() < budgetTotal * 0.55) {
+        const used = new Set(rows.map(r => r.line.p.id));
+        const extras = [...AI_KIT.cats].flatMap(k => aiKitPoolFor(k)).filter(p => !used.has(p.id));
+        if (extras.length) {
+          const priced = extras.map(aiKitLineFor).sort((a, b) => a.total - b.total);
+          const cand = priced[Math.floor(priced.length / 2)];
+          if (sum() + cand.total <= budgetTotal) rows.push({ cat: cand.p.category, line: cand });
+        }
+      }
+      return { people, budgetTotal, rows, total: sum(), notes };
+    }
+
+    function aiKitShowResult() {
+      const kit = aiKitAssemble();
+      AI_KIT.step = 'done';
+      if (!kit) {
+        aiKitPush('Хм, під ці відповіді нічого не зібрати — для такої кількості людей у обраних категоріях немає виробів (ліміти цифрового друку). Спробуйте зменшити людей або обрати інші категорії.',
+          [{ label: '✏️ Змінити відповіді', cb: () => aiAsk('змінити відповіді') }]);
+        return;
+      }
+      AI_KIT.lastKit = kit;
+      const lines = kit.rows.map(r => productNo(r.line.p) + ' ' + r.line.p.icon + ' ' + r.line.p.name + ' — ' + r.line.qty + ' шт · ' + formatUAH(r.line.total));
+      const per = Math.round(kit.total / kit.people * 100) / 100;
+      let txt = '🧪 Готово! Зібрав набір «Промо на ' + kit.people + ' людей»:\n\n' + lines.join('\n') +
+        '\n\n💰 РАЗОМ: ' + formatUAH(kit.total) + '\n👤 На одну людину: ' + formatUAH(per) +
+        '\n🎯 Бюджет: ' + formatUAH(AI_KIT.budget) + '/люд → ' + formatUAH(kit.budgetTotal);
+      if (kit.total <= kit.budgetTotal) txt += '\n✅ Вмістились у бюджет — запас ' + formatUAH(kit.budgetTotal - kit.total) + '.';
+      else txt += '\n⚠️ Вихід за бюджет на ' + formatUAH(kit.total - kit.budgetTotal) + ': навіть найдешевша комбінація дорожча. Підніміть бюджет або зменшіть кількість людей.';
+      if (kit.notes.length) txt += '\n\n' + kit.notes.join('\n');
+      aiKitPush(txt, [
+        { label: '🔄 Перерахувати', cb: () => aiAsk('перерахувати') },
+        { label: '🛒 Набір у кошик', cb: () => aiApplyAction({ label: '🛒 Набір у кошик', action: 'kit-cart' }) },
+        { label: '✏️ Змінити відповіді', cb: () => aiAsk('змінити відповіді') },
+        { label: '✉️ Замовити', cb: () => aiApplyAction({ label: '✉️ Замовити набір', action: 'order' }) }
+      ]);
+    }
+
+    // --- Додавання усього набору в кошик (з повними cfgSnap для редагування) ---
+    function aiKitFinDefaults(p) {
+      return { scoring: !!p.defaultScoring, folding: !!p.defaultFolding, corners: !!p.defaultCorners, hole: !!p.defaultHole, staples: !!p.defaultStaples, spring: !!p.defaultSpring, plotter: !!p.defaultPlotter, perforation: !!p.defaultPerforation };
+    }
+    function aiKitAddToCart() {
+      const kit = AI_KIT.lastKit;
+      if (!kit || !kit.rows.length) return;
+      let i = 0;
+      kit.rows.forEach(r => {
+        const p = r.line.p, q = r.line.qty, kind = p.kind || 'print';
+        let res, spec, fin = null;
+        if (kind === 'print') {
+          fin = aiKitFinDefaults(p);
+          const paperKey = p.defaultPaper || 'coated_130';
+          res = calculatePriceFor(p.defaultW, p.defaultH, q, p.defaultColor || '4+4', paperKey, p.defaultLam || 'none', fin, calcOptsForProduct(p));
+          spec = p.defaultW + '×' + p.defaultH + ' мм · ' + (p.defaultColor || '4+4') + ', ' + (prices.paper[paperKey] ? prices.paper[paperKey].name : paperKey);
+        } else {
+          res = calcAnyProduct(p, q);
+          spec = kind === 'merch' ? ((p.applyMethod || 'друк лого') + ' · ' + p.unitPrice + ' ₴/шт') : (res.simpleRate ? formatUAH(res.simpleRate) + '/шт' : '');
+        }
+        const snap = kind === 'print'
+          ? { product: p, width: p.defaultW, height: p.defaultH, pages: p.pages || 1, color: p.defaultColor || '4+4', paperKey: p.defaultPaper || 'coated_130', laminationKey: p.defaultLam || 'none', finishing: fin, pkgItems: null, calcOpts: calcOptsForProduct(p) }
+          : { product: p };
+        cart.push({
+          key: 'kit' + Date.now() + '-' + (i++) + '-' + Math.random().toString(36).slice(2, 6),
+          code: productCodeOf(p), icon: p.icon, name: p.name, spec: spec,
+          qtyLabel: q + ' шт', qty: q,
+          step: kind === 'merch' ? 10 : (kind === 'simple' ? 1 : 25),
+          cfgSnap: JSON.parse(JSON.stringify(snap)),
+          unit: res.unit, total: res.total
+        });
+      });
+      saveCart();
+      showToast('🛒 Набір у кошику — ' + kit.rows.length + ' поз. на ' + formatUAH(kit.total));
+    }
+
     function aiBotReply(raw) {
       const q = raw.toLowerCase().trim();
+      // TASK 27: активний квіз підбору набору — відповіді йдуть сюди
+      if (AI_KIT.active) {
+        const kr = aiKitStep(raw);
+        if (kr) return kr;
+      }
+      // TASK 27: «перерахувати» працює навіть після виходу з режиму квізу
+      if (!AI_KIT.active && AI_KIT.lastKit && /(перерахув|ще раз|еще раз|новий набір|новий варіант набору)/.test(q)) {
+        AI_KIT.active = true; AI_KIT.step = 'done';
+        aiKitShowResult();
+        return { kitHandled: true };
+      }
+      // TASK 27: старт квізу за запитом
+      if (/(підбер|збер|зібр|склад|конструктор|квіз|підбір)[^.;\n]{0,30}(набір|набори|комплект|пакунок)|набір\s+(на\s+\d|для\s|під\s)|промо[-\s]?(набір|бокс|пак)/.test(q)) {
+        return { text: '', kit: true };
+      }
 
       // 1. Обрати виріб за номером
       if (/(обери|обрати|вибери|вибрати|постав|став|додай|в калькулятор)/.test(q)) {
@@ -7430,6 +7729,7 @@
       }
       for (const t of AI_SCENARIOS) {
         if (t.words.some(w => q.includes(w))) {
+          if (t.label === '🧪 Підібрати набір') return { text: '', kit: true }; // TASK 27
           aiBudgetLastHints = null; // скидаємо перед викликом
           const text = typeof t.dynamic === 'function' ? t.dynamic() : t.text;
           // v19c: якщо dynamic-функція залишила підказки — використовуємо їх
@@ -7762,6 +8062,13 @@
     }
 
     function aiApplyAction(h) {
+      if (h.action === 'kit-cart') { // TASK 27: уесь набір у кошик
+        aiPushMsg(h.label, 'user');
+        const kit = AI_KIT.lastKit;
+        aiKitAddToCart();
+        if (kit) aiPushMsg('Готово: набір у кошику — ' + kit.rows.length + ' позицій на ' + formatUAH(kit.total) + '. Кількість кожної позиції можна підкрутити прямо в кошику.', 'bot', { hints: [{ label: '📦 Що в кошику', q: 'що в кошику' }, { label: '🔄 Ще варіант набору', q: 'перерахувати' }] });
+        return;
+      }
       if (h.action === 'order') {
         aiPushMsg(h.label, 'user');
         aiPushMsg('Відкриваю форму замовлення з поточним розрахунком. Заповніть ім\'я та телефон — лист піде на ' + ORDER_EMAIL + ' без переходів.', 'bot');
@@ -7847,6 +8154,8 @@
       aiPushMsg(q, 'user');
       const r = aiBotReply(q);
       if (r.news) { aiNewsFlow(); return; }
+      if (r.kit) { aiKitStart(false); return; } // TASK 27: квіз питає сам
+      if (r.kitHandled) return; // TASK 27: повідомлення вже показані
       setTimeout(() => {
         aiPushMsg(r.text, 'bot', Object.assign({ cardId: r.cardId, hints: r.hints }, r.extraOpts || {}));
         if (r.action && r.action.type === 'select') selectFromDb(r.action.productId);
@@ -7930,7 +8239,7 @@
       lab2.className = 'ai-chips-label';
       // v19c: основні підказки (найпопулярніші) — у першому рядку
       const AI_MAIN_HINTS = [
-        'Як порахувати', '🔥 Акції', '🛒 У кошик', '📊 У КП', '🔍 Перегляд товарів',
+        'Як порахувати', '🔥 Акції', '🧪 Підібрати набір', '🛒 У кошик', '📊 У КП', '🔍 Перегляд товарів',
         '💡 Як зекономити', 'Як замовити?', 'Мій розрахунок'
       ];
       // розширені — у другому рядку
@@ -7956,6 +8265,7 @@
         b.textContent = t.label;
         b.onclick = () => {
           if (t.label === '📰 Новини') { aiNewsFlow(t.label); return; }
+          if (t.label === '🧪 Підібрати набір') { aiKitStart(t.label); return; } // TASK 27
           aiPushMsg(t.label, 'user');
           const ans = typeof t.dynamic === 'function' ? t.dynamic() : t.text;
           const hints = aiScenarioHints(t);
