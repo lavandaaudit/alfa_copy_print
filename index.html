@@ -2829,10 +2829,73 @@
     .ai-hint-chip.on { background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); box-shadow: 0 0 0 1px var(--accent-yellow) inset; }
     .ai-hint-chip.accent { background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); font-weight: 800; }
     .ai-hint-chip:disabled { opacity: .35; cursor: default; }
+
+    /* ===================== TASK 28: ПОКРАЩЕННЯ ФОТО КАТАЛОГУ =====================
+       Фото користувача часто мутні/сірі/бляклі — накидаємо мʼяку автокорекцію:
+       +насиченість, +контраст, +яскравість, а великим фото ще й мікро-різкість
+       через вбудований SVG-фільтр #pfSharpen (feConvolveMatrix, офлайн-безпечно).
+       Плюс «живе світло»: раз на 5 хв по фото проходить легкий діагональний блік. */
+    .mockup-window img,
+    .mockup-modal-overlay img {
+      filter: url(#pfSharpen) saturate(1.18) contrast(1.08) brightness(1.04);
+      transition: filter .3s ease;
+    }
+    /* мініатюри (багато штук) — лише кольорова корекція, без SVG-різкості (швидкість) */
+    .cp-browse-thumb img,
+    .pli-thumb img {
+      filter: saturate(1.16) contrast(1.07) brightness(1.03);
+    }
+    .pack-hero-img {
+      filter: saturate(1.14) contrast(1.05) brightness(1.02);
+    }
+
+    /* — відблиск-«світло»: тонкий напівпрозорий промінь, цикл 300 с (раз на 5 хв) — */
+    .pf-shine {
+      position: absolute; inset: 0; z-index: 4;
+      overflow: hidden; pointer-events: none;
+      /* легка фотографічна віньєтика — маскує шумні краї неякісних фото */
+      box-shadow: inset 0 0 42px rgba(3, 5, 9, .20);
+    }
+    .pf-shine::before {
+      content: ''; position: absolute; top: -25%; bottom: -25%; width: 36%;
+      left: -70%; transform: skewX(-18deg);
+      background: linear-gradient(105deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,.045) 28%,
+        rgba(255,255,255,.15) 50%,
+        rgba(255,255,255,.045) 72%,
+        rgba(255,255,255,0) 100%);
+      animation: pfShine 300s linear infinite;
+      animation-delay: 9s; /* перший відблиск — через 9 с після показу фото */
+      will-change: left;
+    }
+    @keyframes pfShine {
+      0%   { left: -70%; }
+      1.2% { left: 140%; }  /* сам прохід ≈3.6 с, решту 296 с — тихо */
+      100% { left: 140%; }
+    }
+    /* поважаємо системну заборону анімацій */
+    @media (prefers-reduced-motion: reduce) {
+      .pf-shine::before { animation: none; }
+    }
+
+    /* — сцена модалки: обгортка навколо фото, щоб відблиск точно збігався з фото — */
+    .mockup-modal-stage { position: relative; display: flex; }
+    .mockup-modal-stage .pf-shine { z-index: 1; }
   </style>
 
 </head>
 <body>
+
+  <!-- TASK 28: вбудований SVG-фільтр мікро-різкості для фото (мʼякий unsharp mask) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="pfSharpen" x="0" y="0" width="100%" height="100%">
+        <feConvolveMatrix order="3" preserveAlpha="true"
+          kernelMatrix="0 -0.4 0 -0.4 2.6 -0.4 0 -0.4 0"/>
+      </filter>
+    </defs>
+  </svg>
 
   <!-- TOPBAR -->
   <header class="topbar">
@@ -3586,7 +3649,10 @@
     <button class="mockup-modal-close" onclick="closeMockupModal()" aria-label="Закрити">&times;</button>
     <button class="mockup-modal-nav mockup-modal-nav-l" onclick="event.stopPropagation(); mockNav(-1)" title="Попередній виріб (←)" aria-label="Попередній виріб">&lsaquo;</button>
     <button class="mockup-modal-nav mockup-modal-nav-r" onclick="event.stopPropagation(); mockNav(1)" title="Наступний виріб (→)" aria-label="Наступний виріб">&rsaquo;</button>
-    <img id="mockupModalImg" src="" alt="" onclick="event.stopPropagation()">
+    <div class="mockup-modal-stage">
+      <img id="mockupModalImg" src="" alt="" onclick="event.stopPropagation()">
+      <span class="pf-shine" aria-hidden="true"></span>
+    </div>
     <div class="mockup-modal-cap" id="mockupModalCap"></div>
     <button class="mockup-modal-select" id="mockupModalSelect" onclick="event.stopPropagation(); mockSelectCurrent()" title="Вибрати цей виріб у калькуляторі">✓ Вибрати цей виріб</button>
   </div>
@@ -6816,7 +6882,9 @@
         return;
       }
       win.classList.remove('empty');
+      // TASK 28: відблиск-«живе світло» поверх фото (раз на 5 хв) + автокорекція кольору через CSS
       win.innerHTML = '<img id="mockupImg" src="' + (p.photo ? p.photo : 'mockups/' + num + '.jpg') + '" alt="Мокап: ' + p.name + '">' +
+        '<span class="pf-shine" aria-hidden="true"></span>' +
         '<span class="mockup-num">№' + String(num).padStart(3, '0') + '</span>' +
         arrowsHtml;
       const img = document.getElementById('mockupImg');
