@@ -2397,6 +2397,191 @@
       .cp-browse-thumb { height: 120px; }
       .cp-browse-info { width: 100%; }
     }
+
+    /* ===================== TASK 23: СТАРТОВИЙ ЕКРАН «ВАШ ПАКУНОК» =====================
+       Чистий калькулятор-пакунок: користувач завжди ПЕРШИМ бачить збір свого пакунка.
+       Фото старту — файл start.jpg поруч з index.html (якщо немає — градієнт-заглушка). */
+    .pack-hero {
+      position: relative; min-height: 320px; overflow: hidden;
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      margin-bottom: 14px; background: #10121a;
+    }
+    .pack-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pack-hero-veil {
+      position: absolute; inset: 0;
+      background: linear-gradient(95deg, rgba(8,9,13,.95) 0%, rgba(8,9,13,.78) 42%, rgba(8,9,13,.30) 100%);
+    }
+    .pack-hero-content { position: relative; z-index: 2; padding: 36px 32px 32px; max-width: 660px; }
+    .pack-hero-kicker {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--accent-yellow); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .pack-hero-kicker::before { content: ''; width: 22px; height: 2px; background: var(--accent-yellow); display: inline-block; }
+    .pack-hero h1 {
+      font-family: var(--font-display); font-size: 36px; font-weight: 800;
+      letter-spacing: -0.015em; line-height: 1.04; margin-bottom: 12px; color: #fff;
+    }
+    .pack-hero h1 em { font-style: normal; color: var(--accent-yellow); }
+    .pack-hero-sub { font-size: 13px; color: #c9d0de; line-height: 1.6; max-width: 54ch; margin-bottom: 16px; }
+    .pack-hero-sub strong { color: #fff; }
+    .pack-hero-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .pack-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: .04em; color: #dfe4ee;
+      background: rgba(255,255,255,.06); border: 1px solid #2a3044;
+      padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(4px);
+    }
+    .pack-badge.hot { color: #000; background: var(--accent-yellow); border-color: var(--accent-yellow); }
+    .pack-hero-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .btn-pack-primary {
+      background: var(--accent-yellow); color: #000; font-weight: 800; font-size: 12.5px;
+      padding: 11px 20px; border-radius: 9px; cursor: pointer; transition: all .15s ease;
+      font-family: var(--font); border: 1px solid var(--accent-yellow);
+    }
+    .btn-pack-primary:hover { background: var(--accent-yellow-hover); box-shadow: 0 0 22px rgba(255,222,0,.35); transform: translateY(-1px); }
+    .btn-pack-ghost {
+      background: rgba(255,255,255,.05); color: #e6eaf2; font-weight: 700; font-size: 12.5px;
+      padding: 11px 18px; border-radius: 9px; cursor: pointer; transition: all .15s ease;
+      font-family: var(--font); border: 1px solid #2a3044;
+    }
+    .btn-pack-ghost:hover { border-color: rgba(255,222,0,.55); color: #fff; }
+    .pack-hero-noimg .pack-hero-img { display: none; }
+    .pack-hero-noimg {
+      background:
+        radial-gradient(700px 320px at 85% -10%, rgba(255,222,0,.16), transparent 60%),
+        radial-gradient(500px 300px at 100% 110%, rgba(0,210,255,.10), transparent 55%),
+        linear-gradient(120deg, #10121a 0%, #0a0c12 100%);
+    }
+    .pack-hero-watermark {
+      position: absolute; right: 26px; bottom: 6px; z-index: 1; font-size: 120px;
+      opacity: .16; filter: drop-shadow(0 8px 30px rgba(0,0,0,.6)); pointer-events: none;
+    }
+    .pack-hero-hint {
+      position: absolute; top: 12px; right: 14px; z-index: 2;
+      font-family: var(--font-mono); font-size: 9px; color: #6c7891;
+      letter-spacing: .08em; background: rgba(8,9,13,.55); padding: 3px 8px; border-radius: 6px;
+    }
+
+    /* Сітка: конструктор зліва, ціна справа */
+    .pack-layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 14px; align-items: start; }
+    .pack-rail { position: sticky; top: 66px; display: flex; flex-direction: column; gap: 14px; }
+
+    .pack-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .pack-panel-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.02);
+    }
+    .pack-panel-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .02em; display: flex; align-items: center; gap: 7px; }
+    .pack-panel-title svg { color: var(--accent-yellow); }
+    .pack-panel-hint { font-size: 10px; color: var(--text-dim); }
+    .pack-panel-body { padding: 14px 16px; }
+
+    /* Рядок позиції пакунка — збільшена версія pkg-item-row */
+    .pack-item-row {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,.03); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent-yellow); border-radius: 8px;
+      padding: 9px 11px; margin-bottom: 6px; transition: border-color .15s ease;
+    }
+    .pack-item-row:hover { border-color: #2e3450; border-left-color: var(--accent-yellow); }
+    .pack-item-icon {
+      flex: 0 0 38px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; background: #0e1017; border: 1px solid var(--border); border-radius: 8px;
+    }
+    .pack-item-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .pack-item-name { font-size: 12px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pack-item-name .pk-code { font-family: var(--font-mono); font-size: 9.5px; color: var(--text-dim); font-weight: 500; margin-right: 5px; }
+    .pack-item-price { font-family: var(--font-mono); font-size: 10px; color: var(--accent-yellow); }
+    .pack-item-price em { font-style: normal; color: var(--text-dim); }
+    .pack-item-del {
+      flex: 0 0 26px; width: 26px; height: 26px; background: rgba(255,91,91,.1);
+      border: 1px solid rgba(255,91,91,.35); color: #ff7b7b; font-size: 12px; cursor: pointer;
+      border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all .12s ease;
+    }
+    .pack-item-del:hover { background: #ff5b5b; color: #fff; }
+    .pack-add-row { display: flex; gap: 7px; margin-top: 10px; }
+    .pack-add-row .select-dropdown { flex: 1 1 auto; min-width: 0; padding: 9px 11px; font-size: 12px; }
+    .pack-add-row .btn-pkg-add { padding: 9px 16px; font-size: 12px; border-radius: 8px; }
+
+    .pack-empty {
+      text-align: center; padding: 34px 16px 30px; border: 1px dashed #2a3044; border-radius: 10px;
+      color: var(--text-muted); background: rgba(255,255,255,.015);
+    }
+    .pack-empty-icon { font-size: 40px; margin-bottom: 8px; }
+    .pack-empty-title { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: #dfe4ee; margin-bottom: 5px; }
+    .pack-empty-sub { font-size: 11.5px; line-height: 1.6; max-width: 44ch; margin: 0 auto; }
+
+    /* Готові пакунки-шаблони */
+    .pack-tpl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .pack-tpl-card {
+      text-align: left; background: rgba(255,255,255,.03); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 12px; cursor: pointer; transition: all .15s ease; color: inherit;
+    }
+    .pack-tpl-card:hover { border-color: rgba(255,222,0,.55); background: rgba(255,222,0,.06); transform: translateY(-1px); }
+    .pack-tpl-icon { font-size: 20px; margin-bottom: 6px; }
+    .pack-tpl-name { font-size: 11px; font-weight: 800; color: #eef1f7; line-height: 1.3; margin-bottom: 4px; }
+    .pack-tpl-meta { font-size: 9.5px; color: var(--text-dim); line-height: 1.45; }
+    .pack-tpl-meta b { color: var(--accent-yellow); font-weight: 700; }
+
+    /* Цінова панель пакунка */
+    .pack-price-total {
+      font-family: var(--font-display); font-size: 27px; font-weight: 800; color: var(--accent-yellow);
+      letter-spacing: -0.01em; line-height: 1.1;
+    }
+    .pack-price-unit { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+    .pack-sum-rows { display: flex; flex-direction: column; gap: 6px; margin: 13px 0; border-top: 1px solid var(--border); padding-top: 12px; }
+    .pack-sum-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 11.5px; color: var(--text-muted); }
+    .pack-sum-row b { font-family: var(--font-mono); color: #dfe4ee; font-weight: 700; }
+    .pack-sum-row.disc b { color: #34d399; }
+    .pack-kompl-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 9px; padding: 9px 11px; margin-bottom: 12px;
+    }
+    .pack-kompl-label { font-size: 11.5px; font-weight: 700; color: #dfe4ee; }
+    .pack-kompl-label span { display: block; font-size: 9.5px; color: var(--text-dim); font-weight: 500; margin-top: 1px; }
+    .pack-cta-col { display: flex; flex-direction: column; gap: 7px; }
+    .btn-pack-cta {
+      width: 100%; background: var(--accent-yellow); color: #000; font-weight: 800; font-size: 13px;
+      padding: 12px 14px; border-radius: 9px; cursor: pointer; transition: all .15s ease;
+      font-family: var(--font); border: 1px solid var(--accent-yellow);
+    }
+    .btn-pack-cta:hover:not(:disabled) { background: var(--accent-yellow-hover); box-shadow: 0 0 22px rgba(255,222,0,.35); }
+    .btn-pack-cta:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-pack-second {
+      width: 100%; background: rgba(255,255,255,.05); color: #e6eaf2; font-weight: 700; font-size: 12px;
+      padding: 10px 14px; border-radius: 9px; cursor: pointer; transition: all .15s ease;
+      font-family: var(--font); border: 1px solid #2a3044;
+    }
+    .btn-pack-second:hover:not(:disabled) { border-color: rgba(255,222,0,.55); color: #fff; }
+    .btn-pack-second:disabled { opacity: .4; cursor: not-allowed; }
+    .pack-include-note {
+      display: flex; align-items: flex-start; gap: 7px; font-size: 10.5px; color: var(--text-muted);
+      line-height: 1.55; background: rgba(16,185,129,.07); border: 1px solid rgba(16,185,129,.25);
+      border-radius: 8px; padding: 8px 10px; margin-top: 11px;
+    }
+    .pack-steps { display: flex; flex-direction: column; gap: 9px; }
+    .pack-step { display: flex; gap: 9px; align-items: flex-start; }
+    .pack-step-num {
+      flex: 0 0 20px; width: 20px; height: 20px; border-radius: 6px; background: rgba(255,222,0,.12);
+      border: 1px solid rgba(255,222,0,.4); color: var(--accent-yellow);
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pack-step-text { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+    .pack-step-text b { color: #dfe4ee; }
+
+    @media (max-width: 1080px) {
+      .pack-layout { grid-template-columns: 1fr; }
+      .pack-rail { position: static; }
+      .pack-hero h1 { font-size: 28px; }
+      .pack-hero-content { padding: 26px 22px; }
+    }
+    @media (max-width: 760px) {
+      .pack-tpl-grid { grid-template-columns: repeat(2, 1fr); }
+      .pack-hero { min-height: 250px; }
+      .pack-hero h1 { font-size: 23px; }
+      .pack-hero-sub { font-size: 12px; }
+    }
   </style>
 
 </head>
@@ -2472,8 +2657,123 @@
     <div class="ws-main">
 
 
+  <!-- VIEW 0: СТАРТОВИЙ ЕКРАН «ВАШ ПАКУНОК» (TASK 23) — чистий калькулятор-пакунок,
+       користувач ПЕРШИМ бачить збір власного пакунка. Фото старту: start.jpg поруч з index.html -->
+  <main class="view-container active-view" id="viewPack">
+    <div class="pack-hero" id="packHero">
+      <img class="pack-hero-img" src="start.jpg" alt="Ваш пакунок — стартовий екран alfa.copy.print" onerror="packHeroMissing()" onload="packHeroLoaded()">
+      <div class="pack-hero-veil"></div>
+      <span class="pack-hero-hint" id="packHeroHint">фото старту: start.jpg</span>
+      <span class="pack-hero-watermark" aria-hidden="true">📦</span>
+      <div class="pack-hero-content">
+        <div class="pack-hero-kicker">alfa.copy.print · конструктор комплекту</div>
+        <h1>Ваш <em>пакунок</em></h1>
+        <p class="pack-hero-sub">Зберіть власний набір поліграфії та мерчу: додайте вироби з бази — ціна перерахується миттєво. Знижка за комплект <strong>−10%</strong>, допечатна підготовка всіх макетів уже включена (+).</p>
+        <div class="pack-hero-badges">
+          <span class="pack-badge hot">−10% за комплект</span>
+          <span class="pack-badge">Макетування включено (+)</span>
+          <span class="pack-badge">Готові вироби · від 1 робочого дня</span>
+        </div>
+        <div class="pack-hero-actions">
+          <button class="btn-pack-primary" onclick="packFocusAdd()">📦 Зібрати пакунок</button>
+          <button class="btn-pack-ghost" onclick="packGoCalc()">⚡ Калькулятор</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pack-layout">
+
+      <!-- ЛІВА КОЛОНКА: склад пакунка + готові шаблони -->
+      <div class="pack-main">
+        <div class="pack-panel">
+          <div class="pack-panel-header">
+            <span class="pack-panel-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>
+              Склад пакунка
+            </span>
+            <span class="pack-panel-hint" id="packCountHint">0 позицій</span>
+          </div>
+          <div class="pack-panel-body">
+            <div id="packItemsHost"></div>
+            <div class="pack-add-row" id="packAddRow">
+              <input type="text" id="packSearch" class="catalog-search-input" style="max-width:170px;" placeholder="Пошук виробу..." aria-label="Пошук виробу для пакунка" oninput="packRenderOptions()">
+              <select id="packSelect" class="select-dropdown" aria-label="Вибрати виріб для пакунка" onchange="document.getElementById('packAddBtn').disabled = !this.value;"></select>
+              <button type="button" class="btn-pkg-add" id="packAddBtn" onclick="packAddFromSelect()" disabled>+ Додати</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pack-panel" style="margin-top:14px;">
+          <div class="pack-panel-header">
+            <span class="pack-panel-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Або почніть із готового
+            </span>
+            <span class="pack-panel-hint">1 клік — пакунок у конструкторі</span>
+          </div>
+          <div class="pack-panel-body">
+            <div class="pack-tpl-grid" id="packTplGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ПРАВА КОЛОНКА: ціна пакунка (sticky) -->
+      <aside class="pack-rail">
+        <div class="pack-panel">
+          <div class="pack-panel-header">
+            <span class="pack-panel-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Ваша ціна
+            </span>
+            <span class="pack-panel-hint" id="packRailBadge">пакунок</span>
+          </div>
+          <div class="pack-panel-body">
+            <div class="pack-kompl-row">
+              <div class="pack-kompl-label">Комплектів<span>усі позиції × кількість</span></div>
+              <div class="stepper">
+                <button type="button" class="step-btn" onclick="packStepKompl(-1)" aria-label="Менше комплектів">−</button>
+                <input type="number" id="packKomplInput" class="qty-input" value="1" min="1" max="50" oninput="packOnKomplInput(this.value)" aria-label="Кількість комплектів">
+                <button type="button" class="step-btn" onclick="packStepKompl(1)" aria-label="Більше комплектів">+</button>
+              </div>
+            </div>
+
+            <div class="pack-price-total" id="packTotal">0 ₴</div>
+            <div class="pack-price-unit" id="packUnit">≈ 0 ₴ / комплект</div>
+
+            <div class="pack-sum-rows">
+              <div class="pack-sum-row"><span>Сума позицій</span><b id="packSum">0 ₴</b></div>
+              <div class="pack-sum-row disc"><span>Знижка комплекту −10%</span><b id="packDisc">−0 ₴</b></div>
+            </div>
+
+            <div class="pack-cta-col">
+              <button class="btn-pack-cta" id="packCtaCalc" onclick="packToCalc()" disabled>🧺 Зібрати в калькуляторі →</button>
+              <button class="btn-pack-second" id="packCtaOrder" onclick="packOrderNow()" disabled>🛒 Замовити пакунок</button>
+              <button class="btn-pack-second" id="packCtaClear" onclick="packClear()" disabled>Очистити пакунок</button>
+            </div>
+
+            <div class="pack-include-note"><span>✓</span><span>Макетування всіх макетів включено у ціну. Друк цифровий: до 1000 шт на позицію (флаєри та листівки — до 2500).</span></div>
+          </div>
+        </div>
+
+        <div class="pack-panel">
+          <div class="pack-panel-header">
+            <span class="pack-panel-title">Як це працює</span>
+          </div>
+          <div class="pack-panel-body">
+            <div class="pack-steps">
+              <div class="pack-step"><span class="pack-step-num">1</span><span class="pack-step-text"><b>Додайте вироби</b> з бази 111 виробів — кількість кожної позиції змінюйте кроками або вручну.</span></div>
+              <div class="pack-step"><span class="pack-step-num">2</span><span class="pack-step-text"><b>Оберіть кількість комплектів</b> — усі позиції множаться автоматично, знижка −10% додається одразу.</span></div>
+              <div class="pack-step"><span class="pack-step-num">3</span><span class="pack-step-text"><b>«Зібрати в калькуляторі»</b> — пакунок перенесеться у повний калькулятор: деталі позицій, КП, PDF.</span></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
   <!-- VIEW 1: COMPACT PRO CALCULATOR WORKSPACE -->
-  <main class="view-container active-view" id="viewCalc">
+  <main class="view-container" id="viewCalc">
     <div class="dashboard-grid">
 
       <!-- COLUMN 1: PRODUCT LIST / DATABASE NAVIGATOR -->
@@ -2936,6 +3236,7 @@
       </div>
       <nav class="sf-col" aria-label="Навігація у футері">
         <div class="sf-col-title">Навігація</div>
+        <button class="sf-link" onclick="switchMainView('pack', this)">📦 Ваш пакунок</button>
         <button class="sf-link" onclick="switchMainView('calc', this)">⚡ Калькулятор</button>
         <button class="sf-link" onclick="switchMainView('database', this)">📋 База виробів</button>
         <button class="sf-link" onclick="switchMainView('a3price', this)">🏷️ Тарифи А3</button>
@@ -5240,6 +5541,7 @@
       });
 
       document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active-view'));
+      if (viewId === 'pack') document.getElementById('viewPack').classList.add('active-view');
       if (viewId === 'calc') document.getElementById('viewCalc').classList.add('active-view');
       if (viewId === 'database') document.getElementById('viewDatabase').classList.add('active-view');
       if (viewId === 'a3price') document.getElementById('viewA3Price').classList.add('active-view');
@@ -7293,8 +7595,8 @@
         if (e.key === 'Escape' && aiOpen) aiToggle(false);
       });
 
-      // Автовідкриття на десктопі — сторінка є «домом» помічника
-      if (window.innerWidth >= 1100) {
+      // Автовідкриття на десктопі — лише у калькуляторі (стартовий екран «Ваш пакунок» лишається чистим)
+      if (window.innerWidth >= 1100 && document.getElementById('viewCalc').classList.contains('active-view')) {
         setTimeout(() => { if (!aiOpen) aiToggle(true); }, 900);
       }
     }
@@ -7751,7 +8053,267 @@
       openCartModal();
     }
 
+    // ===================== TASK 23: СТАРТОВИЙ ЕКРАН «ВАШ ПАКУНОК» =====================
+    // Чистий калькулятор-пакунок: користувач одразу збирає власний набір зі знижкою −10%.
+    // Стан окремий від cfg (калькулятора) — переноситься туди кнопкою «Зібрати в калькуляторі».
+    const packState = { items: [], kompl: 1 };
+
+    // Фото старту start.jpg: якщо файлу ще немає — градієнт-заглушка з вотермаркою
+    function packHeroMissing() {
+      const hero = document.getElementById('packHero');
+      if (hero) hero.classList.add('pack-hero-noimg');
+    }
+    function packHeroLoaded() {
+      const h = document.getElementById('packHeroHint');
+      if (h) h.style.display = 'none';
+      const w = document.querySelector('#packHero .pack-hero-watermark');
+      if (w) w.style.display = 'none';
+      const hero = document.getElementById('packHero');
+      if (hero) hero.classList.remove('pack-hero-noimg');
+    }
+
+    // Кандидати для пакунка — усе, крім готових пакунків
+    function packCandidates() { return productsCatalog.filter(p => p.kind !== 'package'); }
+
+    // Селект «додати позицію» з урахуванням пошуку
+    function packRenderOptions() {
+      const sel = document.getElementById('packSelect');
+      const search = document.getElementById('packSearch');
+      const q = ((search && search.value) || '').toLowerCase().trim();
+      let opts = '<option value="">+ Оберіть виріб з каталогу…</option>';
+      packCandidates().forEach(p => {
+        if (packState.items.some(it => it.id === p.id)) return;
+        const hay = (productCodeOf(p) + ' ' + p.name + ' ' + (p.desc || '')).toLowerCase();
+        if (q && !hay.includes(q)) return;
+        opts += '<option value="' + p.id + '">' + productCodeOf(p) + ' ' + p.icon + ' ' + p.name + ' — від ' + p.priceFrom + ' ₴</option>';
+      });
+      sel.innerHTML = opts;
+      const btn = document.getElementById('packAddBtn');
+      if (btn) btn.disabled = !sel.value;
+    }
+
+    function packAddFromSelect() {
+      const sel = document.getElementById('packSelect');
+      if (!sel.value) return;
+      packAdd(sel.value);
+      sel.value = '';
+      document.getElementById('packAddBtn').disabled = true;
+    }
+
+    function packAdd(id) {
+      const p = productsCatalog.find(x => x.id === id);
+      if (!p || p.kind === 'package') return;
+      if (packState.items.some(it => it.id === id)) { showToast('Позиція вже у пакунку — змініть її кількість'); return; }
+      const defQty = p.kind === 'merch'
+        ? Math.max(p.minQty, 10)
+        : p.kind === 'simple'
+          ? (productTiersS(p)[0] ? productTiersS(p)[0].qty : Math.max(p.minQty, 1))
+          : Math.max(p.minQty, 100);
+      packState.items.push({ id: id, qty: defQty });
+      packRefresh();
+    }
+
+    // Крок кількості позиції — як у редакторі пакунка калькулятора (мерч — 1, решта — 10)
+    function packItemStep(idx, dir) {
+      const it = packState.items[idx];
+      if (!it) return;
+      packItemQty(idx, it.qty + dir * pkgItemStepOf(it.id));
+    }
+    function packItemQty(idx, qty) {
+      const it = packState.items[idx];
+      if (!it) return;
+      const comp = productsCatalog.find(x => x.id === it.id);
+      const maxQ = comp ? maxQtyForP(comp) : 1000;
+      it.qty = Math.min(maxQ, Math.max(1, Math.floor(qty) || 1));
+      packRefresh();
+    }
+    function packItemRemove(idx) {
+      packState.items.splice(idx, 1);
+      packRefresh();
+    }
+
+    // Кількість комплектів (1–50, як і ліміт пакунків у калькуляторі)
+    function packStepKompl(d) { packSetKompl(packState.kompl + d); }
+    function packOnKomplInput(v) { packSetKompl(parseInt(v, 10) || 1); }
+    function packSetKompl(v) {
+      packState.kompl = Math.min(50, Math.max(1, Math.floor(v) || 1));
+      const inp = document.getElementById('packKomplInput');
+      if (inp) inp.value = packState.kompl;
+      packRefresh();
+    }
+
+    // Розрахунок: сума позицій (тиражні знижки всередині кожної) → −10% за комплект.
+    // Формула ідентична calcAnyProduct(kind:'package') — перенесення без розбіжностей.
+    function packCalcTotals() {
+      let sum = 0;
+      packState.items.forEach(it => {
+        const comp = productsCatalog.find(x => x.id === it.id);
+        if (comp) sum += calcAnyProduct(comp, it.qty * packState.kompl).total;
+      });
+      const sumR = Math.round(sum * 100) / 100;
+      const total = Math.round(sumR * 0.9 * 100) / 100;
+      const disc = Math.round((sumR - total) * 100) / 100;
+      const unit = Math.round(total / Math.max(1, packState.kompl) * 100) / 100;
+      return { sum: sumR, disc: disc, total: total, unit: unit };
+    }
+
+    function packRefresh() { packRenderItems(); packRenderPrice(); }
+
+    function packRenderItems() {
+      const host = document.getElementById('packItemsHost');
+      if (!host) return;
+      host.innerHTML = '';
+      const nK = Math.max(1, packState.kompl);
+      if (!packState.items.length) {
+        host.innerHTML =
+          '<div class="pack-empty">' +
+            '<div class="pack-empty-icon">📦</div>' +
+            '<div class="pack-empty-title">Пакунок поки порожній</div>' +
+            '<div class="pack-empty-sub">Знайдіть виріб у пошуку нижче або оберіть готовий пакунок — ціна зібрається автоматично зі знижкою −10%.</div>' +
+          '</div>';
+      } else {
+        packState.items.forEach((it, idx) => {
+          const comp = productsCatalog.find(x => x.id === it.id);
+          const posTotal = comp ? calcAnyProduct(comp, Math.max(1, it.qty) * nK).total : 0;
+          const row = document.createElement('div');
+          row.className = 'pack-item-row';
+          row.innerHTML =
+            '<span class="pack-item-icon">' + (comp ? comp.icon : '📦') + '</span>' +
+            '<div class="pack-item-info">' +
+              '<span class="pack-item-name"><span class="pk-code">' + (comp ? productCodeOf(comp) : '') + '</span>' + (comp ? comp.name : it.id) + '</span>' +
+              '<span class="pack-item-price">' + formatUAH(posTotal) + ' <em>· ' + it.qty + ' шт/компл × ' + nK + '</em></span>' +
+            '</div>' +
+            '<div class="stepper stepper-sm">' +
+              '<button type="button" class="step-btn" aria-label="Менше">−</button>' +
+              '<input type="number" class="qty-input" value="' + it.qty + '" min="1" aria-label="Кількість позиції">' +
+              '<button type="button" class="step-btn" aria-label="Більше">+</button>' +
+            '</div>' +
+            '<button type="button" class="pack-item-del" title="Видалити позицію">✕</button>';
+          const btns = row.querySelectorAll('button.step-btn');
+          const inp = row.querySelector('.qty-input');
+          btns[0].addEventListener('click', () => packItemStep(idx, -1));
+          btns[1].addEventListener('click', () => packItemStep(idx, 1));
+          inp.addEventListener('change', () => packItemQty(idx, parseInt(inp.value, 10) || 1));
+          row.querySelector('.pack-item-del').addEventListener('click', () => packItemRemove(idx));
+          host.appendChild(row);
+        });
+      }
+      const cnt = document.getElementById('packCountHint');
+      if (cnt) cnt.textContent = packState.items.length + ' позицій';
+      packRenderOptions();
+    }
+
+    function packRenderPrice() {
+      const t = packCalcTotals();
+      const totalEl = document.getElementById('packTotal');
+      const unitEl = document.getElementById('packUnit');
+      const sumEl = document.getElementById('packSum');
+      const discEl = document.getElementById('packDisc');
+      if (totalEl) totalEl.textContent = formatUAH(t.total);
+      if (unitEl) unitEl.textContent = '≈ ' + formatUAH(t.unit) + ' / комплект';
+      if (sumEl) sumEl.textContent = formatUAH(t.sum);
+      if (discEl) discEl.textContent = '−' + formatUAH(t.disc);
+      const empty = !packState.items.length;
+      ['packCtaCalc', 'packCtaOrder', 'packCtaClear'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) b.disabled = empty;
+      });
+      const badge = document.getElementById('packRailBadge');
+      if (badge) badge.textContent = empty ? 'пакунок' : packState.items.length + ' поз. × ' + packState.kompl + ' компл.';
+    }
+
+    // Готові пакунки-шаблони з каталогу (pack-start, pack-promo, …)
+    function packRenderTemplates() {
+      const grid = document.getElementById('packTplGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      productsCatalog.filter(p => p.kind === 'package').forEach(p => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'pack-tpl-card';
+        card.innerHTML =
+          '<div class="pack-tpl-icon">' + p.icon + '</div>' +
+          '<div class="pack-tpl-name">' + p.name.replace(/^Пакунок\s*/, '') + '</div>' +
+          '<div class="pack-tpl-meta">' + ((p.contents || p.items || []).length) + ' позиції · <b>' + formatUAH(calcAnyProduct(p, 1).total) + '</b> /компл.</div>';
+        card.addEventListener('click', () => packLoadReady(p.id));
+        grid.appendChild(card);
+      });
+    }
+
+    function packLoadReady(id) {
+      const p = productsCatalog.find(x => x.id === id);
+      if (!p || p.kind !== 'package') return;
+      packState.items = (p.items || []).map(it => ({ id: it.id, qty: it.qty }));
+      packState.kompl = 1;
+      const inp = document.getElementById('packKomplInput');
+      if (inp) inp.value = 1;
+      packRefresh();
+      showToast(p.icon + ' «' + p.name.replace(/^Пакунок\s*/, '') + '» у конструкторі — ' + packState.items.length + ' позицій');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function packClear() {
+      packState.items = [];
+      packState.kompl = 1;
+      const inp = document.getElementById('packKomplInput');
+      if (inp) inp.value = 1;
+      packRefresh();
+    }
+
+    function packFocusAdd() {
+      const row = document.getElementById('packAddRow');
+      if (row && row.scrollIntoView) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const sel = document.getElementById('packSelect');
+      if (sel) setTimeout(() => sel.focus(), 350);
+    }
+
+    function packGoCalc() {
+      switchMainView('calc', null);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Перенесення зібраного пакунка у калькулятор (режим «Пакунок», редагування складу доступне)
+    function packToCalc() {
+      if (!packState.items.length) { showToast('Пакунок порожній — додайте позиції з каталогу'); return; }
+      const t = packCalcTotals();
+      const customPack = {
+        id: 'pack-custom',
+        name: 'Ваш пакунок — власний набір',
+        category: 'packages', icon: '🧺',
+        kind: 'package', pkgPrice: t.total,
+        items: packState.items.map(it => ({ id: it.id, qty: it.qty })),
+        contents: packState.items.map(it => {
+          const cp = productsCatalog.find(x => x.id === it.id);
+          return (cp ? cp.name : it.id) + ' — ' + it.qty + ' шт';
+        }),
+        desc: 'Власний пакунок, зібраний у конструкторі: ' + packState.items.length + ' позицій × ' + packState.kompl + ' компл. Знижка комплекту −10%, макетування включено (+).',
+        defaultW: 90, defaultH: 50, defaultPaper: 'coated_350', allowedPapers: [], defaultColor: '4+0',
+        minQty: 1, priceFrom: formatUAH(t.unit).replace(' ₴', '')
+      };
+      selectProduct(customPack);
+      switchMainView('calc', null);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('🧺 Пакунок перенесено у калькулятор — склад можна редагувати далі');
+    }
+
+    function packOrderNow() {
+      if (!packState.items.length) return;
+      packToCalc();
+      openModal();
+    }
+
+    function packInit() {
+      // Фото start.jpg могло вже завершити завантаження до оголошення функцій — синхронізуємо стан
+      const heroImg = document.querySelector('#packHero .pack-hero-img');
+      if (heroImg && heroImg.complete) {
+        if (heroImg.naturalWidth === 0) packHeroMissing(); else packHeroLoaded();
+      }
+      packRenderTemplates();
+      packRefresh();
+    }
+
     window.addEventListener('DOMContentLoaded', init);
+    window.addEventListener('DOMContentLoaded', packInit);
   </script>
 
   <!-- TASK 22: АДМІНКА — завантаження оверрайду ДО init (класичні скрипти блокують DOMContentLoaded) -->
