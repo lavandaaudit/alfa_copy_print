@@ -2530,13 +2530,8 @@
       font-size: 9px; font-weight: 900; padding: 2px 6px;
       font-family: var(--font-mono); letter-spacing: .4px; z-index: 2;
     }
-    .cat-zoomhint {
-      position: absolute; top: 7px; right: 7px; z-index: 2;
-      background: rgba(8, 10, 16, .72); color: #cbd5e1;
-      font-size: 9px; font-weight: 700; padding: 3px 7px; border-radius: 4px;
-      opacity: 0; transition: opacity .15s ease;
-    }
-    .cat-card:hover .cat-zoomhint { opacity: 1; }
+    /* v21 FIXED: значок «збільшити» прибрано — фото вже немає, підказка не потрібна */
+    .cat-zoomhint { display: none !important; }
     .cat-infoblock { padding: 10px 12px 8px; flex: 1; display: flex; flex-direction: column; gap: 3px; min-height: 0; }
     .cat-code { font-family: var(--font-mono); font-weight: 800; font-size: 9.5px; color: var(--accent-yellow); letter-spacing: .3px; }
     .cat-name { font-size: 12.5px; font-weight: 700; color: #fff; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -2613,6 +2608,20 @@
       font-family: var(--font); border: 1px solid #2a3044;
     }
     .btn-pack-ghost:hover { border-color: rgba(255,222,0,.55); color: #fff; }
+    /* v21 NEW: кнопка «Каталог товарів» на стартовій — акцентна, виділяється */
+    .btn-pack-catalog {
+      background: linear-gradient(180deg, #1a2030, #141826); color: #ffd400;
+      font-weight: 800; font-size: 12.5px; padding: 11px 18px;
+      border-radius: 9px; cursor: pointer; transition: all .15s ease;
+      font-family: var(--font); border: 1px solid rgba(255, 222, 0, .55);
+      box-shadow: 0 2px 12px rgba(255, 222, 0, .12);
+    }
+    .btn-pack-catalog:hover {
+      background: linear-gradient(180deg, #222a3d, #181d2e);
+      border-color: var(--accent-yellow);
+      box-shadow: 0 4px 18px rgba(255, 222, 0, .3);
+      transform: translateY(-1px);
+    }
     .pack-hero-noimg .pack-hero-img { display: none; }
     .pack-hero-noimg {
       background:
@@ -2945,11 +2954,16 @@
       transition: opacity .2s ease, transform .2s ease;
     }
     /* наведення на фото — тіні-підказки проявляються з обох боків, шеврон ледь помітний */
-    .mockup-window:hover .mockup-nav-zone { opacity: .55; }
-    .mockup-window:hover .mockup-nav-zone .chev { opacity: .5; }
+    .mockup-window:hover .mockup-nav-zone { opacity: .75; }
+    .mockup-window:hover .mockup-nav-zone .chev { opacity: .65; }
     /* наведення на сам край — тінь темніє, шеврон яскравіє: «натисни мене» */
     .mockup-window .mockup-nav-zone:hover { opacity: 1; }
     .mockup-window .mockup-nav-zone:hover .chev { opacity: .95; transform: scale(1); }
+    /* v21 FIXED: на ПК тіні-підказки видно завжди (не лише при hover) — користувач бачить, що фото гортається */
+    @media (hover: hover) and (pointer: fine) {
+      .mockup-nav-zone { opacity: .35; }
+      .mockup-nav-zone .chev { opacity: .35; }
+    }
     /* тач-екрани (hover немає): тіні видно завжди, зони тапаються */
     @media (hover: none) {
       .mockup-nav-zone { opacity: .8; }
@@ -3143,7 +3157,7 @@
     <span class="ai-head ai-eye-head ai-head-fab">
       <span class="ai-eye"></span><span class="ai-eye"></span><span class="ai-mouth"></span>
     </span>
-    <span class="ai-fab-label">AI Лаборант<span class="ai-fab-sub" id="aiFabSub">111 виробів</span></span>
+    <span class="ai-fab-label">AI MANAGER001<span class="ai-fab-sub" id="aiFabSub">— виробів</span></span>
   </button>
 
   <div class="ai-panel" id="aiPanel" role="dialog" aria-label="AI-помічник alfa.copy.print">
@@ -3154,8 +3168,8 @@
           <span class="ai-eye"></span><span class="ai-eye"></span><span class="ai-mouth"></span>
         </span>
         <div class="ai-header-text">
-          <div class="ai-title">Лаборант · AI-помічник ALFAMEDIA</div>
-          <div class="ai-status"><span class="ai-dot"></span>онлайн · база 111 виробів</div>
+          <div class="ai-title">MANAGER001 · AI-помічник ALFAMEDIA</div>
+          <div class="ai-status"><span class="ai-dot"></span>онлайн · база <span id="aiStatusCount">—</span> виробів</div>
         </div>
         <button class="ai-close" onclick="aiToggle(false)" aria-label="Закрити">&times;</button>
       </div>
@@ -3192,6 +3206,7 @@
         <div class="pack-hero-actions">
           <button class="btn-pack-primary" onclick="packFocusAdd()">📦 Зібрати пакунок</button>
           <button class="btn-pack-ghost" onclick="packGoCalc()">⚡ Калькулятор</button>
+          <button class="btn-pack-catalog" onclick="openCatalogModal()" title="Переглянути всі товари вікном — сітка по 3 в ряду, пошук і категорії">📚 Каталог товарів</button>
         </div>
       </div>
     </div>
@@ -3276,7 +3291,7 @@
           </div>
           <div class="pack-panel-body">
             <div class="pack-steps">
-              <div class="pack-step"><span class="pack-step-num">1</span><span class="pack-step-text"><b>Додайте вироби</b> з бази 111 виробів — кількість кожної позиції змінюйте кроками або вручну.</span></div>
+              <div class="pack-step"><span class="pack-step-num">1</span><span class="pack-step-text"><b>Додайте вироби</b> з бази <span id="packStepCount">—</span> виробів — кількість кожної позиції змінюйте кроками або вручну.</span></div>
               <div class="pack-step"><span class="pack-step-num">2</span><span class="pack-step-text"><b>Оберіть кількість комплектів</b> — усі позиції множаться автоматично, знижка −10% додається одразу.</span></div>
               <div class="pack-step"><span class="pack-step-num">3</span><span class="pack-step-text"><b>«Зібрати в калькуляторі»</b> — пакунок перенесеться у повний калькулятор: деталі позицій, КП, PDF.</span></div>
             </div>
@@ -4886,6 +4901,8 @@
           productsCatalog.forEach(function (p, i) { PRODUCT_NUMBERS[p.id] = i + 1; });
         }
         console.info('[admin] застосовано catalog-override від', ov.updatedAt || '?');
+        // v21: AI MANAGER001 — після оверрайду одразу оновлюємо лічильники
+        try { if (typeof aiSyncCatalogCounters === 'function') aiSyncCatalogCounters(); } catch (e) {}
       } catch (e) { console.warn('[admin] override помилка:', e); }
     };
     function productNo(p) { const n = PRODUCT_NUMBERS[p.id]; return n ? '№' + String(n).padStart(3, '0') : '—'; }
@@ -5238,7 +5255,38 @@
       recalc();
       // v19d: запускаємо проактивну активність Лаборанта (перший тик через 3 хв)
       aiProactiveStart();
+      // v21 FIXED: AI MANAGER001 — моніторить каталог, лічильники товарів динамічні.
+      // Тепер при додаванні/видаленні товарів через catalog-override.js або інакше,
+      // лічильник у шапці AI та в FAB-кнопці оновлюється автоматично.
+      aiSyncCatalogCounters();
     }
+
+    // v21 FIXED: AI MANAGER001 — моніторинг каталогу.
+    // Оновлює лічильники у шапці AI-помічника та FAB-кнопці з productsCatalog.length.
+    // Викликається: 1) після init; 2) після застосування catalog-override; 3) кожні 30 с — на випадок
+    //    відкладеного завантаження оверрайду або динамічних змін каталогу.
+    function aiSyncCatalogCounters() {
+      try {
+        const total = (typeof productsCatalog !== 'undefined' && productsCatalog) ? productsCatalog.length : 0;
+        const fab = document.getElementById('aiFabSub');
+        if (fab) fab.textContent = total + ' виробів';
+        const statusCount = document.getElementById('aiStatusCount');
+        if (statusCount) statusCount.textContent = total;
+        // Також оновлюємо лічильник на стартовій сторінці («Як це працює»)
+        const packStepCount = document.getElementById('packStepCount');
+        if (packStepCount) packStepCount.textContent = total;
+        // Також оновлюємо AI_TOTAL динамічно, якщо він const — перетворимо на let
+        if (typeof window._aiTotalLast === 'undefined' || window._aiTotalLast !== total) {
+          window._aiTotalLast = total;
+          // сповіщаємо інші модулі (опціонально)
+          try { console.info('[AI MANAGER001] каталог проскановано:', total, 'виробів'); } catch (e) {}
+        }
+      } catch (e) {
+        console.warn('[AI MANAGER001] не вдалося оновити лічильник:', e);
+      }
+    }
+    // Регулярний моніторинг каталогу (кожні 30 с) — ловить відкладене завантаження оверрайду
+    setInterval(aiSyncCatalogCounters, 30000);
 
     function setCategory(cat) {
       currentCategory = cat;
@@ -7051,31 +7099,63 @@
       if (!win) return;
       const p = cfg.product;
       const num = p ? (PRODUCT_NUMBERS[p.id] || 0) : 0;
-      // v20: стрілки ‹ › по краях фото прибрано — гортання каталогу тепер у кнопці «📚 Каталог товарів»
-      // (модальне вікно «Перегляд товарів» сіткою по 3 в ряду). Свайп по фото лишився.
+      // v21 FIXED: повертаємо гортання вліво/вправо прямо на фото калькулятора:
+      //   • тач-екрани — свайп (bindMockupSwipe);
+      //   • ПК — дві прозорі зони .mockup-nav-zone з тінню-підказкою та шевроном ‹ ›;
+      //   • клавіатура — ← / → (bindMockupKeys), коли калькулятор активний.
+      const navZonesHtml =
+        '<button type="button" class="mockup-nav-zone mockup-nav-zone-l" ' +
+          'onclick="event.stopPropagation(); calcBrowseProduct(-1)" ' +
+          'aria-label="Попередній виріб (←)" title="Попередній виріб (←)">' +
+          '<span class="chev">‹</span></button>' +
+        '<button type="button" class="mockup-nav-zone mockup-nav-zone-r" ' +
+          'onclick="event.stopPropagation(); calcBrowseProduct(1)" ' +
+          'aria-label="Наступний виріб (→)" title="Наступний виріб (→)">' +
+          '<span class="chev">›</span></button>';
       if (!num) {
         win.classList.add('empty');
-        win.innerHTML = mockupPlaceholderHtml(p, 0);
+        win.innerHTML = mockupPlaceholderHtml(p, 0) + navZonesHtml;
         win.onclick = null;
         bindMockupSwipe(win);
+        bindMockupKeys();
         return;
       }
       win.classList.remove('empty');
       // TASK 28: відблиск-«живе світло» поверх фото (раз на 5 хв) + автокорекція кольору через CSS
       win.innerHTML = '<img id="mockupImg" src="' + (p.photo ? p.photo : 'mockups/' + num + '.jpg') + '" alt="Мокап: ' + p.name + '">' +
         '<span class="pf-shine" aria-hidden="true"></span>' +
-        '<span class="mockup-num">№' + String(num).padStart(3, '0') + '</span>';
+        '<span class="mockup-num">№' + String(num).padStart(3, '0') + '</span>' +
+        navZonesHtml;
       const img = document.getElementById('mockupImg');
       if (img) {
         img.onerror = () => {
           win.classList.add('empty');
-          win.innerHTML = mockupPlaceholderHtml(p, num);
+          win.innerHTML = mockupPlaceholderHtml(p, num) + navZonesHtml;
         };
       }
       // TASK 26: функцію збільшення прибрано — клік на фото нічого не відкриває
       win.onclick = null;
-      win.title = 'Мокап: ' + p.name + ' — весь каталог у кнопці «📚 Каталог товарів»';
+      win.title = 'Мокап: ' + p.name + ' — гортайте ←/→, свайпайте або «📚 Каталог товарів»';
       bindMockupSwipe(win);
+      bindMockupKeys();
+    }
+
+    // v21 FIXED: клавіатура ←/→ — гортання каталогу прямо з калькулятора (ПК).
+    // Один бінддинг на document, спрацьовує лише коли активний viewCalc і фокус не в полі вводу.
+    let _mockupKeysBound = false;
+    function bindMockupKeys() {
+      if (_mockupKeysBound) return;
+      _mockupKeysBound = true;
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        const active = document.querySelector('.view-container.active-view');
+        if (!active || active.id !== 'viewCalc') return;
+        const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+        if (tag === 'input' || tag === 'textarea' || tag === 'select' || (e.target && e.target.isContentEditable)) return;
+        if (catOverlayEl && catOverlayEl.classList.contains('open')) return; // не ламаємо гортання в модалці каталогу
+        e.preventDefault();
+        calcBrowseProduct(e.key === 'ArrowLeft' ? -1 : 1);
+      });
     }
 
     // TASK 25: свайп вліво/вправо по фото — гортання каталогу (одноразовий біндинг на елемент)
@@ -7446,12 +7526,12 @@
         '💡 Проте система налаштована на автоматизацію — вам не обов\'язково телефонувати:\n' +
         '• Натисніть «Замовити» у шапці — лист автоматично піде на пошту\n' +
         '• Зберіть КП через «📊 КП» і завантажте PDF — відправите клієнту самостійно\n' +
-        '• Напишіть мені (Лаборанту) тут — я відповім за секунди\n' +
+        '• Напишіть мені (MANAGER001) тут — я відповім за секунди\n' +
         '• Кошик і КП зберігаються в браузері — не зникнуть між сесіями\n\n' +
         'Менеджер передзвонить саме тоді, коли вам зручно — залиште заявку з номером і часом.';
     }
 
-    const AI_WELCOME = '🤖 Вітаю! Я — Лаборант, цифровий помічник друкарні ALFAMEDIA (alfa.copy.print).\nСтворений для автоматизації процесів замовлення поліграфії — без дзвінків, без очікувань менеджера, без паперової волокити.\n\nЯ знаю всі ' + AI_TOTAL + ' виробів за номерами №001–№' + String(AI_TOTAL).padStart(3, '0') + ', їхні формати, матеріали та вартість до копійки. Веду клієнта по всіх етапах — від першого питання до оформленого замовлення.\n\nЩо я вмію:\n• 📦 знайти виріб за номером або назвою — покажу карточку з ціною та описом\n• 🧮 одразу обрати його в калькуляторі, задати тираж і порахувати вартість\n• 📊 додати в кошик або в комерційну пропозицію (КП) одним словом\n• 📐 пояснити вимоги до макету, підібрати папір, ламінацію, постдрук\n• 💡 підказати, як зекономити — від формату до тиражу\n• 🔥 показати акції дня (−5–10%) та свіжі новини ринку\n• 🧪 зібрати промо-набір: 5 питань — і готовий прорахунок під людей і бюджет\n• ✉️ відкрити форму замовлення — лист піде на пошту без переходів\n• 📚 розповісти про технології друку, словник термінів, формати паперу\n• 🎓 поділитися цікавим про історію друку\n\nОберіть тему нижче або напишіть питання — я на зв\'язку 24/7.';
+    const AI_WELCOME = '🤖 Вітаю! Я — MANAGER001, цифровий помічник друкарні ALFAMEDIA (alfa.copy.print).\nСтворений для автоматизації процесів замовлення поліграфії — без дзвінків, без очікувань менеджера, без паперової волокити.\n\nЯ знаю всі ' + AI_TOTAL + ' виробів за номерами №001–№' + String(AI_TOTAL).padStart(3, '0') + ', їхні формати, матеріали та вартість до копійки. Веду клієнта по всіх етапах — від першого питання до оформленого замовлення.\n\nЩо я вмію:\n• 📦 знайти виріб за номером або назвою — покажу карточку з ціною та описом\n• 🧮 одразу обрати його в калькуляторі, задати тираж і порахувати вартість\n• 📊 додати в кошик або в комерційну пропозицію (КП) одним словом\n• 📐 пояснити вимоги до макету, підібрати папір, ламінацію, постдрук\n• 💡 підказати, як зекономити — від формату до тиражу\n• 🔥 показати акції дня (−5–10%) та свіжі новини ринку\n• 🧪 зібрати промо-набір: 5 питань — і готовий прорахунок під людей і бюджет\n• ✉️ відкрити форму замовлення — лист піде на пошту без переходів\n• 📚 розповісти про технології друку, словник термінів, формати паперу\n• 🎓 поділитися цікавим про історію друку\n\nОберіть тему нижче або напишіть питання — я на зв\'язку 24/7.';
     const AI_WELCOME_HINTS = [
       { label: '🔥 Акції дня', q: 'акції' },
       { label: '🛒 У кошик поточний', q: 'додай в кошик' },
@@ -7483,7 +7563,7 @@
       { label: '📏 Формати паперу', words: ['формат', 'sra', 'розміри аркуш', 'а-формат'], text: '📏 Система форматів А — проста математика:\n• А0 (841×1189 мм) — рівно 1 м² паперу.\n• Кожен наступний — половина попереднього: А1 → А2 (420×594) → А3 (297×420) → А4 (210×297) → А5 (148×210) → А6 (105×148).\n• А3 вміщує 2×А4 — тому друк двох А4 на одному аркуші А3 помітно дешевший за штуку.\n• Візитка 90×50 — на А3 поміщається 12 шт, флаєр А6 — 8 шт, листівка А5 — 4 шт.\n• SRA3 (320×450) — технологічний формат із запасом під виліжування: саме він закладений у прорахунок друкарні.\nУ калькуляторі обирайте А6–А3 або «Свій розмір» — я автоматично переведу все в потрібні аркуші А3.' },
       { label: '📚 Словник друкарні', words: ['словник', 'термін', 'що таке', 'значення'], text: '📚 Міні-словник друкарні — говоріть з нами однією мовою:\n• Фальц — згин аркуша (флаєри, меню, листівки).\n• Біговка — канавка на щільному папері, щоб згин був рівним і фарба не тріскалась.\n• Виліжування — запас 2–3 мм за межами крою, щоб не було білих смуг.\n• Спускополоси — точна розстановка сторінок на друкарському аркуші (їх роблять під час макетування).\n• Растр — мікроточки, з яких складається зображення; 300 dpi — стандарт чіткості.\n• Креш — розрізання аркуша на готові вироби.\n• Тиснення — рельєфний відбиток фольгою для преміум-вигляду.\n• Скоба, пружина (КБС), клей — способи скріплення багатосторінкових видань.\nПитайте «що таке …» про будь-який термін — поясню просто й з прикладами.' },
       { label: '💡 Як зекономити', words: ['економ', 'зеконом', 'дешев', 'здешев', 'оптиміз', 'як знизити', 'менше заплатити'], text: '💡 6 перевірених способів платити менше без втрати якості:\n1. Тираж вище — ціна/шт нижча. 100 шт завжди вигідніші за 25: змініть тираж у калькуляторі — різниця до 2×.\n2. Друк парами: 2×А4 на аркуші А3, 8×А6 на А3 — розумне розкладання економить аркуші.\n3. Кольоровість: для внутрішніх документів 1+1 замість 4+4 — різниця суттєва.\n4. Папір: 115–130 г для флаєрів майже не відрізняється на вигляд від 170 г, а коштує менше.\n5. Ламінація — тільки на обкладинку видання, а не на весь блок.\n6. Пакунки: комплект дешевший за ті самі позиції окремо (СТАРТ 4140 ₴ — це ≈ −10% від суми).\nСкажіть свій бюджет — підберу формат, папір і тираж під нього.' },
-      { label: '🤖 Про себе', words: ['хто ти', 'про себе', 'що вмієш', 'вмієш', 'хто такий', 'лаборант', 'ти бот', 'ви бот', 'штучний інтелект', 'розкажи про'], text: '🤖 Я — Лаборант 3, цифровий помічник друкарні ALFAMEDIA (alfa.copy.print).\nСтворений для автоматизації процесів замовлення поліграфії — щоб клієнт отримав відповідь за секунди, а не чекав на менеджера.\n\nМоя база — ' + AI_TOTAL + ' виробів із номерами №001–№' + String(AI_TOTAL).padStart(3, '0') + ': пам\'ятаю кожен виріб, його формати, папір і ціну до копійки.\n\nЩо я вмію:\n• 📦 знайти виріб за номером або назвою — покажу карточку з ціною\n• 🧮 одразу обрати його в калькуляторі, задати тираж і порахувати вартість\n• 🛒 додати поточний розрахунок у кошик — скажіть «додай в кошик»\n• 📊 додати в комерційну пропозицію (КП) — скажіть «додай в КП»\n• 🔍 відкрити перегляд усіх ' + AI_TOTAL + ' товарів з фото\n• 📐 пояснити логіку: постдрук «500 ₴ + ціна/одиницю», макетування (+), офсет 1000+\n• 💡 підказати, як зекономити під ваш бюджет\n• 🔥 показати акції дня (−5–10%) та свіжі новини ринку\n• 📚 розповісти про технології, словник термінів, формати паперу\n• ✉️ відкрити форму замовлення — лист піде на ' + ORDER_EMAIL + ' без переходів\n\nПишіть номером чи словом — я на зв\'язку 24/7.' },
+      { label: '🤖 Про себе', words: ['хто ти', 'про себе', 'що вмієш', 'вмієш', 'хто такий', 'лаборант', 'manager', 'менеджер', 'ти бот', 'ви бот', 'штучний інтелект', 'розкажи про'], text: '🤖 Я — MANAGER001, цифровий помічник друкарні ALFAMEDIA (alfa.copy.print).\nСтворений для автоматизації процесів замовлення поліграфії — щоб клієнт отримав відповідь за секунди, а не чекав на менеджера.\n\nМоя база — ' + AI_TOTAL + ' виробів із номерами №001–№' + String(AI_TOTAL).padStart(3, '0') + ': пам\'ятаю кожен виріб, його формати, папір і ціну до копійки. Моніторю каталог у режимі реального часу — при додаванні нових товарів лічильник оновлюється автоматично.\n\nЩо я вмію:\n• 📦 знайти виріб за номером або назвою — покажу карточку з ціною\n• 🧮 одразу обрати його в калькуляторі, задати тираж і порахувати вартість\n• 🛒 додати поточний розрахунок у кошик — скажіть «додай в кошик»\n• 📊 додати в комерційну пропозицію (КП) — скажіть «додай в КП»\n• 🔍 відкрити перегляд усіх ' + AI_TOTAL + ' товарів з фото\n• 📐 пояснити логіку: постдрук «500 ₴ + ціна/одиницю», макетування (+), офсет 1000+\n• 💡 підказати, як зекономити під ваш бюджет\n• 🔥 показати акції дня (−5–10%) та свіжі новини ринку\n• 📚 розповісти про технології, словник термінів, формати паперу\n• ✉️ відкрити форму замовлення — лист піде на ' + ORDER_EMAIL + ' без переходів\n\nПишіть номером чи словом — я на зв\'язку 24/7.' },
       { label: '🛒 У кошик', words: ['додай в кошик', 'додати в кошик', 'в кошик', 'у кошик', 'кошик', 'basket', 'cart'], dynamic: aiAddToCartText },
       { label: '📊 У КП', words: ['додай в кп', 'додати в кп', 'в кп', 'у кп', 'комерційн', 'пропозиці', 'комерційна пропозиція'], dynamic: aiAddToKpText },
       { label: '🔍 Перегляд товарів', words: ['перегляд', 'всі товари', 'каталог товарів', 'покажи все', 'галерея', 'з фото'], dynamic: aiBrowseText },
@@ -8102,7 +8182,7 @@
       'Приходить клієнт: «Надрукуйте мені картину Рафаеля».\nДрукар: «Оригінал у музеї, а копія — 50 ₴ за А3».\nКлієнт: «Як копія може коштувати 50?»\nДрукар: «А я не Рафаель — я друкар. Але за 100 ₴ зроблю А3+ з ламінацією, виглядатиме ще краще 🖼️»',
       'Папір каже ламінації: «Ти така холодна, товста й незграбна…»\nЛамінація: «Зато я тебе захищаю від вологи, бруду й часу. Любов буває різною 💞»',
       'Фальц, біговка й плотер зустрічаються в барі.\nФальц: «Я згинаю світ!»\nБіговка: «А я роблю його рівним!»\nПлотер: «А я вирізаю все зайве. Особливо зайдів, які замовляють по 1 візитці 😅»',
-      'Я (Лаборант) хотів пожартувати про Pantone, але вирішив не ускладнювати — він і так дуже специфічний колір 🟪',
+      'Я (MANAGER001) хотів пожартувати про Pantone, але вирішив не ускладнювати — він і так дуже специфічний колір 🟪',
       'Чому друк офсетом довший за цифровий?\nТому що офсет — як теплохід: довго розганяється, але багато везе за раз 🚢. А цифра — як велосипед: швидко стартує, але на дальні дистанції втомлюється 🚴',
       'Клієнт: «А можете надрукувати вчора?»\nДрукар: «Можна, але машина часу дорого коштує — окремий прорахунок ⏰»',
       'Календар запитав у годинника: «Скільки в тебе сторінок?»\nГодинник: «Це залежить від дня тижня. А в тебе завжди 365 — нудно ж!»\nКалендар: «Зато я не стрибаю стрілками кожну секунду. Стабільність — це моя суперсила 📅»',
@@ -9088,7 +9168,7 @@
         const inCart = cpBrowseAddedCart.has(p.id);
         const inKp = cpBrowseAddedKp.has(p.id);
         return '<div class="cp-browse-card">' +
-          '<div class="cp-browse-thumb" onclick="openMockupModalByProductId(\'' + p.id + '\')" title="Збільшити фото">' +
+          '<div class="cp-browse-thumb" onclick="openMockupModalByProductId(\'' + p.id + '\')" title="Переглянути">' +
             (numStr ? '<span class="cp-browse-num">№' + numStr + '</span>' : '') +
             thumbInner +
           '</div>' +
@@ -9121,7 +9201,7 @@
         '<div class="cp-sheet">' +
           '<div class="cp-chrome">' +
             '<div><div class="cp-chrome-title">Перегляд товарів</div>' +
-            '<div class="cp-chrome-sub">Додавайте в кошик або в КП — пошук не переривається. Клік на фото — збільшити.</div></div>' +
+            '<div class="cp-chrome-sub">Додавайте в кошик або в КП — пошук не переривається. Клік на фото — перегляд.</div></div>' +
             '<div class="cp-chrome-actions cp-no-print">' +
               '<button type="button" class="cp-chip" onclick="cpBrowseClose()" title="Повернутись до таблиці КП">← До КП (' + cpRows.length + ')</button>' +
               '<button type="button" class="cp-chip accent" onclick="cpBrowseCheckout()" title="Перейти до оформлення кошика"' + (cart.length ? '' : ' disabled') + '>Кошик (' + cart.length + ')</button>' +
@@ -9255,9 +9335,8 @@
         const inCart = cpBrowseAddedCart.has(p.id);
         const inKp = cpBrowseAddedKp.has(p.id);
         return '<div class="cat-card">' +
-          '<div class="cat-thumb" onclick="openMockupModalByProductId(\'' + p.id + '\')" title="Збільшити фото">' +
+          '<div class="cat-thumb" onclick="openMockupModalByProductId(\'' + p.id + '\')" title="Переглянути">' +
             (numStr ? '<span class="cat-num">№' + numStr + '</span>' : '') +
-            '<span class="cat-zoomhint">збільшити</span>' +
             thumbInner +
           '</div>' +
           '<div class="cat-infoblock">' +
@@ -9304,7 +9383,7 @@
         '<div class="cat-sheet">' +
           '<div class="cat-chrome">' +
             '<div><div class="cat-chrome-title">Перегляд товарів</div>' +
-            '<div class="cat-chrome-sub">Усі ' + productsCatalog.length + ' товарів з фото · клік на фото — збільшити · додавайте не перериваючи пошук</div></div>' +
+            '<div class="cat-chrome-sub">Усі ' + productsCatalog.length + ' товарів · додавайте не перериваючи пошук</div></div>' +
             '<div class="cat-chrome-actions">' +
               (kpOpen
                 ? '<button type="button" class="cp-chip" onclick="catBackToKp()" title="Повернутися до таблиці КП">← До КП (' + cpRows.length + ')</button>' +
