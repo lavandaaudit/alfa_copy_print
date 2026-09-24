@@ -2690,6 +2690,176 @@
       transform: translateY(-1px);
     }
 
+    /* ===================== v22: БАНЕР «КАЛЬКУЛЯТОР БОКСУ» ===================== */
+    .box-calc-banner {
+      max-width: 1240px; margin: 14px auto 0;
+      background: linear-gradient(135deg, rgba(255, 222, 0, .12) 0%, rgba(255, 222, 0, .04) 100%);
+      border: 1px solid rgba(255, 222, 0, .4); border-radius: 12px;
+      overflow: hidden; animation: boxBannerIn .35s ease;
+    }
+    @keyframes boxBannerIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .box-calc-banner-inner {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 16px; flex-wrap: wrap;
+    }
+    .box-calc-banner-icon {
+      font-size: 26px; line-height: 1; flex-shrink: 0;
+      background: rgba(255, 222, 0, .15); border-radius: 10px;
+      padding: 8px 12px;
+    }
+    .box-calc-banner-text { flex: 1; min-width: 200px; }
+    .box-calc-banner-title {
+      font-family: var(--font-display); font-weight: 700; font-size: 15px;
+      color: #fff; letter-spacing: -.01em; margin-bottom: 3px;
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .box-calc-banner-tag {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px;
+      background: rgba(255, 222, 0, .15); color: var(--accent-yellow);
+      letter-spacing: .02em;
+    }
+    .box-calc-banner-sub {
+      font-size: 11px; color: #8e99ac; line-height: 1.4;
+    }
+    .box-calc-banner-actions {
+      display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0;
+    }
+    .box-calc-banner-btn {
+      background: rgba(255, 255, 255, .06); color: #cbd5e1;
+      border: 1px solid #2a3044; padding: 7px 12px;
+      border-radius: 7px; font-size: 11px; font-weight: 700;
+      cursor: pointer; transition: all .15s ease; font-family: var(--font);
+      white-space: nowrap;
+    }
+    .box-calc-banner-btn:hover { color: #fff; border-color: rgba(255, 222, 0, .5); }
+    .box-calc-banner-btn.primary {
+      background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow);
+    }
+    .box-calc-banner-btn.primary:hover { background: var(--accent-yellow-hover); }
+    @media (max-width: 640px) {
+      .box-calc-banner-inner { flex-direction: column; align-items: stretch; }
+      .box-calc-banner-actions { flex-direction: column; }
+      .box-calc-banner-btn { width: 100%; }
+    }
+    /* ===================== /v22: БАНЕР «КАЛЬКУЛЯТОР БОКСУ» ===================== */
+
+    /* ===================== v22: ПАНЕЛЬ «СКЛАД БОКСУ» — список позицій ===================== */
+    .box-calc-panel {
+      border-top: 1px solid rgba(255, 222, 0, .25);
+      background: rgba(8, 9, 13, .5);
+    }
+    .box-calc-panel-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px; cursor: pointer; transition: background .15s ease;
+      user-select: none;
+    }
+    .box-calc-panel-head:hover { background: rgba(255, 222, 0, .05); }
+    .box-calc-panel-title {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      font-size: 12.5px; font-weight: 800; color: #fff;
+      font-family: var(--font-display); letter-spacing: -.01em;
+    }
+    .box-calc-panel-chevron {
+      display: inline-block; transition: transform .2s ease;
+      color: var(--accent-yellow); font-size: 14px;
+    }
+    .box-calc-panel.collapsed .box-calc-panel-chevron { transform: rotate(-90deg); }
+    .box-calc-panel-count {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px;
+      background: rgba(255, 255, 255, .08); color: #cbd5e1;
+    }
+    .box-calc-panel-total {
+      font-family: var(--font-mono); font-size: 13px; font-weight: 800;
+      color: var(--accent-yellow);
+    }
+    .box-calc-panel-hint {
+      font-size: 10px; color: var(--text-dim); font-weight: 600;
+    }
+    .box-calc-panel-body {
+      padding: 4px 12px 12px;
+      display: flex; flex-direction: column; gap: 6px;
+      max-height: 360px; overflow-y: auto;
+    }
+    .box-calc-panel.collapsed .box-calc-panel-body { display: none; }
+    .box-calc-item {
+      display: flex; align-items: center; gap: 10px;
+      background: #0c0e15; border: 1px solid #232738;
+      border-radius: 8px; padding: 8px 10px; transition: all .15s ease;
+    }
+    .box-calc-item:hover { border-color: rgba(255, 222, 0, .3); }
+    .box-calc-item.active {
+      border-color: var(--accent-yellow);
+      background: rgba(255, 222, 0, .05);
+    }
+    .box-calc-item-icon {
+      font-size: 18px; flex-shrink: 0; width: 28px; text-align: center;
+    }
+    .box-calc-item-info { flex: 1; min-width: 0; cursor: pointer; }
+    .box-calc-item-name {
+      font-size: 12px; font-weight: 700; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .box-calc-item-no {
+      font-family: var(--font-mono); color: var(--accent-yellow);
+      font-weight: 800; font-size: 10px;
+    }
+    .box-calc-item-price {
+      font-size: 10.5px; color: var(--text-muted); margin-top: 2px;
+      font-family: var(--font-mono);
+    }
+    .box-calc-item-price b { color: var(--accent-yellow); }
+    .box-calc-item-stepper {
+      display: flex; align-items: center; gap: 0;
+      background: #161a26; border: 1px solid #2a3044; border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .box-calc-item-stepper button {
+      background: transparent; color: #cbd5e1; border: none;
+      width: 24px; height: 28px; cursor: pointer; font-size: 14px; font-weight: 700;
+      transition: all .12s ease;
+    }
+    .box-calc-item-stepper button:hover { color: var(--accent-yellow); }
+    .box-calc-item-stepper input {
+      width: 36px; height: 28px; text-align: center;
+      background: transparent; color: #fff; border: none;
+      border-left: 1px solid #2a3044; border-right: 1px solid #2a3044;
+      font-family: var(--font-mono); font-weight: 700; font-size: 11px;
+    }
+    .box-calc-item-del {
+      background: transparent; color: #647087;
+      border: 1px solid #2a3044; width: 26px; height: 26px;
+      border-radius: 6px; cursor: pointer; font-size: 12px;
+      transition: all .15s ease; flex-shrink: 0;
+    }
+    .box-calc-item-del:hover { color: #ff5566; border-color: rgba(255,85,102,.5); }
+    .box-calc-empty {
+      padding: 20px; text-align: center; color: var(--text-muted);
+      font-size: 12px; background: #0c0e15; border-radius: 8px;
+    }
+    /* кнопка «Додати поточний товар у бокс» — під списком */
+    .box-calc-add-current {
+      background: linear-gradient(135deg, #1a2030, #141826);
+      color: var(--accent-yellow); border: 1px dashed rgba(255, 222, 0, .5);
+      padding: 9px 14px; border-radius: 8px; font-size: 11.5px; font-weight: 700;
+      cursor: pointer; transition: all .15s ease; font-family: var(--font);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 4px;
+    }
+    .box-calc-add-current:hover {
+      background: var(--accent-yellow); color: #000;
+      border-style: solid; border-color: var(--accent-yellow);
+    }
+    .box-calc-add-current.in-box {
+      background: rgba(16, 185, 129, .12); color: #10b981;
+      border-color: rgba(16, 185, 129, .4); border-style: solid;
+    }
+    /* ===================== /v22: ПАНЕЛЬ «СКЛАД БОКСУ» ===================== */
+
     /* ===================== v22: 3 РЕЖИМИ alfa.copy.print ===================== */
     .modes-strip {
       max-width: 1240px; margin: 18px auto 0;
@@ -3829,6 +3999,40 @@
 
   <!-- VIEW 1: COMPACT PRO CALCULATOR WORKSPACE -->
   <main class="view-container" id="viewCalc">
+
+    <!-- v22: Банер «Калькулятор боксу» — з'являється коли прийшли з Merch Box -->
+    <div class="box-calc-banner" id="boxCalcBanner" style="display:none;">
+      <div class="box-calc-banner-inner">
+        <div class="box-calc-banner-icon">🧰</div>
+        <div class="box-calc-banner-text">
+          <div class="box-calc-banner-title">
+            Калькулятор боксу
+            <span class="box-calc-banner-tag" id="boxCalcBannerTag">— Merch Box</span>
+          </div>
+          <div class="box-calc-banner-sub" id="boxCalcBannerSub">—</div>
+        </div>
+        <div class="box-calc-banner-actions">
+          <button type="button" class="box-calc-banner-btn primary" onclick="goToMerchBox()" title="Повернутися до конструктора Merch Box">← До Merch Box</button>
+          <button type="button" class="box-calc-banner-btn" onclick="exitBoxCalcMode()" title="Вийти з режиму боксу — звичайний калькулятор">✕ Вийти з режиму боксу</button>
+        </div>
+      </div>
+      <!-- v22: розкривна панель «Склад боксу» з усіма позиціями -->
+      <div class="box-calc-panel" id="boxCalcPanel">
+        <div class="box-calc-panel-head" onclick="boxTogglePanel()">
+          <span class="box-calc-panel-title">
+            <span class="box-calc-panel-chevron" id="boxCalcPanelChevron">▾</span>
+            Склад боксу
+            <span class="box-calc-panel-count" id="boxCalcPanelCount">0 позицій</span>
+            <span class="box-calc-panel-total" id="boxCalcPanelTotal">0 ₴</span>
+          </span>
+          <span class="box-calc-panel-hint">клік — розгорнути / згорнути</span>
+        </div>
+        <div class="box-calc-panel-body" id="boxCalcPanelBody">
+          <!-- позиції боксу рендеряться JS-функцією boxRenderPanel() -->
+        </div>
+      </div>
+    </div>
+
     <div class="dashboard-grid">
 
       <!-- COLUMN 1: PRODUCT LIST / DATABASE NAVIGATOR -->
@@ -5954,6 +6158,10 @@
       syncQtyLimits();
       renderCategoryButtons();
       recalc();
+      // v22: якщо ми в режимі «Калькулятор боксу» — оновити панель (підсвітити активний товар)
+      if (typeof _calcMode !== 'undefined' && _calcMode === 'box') {
+        try { boxRenderPanel(); } catch (e) {}
+      }
     }
 
     // Показ/хованання контролів за типом виробу (print / merch / package)
@@ -6664,6 +6872,12 @@
       if (viewId === 'calc') document.getElementById('viewCalc').classList.add('active-view');
       if (viewId === 'database') document.getElementById('viewDatabase').classList.add('active-view');
       if (viewId === 'a3price') document.getElementById('viewA3Price').classList.add('active-view');
+      // v22: при прямому переході в 'calc' з футера/кнопки — скидаємо режим «Калькулятор боксу»
+      // (не стосується packToCalc/boxToCalc — вони викликають enterBoxCalcMode вже ПІСЛЯ switchMainView)
+      if (viewId === 'calc' && typeof _calcMode !== 'undefined' && _calcMode === 'box' && !window._keepBoxCalcMode) {
+        exitBoxCalcMode();
+      }
+      window._keepBoxCalcMode = false; // одноразовий прапорець
       // перемикаємось з футера — прокручуємо до калькулятора, щоб зміну одразу було видно
       if (btnEl && btnEl.closest && btnEl.closest('.site-footer')) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -10206,6 +10420,7 @@
           : Math.max(p.minQty, 100);
       packState.items.push({ id: id, qty: defQty });
       packRefresh();
+      savePackState(); // v22: зберегти в localStorage
     }
 
     // Крок кількості позиції — як у редакторі пакунка калькулятора (мерч — 1, решта — 10)
@@ -10221,10 +10436,12 @@
       const maxQ = comp ? maxQtyForP(comp) : 1000;
       it.qty = Math.min(maxQ, Math.max(1, Math.floor(qty) || 1));
       packRefresh();
+      savePackState(); // v22: зберегти
     }
     function packItemRemove(idx) {
       packState.items.splice(idx, 1);
       packRefresh();
+      savePackState(); // v22: зберегти
     }
 
     // Кількість комплектів (1–50, як і ліміт пакунків у калькуляторі)
@@ -10235,6 +10452,7 @@
       const inp = document.getElementById('packKomplInput');
       if (inp) inp.value = packState.kompl;
       packRefresh();
+      savePackState(); // v22: зберегти
     }
 
     // Розрахунок: сума позицій (тиражні знижки всередині кожної) → −10% за комплект.
@@ -10343,6 +10561,7 @@
       const inp = document.getElementById('packKomplInput');
       if (inp) inp.value = 1;
       packRefresh();
+      savePackState(); // v22: зберегти
       showToast(p.icon + ' «' + p.name.replace(/^Пакунок\s*/, '') + '» у конструкторі — ' + packState.items.length + ' позицій');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -10353,6 +10572,7 @@
       const inp = document.getElementById('packKomplInput');
       if (inp) inp.value = 1;
       packRefresh();
+      savePackState(); // v22: зберегти
     }
 
     function packFocusAdd() {
@@ -10380,37 +10600,236 @@
       }, 250);
     }
 
+    // v22: прапорець режиму «Калькулятор боксу» — вмикається при packToCalc/boxToCalc,
+    // скидається при прямому switchMainView('calc') з футера або кнопкою «Вийти з режиму боксу».
+    let _calcMode = 'standalone'; // 'standalone' | 'box'
+
+    // Увімкнути режим «Калькулятор боксу» — показати банер з описом складу боксу
+    function enterBoxCalcMode(source) {
+      _calcMode = 'box';
+      const banner = document.getElementById('boxCalcBanner');
+      if (!banner) return;
+      // підготувати текст банера залежно від джерела (pack або box)
+      const itemsCount = packState.items.length;
+      const kompl = packState.kompl || 1;
+      const sub = document.getElementById('boxCalcBannerSub');
+      const tag = document.getElementById('boxCalcBannerTag');
+      if (source === 'box') {
+        if (tag) tag.textContent = '— Merch Box';
+        if (sub) sub.textContent = itemsCount + ' позицій × ' + kompl + ' компл. · додавайте або видаляйте товари прямо тут, ціна перерахується';
+      } else {
+        if (tag) tag.textContent = '— конструктор пакунка';
+        if (sub) sub.textContent = itemsCount + ' позицій × ' + kompl + ' компл. · редагуйте склад — ціна перерахується';
+      }
+      banner.style.display = '';
+      // v22: рендер панелі «Склад боксу»
+      boxRenderPanel();
+    }
+
+    // Вийти з режиму боксу — повернутись у звичайний калькулятор
+    function exitBoxCalcMode() {
+      _calcMode = 'standalone';
+      const banner = document.getElementById('boxCalcBanner');
+      if (banner) banner.style.display = 'none';
+      showToast('Звичайний режим калькулятора');
+    }
+
+    // v22: розгорнути/згорнути панель «Склад боксу»
+    function boxTogglePanel() {
+      const panel = document.getElementById('boxCalcPanel');
+      if (!panel) return;
+      panel.classList.toggle('collapsed');
+    }
+
+    // v22: рендер панелі «Склад боксу» — список усіх позицій з цінами та керуванням
+    // Викликається: enterBoxCalcMode, після packRefresh, після selectProduct (для підсвічування активного)
+    function boxRenderPanel() {
+      const body = document.getElementById('boxCalcPanelBody');
+      const countEl = document.getElementById('boxCalcPanelCount');
+      const totalEl = document.getElementById('boxCalcPanelTotal');
+      if (!body) return;
+      const nK = Math.max(1, packState.kompl);
+      const activeId = cfg.product && cfg.product.id;
+
+      if (!packState.items.length) {
+        body.innerHTML = '<div class="box-calc-empty">Бокс порожній. Додайте товари з каталогу кнопкою нижче.</div>';
+      } else {
+        body.innerHTML = packState.items.map((it, idx) => {
+          const comp = productsCatalog.find(x => x.id === it.id);
+          if (!comp) return '';
+          const num = PRODUCT_NUMBERS[it.id] || 0;
+          const numStr = num ? '№' + String(num).padStart(3, '0') : '';
+          const posTotal = calcAnyProduct(comp, Math.max(1, it.qty) * nK).total;
+          const isActive = (it.id === activeId);
+          return '<div class="box-calc-item' + (isActive ? ' active' : '') + '">' +
+            '<div class="box-calc-item-icon">' + (comp.icon || '📦') + '</div>' +
+            '<div class="box-calc-item-info" onclick="boxPanelSelect(\'' + it.id + '\')" title="Показати цей товар у калькуляторі">' +
+              '<div class="box-calc-item-name">' + (numStr ? '<span class="box-calc-item-no">' + numStr + '</span> ' : '') + (comp.name || it.id) + '</div>' +
+              '<div class="box-calc-item-price"><b>' + formatUAH(posTotal) + '</b> · ' + it.qty + ' шт × ' + nK + ' компл.</div>' +
+            '</div>' +
+            '<div class="box-calc-item-stepper">' +
+              '<button type="button" onclick="boxPanelStep(' + idx + ', -1)" aria-label="Менше">−</button>' +
+              '<input type="number" value="' + it.qty + '" min="1" onchange="boxPanelQty(' + idx + ', this.value)" aria-label="Кількість">' +
+              '<button type="button" onclick="boxPanelStep(' + idx + ', 1)" aria-label="Більше">+</button>' +
+            '</div>' +
+            '<button type="button" class="box-calc-item-del" onclick="boxPanelRemove(' + idx + ')" title="Видалити з боксу">✕</button>' +
+          '</div>';
+        }).join('');
+      }
+      // оновити лічильник та загальну суму
+      if (countEl) countEl.textContent = packState.items.length + ' позицій';
+      const t = packCalcTotals();
+      if (totalEl) totalEl.textContent = formatUAH(t.total);
+
+      // кнопка «Додати поточний товар у бокс»
+      const inBox = activeId && packState.items.some(it => it.id === activeId);
+      const addBtnHtml = '<button type="button" class="box-calc-add-current' + (inBox ? ' in-box' : '') + '" onclick="boxAddCurrentToBox()" title="' + (inBox ? 'Цей товар вже в боксі — збільшити кількість на 1' : 'Додати поточний товар у бокс') + '">' +
+        (inBox ? '✓ Товар у боксі (натисни щоб +1)' : '➕ Додати поточний товар у бокс') +
+      '</button>';
+      body.insertAdjacentHTML('beforeend', addBtnHtml);
+    }
+
+    // клік на позицію в панелі — показати товар у калькуляторі (БЕЗ заміни боксу)
+    function boxPanelSelect(id) {
+      const p = productsCatalog.find(x => x.id === id);
+      if (!p) return;
+      selectProduct(p);
+      boxRenderPanel(); // оновити підсвічування активного
+    }
+
+    // змінити кількість позиції в боксі
+    function boxPanelStep(idx, dir) {
+      if (!packState.items[idx]) return;
+      packState.items[idx].qty = Math.max(1, (packState.items[idx].qty || 1) + dir);
+      packRefresh();
+      boxRenderPanel();
+      savePackState();
+    }
+    function boxPanelQty(idx, val) {
+      if (!packState.items[idx]) return;
+      packState.items[idx].qty = Math.max(1, parseInt(val, 10) || 1);
+      packRefresh();
+      boxRenderPanel();
+      savePackState();
+    }
+    function boxPanelRemove(idx) {
+      if (!packState.items[idx]) return;
+      const removed = packState.items.splice(idx, 1)[0];
+      const comp = productsCatalog.find(x => x.id === removed.id);
+      packRefresh();
+      boxRenderPanel();
+      savePackState();
+      showToast('Видалено: ' + (comp ? comp.name : removed.id));
+    }
+
+    // додати поточний активний товар у бокс
+    function boxAddCurrentToBox() {
+      if (!cfg.product) {
+        showToast('Оберіть товар у каталозі спочатку ⚠️');
+        return;
+      }
+      const id = cfg.product.id;
+      const existing = packState.items.find(it => it.id === id);
+      if (existing) {
+        existing.qty = (existing.qty || 1) + 1;
+        showToast('+1 до кількості: ' + (cfg.product.name || id));
+      } else {
+        packState.items.push({ id: id, qty: 1 });
+        showToast('✓ Додано в бокс: ' + (cfg.product.name || id));
+      }
+      packRefresh();
+      boxRenderPanel();
+      savePackState();
+    }
+
+    // v22: зберегти стан боксу в localStorage
+    function savePackState() {
+      try {
+        localStorage.setItem('alfa_pack_state', JSON.stringify({
+          items: packState.items,
+          kompl: packState.kompl
+        }));
+      } catch (e) {}
+    }
+
+    // v22: завантажити стан боксу з localStorage
+    function loadPackState() {
+      try {
+        const raw = localStorage.getItem('alfa_pack_state');
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.items)) {
+          packState.items = parsed.items.filter(it => it && it.id);
+          packState.kompl = Math.max(1, parseInt(parsed.kompl, 10) || 1);
+        }
+      } catch (e) {}
+    }
+
     // Перенесення зібраного пакунка у калькулятор (режим «Пакунок», редагування складу доступне)
+    // v22: НЕ загортаємо items в customPack — зберігаємо всі позиції в packState.items.
+    // Калькулятор просто показує перший товар як активний; склад боксу — окрема панель.
     function packToCalc() {
       if (!packState.items.length) { showToast('Пакунок порожній — додайте позиції з каталогу'); return; }
-      const t = packCalcTotals();
-      const customPack = {
-        id: 'pack-custom',
-        name: 'Ваш пакунок — власний набір',
-        category: 'packages', icon: '🧺',
-        kind: 'package', pkgPrice: t.total,
-        items: packState.items.map(it => ({ id: it.id, qty: it.qty })),
-        contents: packState.items.map(it => {
-          const cp = productsCatalog.find(x => x.id === it.id);
-          return (cp ? cp.name : it.id) + ' — ' + it.qty + ' шт';
-        }),
-        desc: 'Власний пакунок, зібраний у конструкторі: ' + packState.items.length + ' позицій × ' + packState.kompl + ' компл. Знижка комплекту −10%, макетування включено (+).',
-        defaultW: 90, defaultH: 50, defaultPaper: 'coated_350', allowedPapers: [], defaultColor: '4+0',
-        minQty: 1, priceFrom: formatUAH(t.unit).replace(' ₴', '')
-      };
-      selectProduct(customPack);
+      // v22: показуємо перший товар з боксу як активний (для перегляду)
+      const firstItem = packState.items[0];
+      const firstProduct = productsCatalog.find(x => x.id === firstItem.id);
+      if (firstProduct) {
+        selectProduct(firstProduct);
+      }
+      // v22: позначити, що наступний switchMainView('calc') має зберегти режим боксу
+      window._keepBoxCalcMode = true;
       switchMainView('calc', null);
+      // v22: увімкнути режим «Калькулятор боксу» — показати банер + панель складу
+      enterBoxCalcMode('pack');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      showToast('🧺 Пакунок перенесено у калькулятор — склад можна редагувати далі');
+      showToast('🧺 Бокс у калькуляторі — ' + packState.items.length + ' позицій. Активний товар не замінить бокс, лише для перегляду.');
     }
 
     function packOrderNow() {
       if (!packState.items.length) return;
-      packToCalc();
-      openModal();
+      // v22: перенести всі позиції пакунка в кошик та відкрити КП кошика для відправки на пошту.
+      // Це ідентично до того, як відправляється кошик — через openCartModal().
+      const kompl = packState.kompl || 1;
+      packState.items.forEach(it => {
+        const p = productsCatalog.find(x => x.id === it.id);
+        if (!p) return;
+        const qtyPerKompl = it.qty || 1;
+        const totalQty = qtyPerKompl * kompl;
+        const r = calcAnyProduct(p, totalQty);
+        let spec = '';
+        if (p.kind === 'merch') spec = (p.applyMethod || 'друк лого') + ' · ' + p.unitPrice + ' ₴/шт';
+        else if (p.kind === 'simple') spec = (productTiersS(p).map(function (t) { return 'від ' + t.qty + ' шт — ' + formatUAH(t.price) + '/шт'; }).join(' · ') || '—');
+        else spec = p.defaultW + '×' + p.defaultH + ' мм · ' + (p.defaultColor || '4+4') + ', ' + (prices.paper[p.defaultPaper] ? prices.paper[p.defaultPaper].name : p.defaultPaper);
+        cart.push({
+          key: p.id + '~pack~' + Math.random().toString(36).slice(2, 7),
+          code: productCodeOf(p),
+          icon: p.icon || '📦',
+          name: p.name,
+          spec: spec + ' · ' + qtyPerKompl + ' шт/компл × ' + kompl + ' компл.',
+          qtyLabel: totalQty + ' шт',
+          qty: totalQty,
+          step: p.kind === 'merch' ? 10 : 25,
+          cfgSnap: {
+            product: p, width: p.defaultW, height: p.defaultH, pages: p.pages || 1,
+            color: p.defaultColor || '4+4', paperKey: p.defaultPaper || 'coated_130',
+            laminationKey: p.defaultLam || 'none',
+            finishing: { scoring: !!p.defaultScoring, folding: !!p.defaultFolding, corners: !!p.defaultCorners, hole: !!p.defaultHole, staples: !!p.defaultStaples, spring: !!p.defaultSpring, plotter: !!p.defaultPlotter, perforation: !!p.defaultPerforation },
+            pkgItems: p.items ? p.items.map(x => ({ id: x.id, qty: x.qty })) : null,
+            calcOpts: calcOptsForProduct(p)
+          },
+          unit: r.unit,
+          total: r.total
+        });
+      });
+      saveCart();
+      updateCartBadge();
+      openCartModal();
+      showToast('🧺 Пакунок у КП — ' + packState.items.length + ' позицій × ' + kompl + ' компл. Заповніть дані для відправки на ' + ORDER_EMAIL);
     }
 
     function packInit() {
+      // v22: завантажити збережений стан боксу з localStorage (щоб не зникав при перезавантаженні)
+      loadPackState();
       // Фото start.jpg міг уже завантажитися до оголошення функцій — синхронізуємо стан
       const heroImg = document.querySelector('#packHero .pack-hero-img');
       if (heroImg && heroImg.complete) {
@@ -10418,6 +10837,9 @@
       }
       packRenderTemplates();
       packRefresh();
+      // v22: синхронізувати кількість комплектів з packState
+      const komplInp = document.getElementById('packKomplInput');
+      if (komplInp) komplInp.value = packState.kompl;
       boxInit();
       // v22 SLIDER: запускаємо зондування start1.jpg..start30.jpg + автозміну
       // невелика затримка щоб не блокувати перший рендер
@@ -10744,24 +11166,64 @@
       const inp = document.getElementById('packKomplInput');
       if (inp) inp.value = boxState.qty;
       packRefresh();
-      switchMainView('calc');
+      // v22: спершу переносимо в пакунок через packToCalc (він вмикає режим 'pack' банера),
+      // потім перезаписуємо тег як «Merch Box»
+      packToCalc();
+      enterBoxCalcMode('box');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showToast('✓ Merch Box перенесено в калькулятор — ' + boxState.items.length + ' позицій × ' + boxState.qty + ' компл.');
     }
 
     // Замовити бокс одразу (відкриває форму замовлення)
+    // v22: перенести всі позиції боксу в кошик та відкрити КП кошика для відправки на пошту.
+    // Це ідентично до того, як відправляється кошик — через ту ж форму openCartModal().
     function boxOrderNow() {
       if (!boxState.items.length) {
         showToast('Спочатку підберіть бокс ⚠️');
         return;
       }
-      // переносимо в пакунок і викликаємо packOrderNow
-      packState.items = boxState.items.map(it => ({ id: it.id, qty: it.qty || 1 }));
-      packState.kompl = boxState.qty;
-      const inp = document.getElementById('packKomplInput');
-      if (inp) inp.value = boxState.qty;
-      packRefresh();
-      packOrderNow();
+      // переносимо всі позиції боксу в кошик як окремі позиції КП
+      const kompl = boxState.qty || 1;
+      const addedNames = [];
+      boxState.items.forEach(it => {
+        const p = productsCatalog.find(x => x.id === it.id);
+        if (!p) return;
+        const qtyPerKompl = it.qty || 1;
+        const totalQty = qtyPerKompl * kompl;
+        // розрахунок ціни для повної кількості (qtyPerKompl * kompl)
+        const r = calcAnyProduct(p, totalQty);
+        // спеціфікація для картки кошика
+        let spec = '';
+        if (p.kind === 'merch') spec = (p.applyMethod || 'друк лого') + ' · ' + p.unitPrice + ' ₴/шт';
+        else if (p.kind === 'simple') spec = (productTiersS(p).map(function (t) { return 'від ' + t.qty + ' шт — ' + formatUAH(t.price) + '/шт'; }).join(' · ') || '—');
+        else spec = p.defaultW + '×' + p.defaultH + ' мм · ' + (p.defaultColor || '4+4') + ', ' + (prices.paper[p.defaultPaper] ? prices.paper[p.defaultPaper].name : p.defaultPaper);
+        cart.push({
+          key: p.id + '~box~' + Math.random().toString(36).slice(2, 7),
+          code: productCodeOf(p),
+          icon: p.icon || '📦',
+          name: p.name,
+          spec: spec + ' · ' + qtyPerKompl + ' шт/компл × ' + kompl + ' компл.',
+          qtyLabel: totalQty + ' шт',
+          qty: totalQty,
+          step: p.kind === 'merch' ? 10 : 25,
+          cfgSnap: {
+            product: p, width: p.defaultW, height: p.defaultH, pages: p.pages || 1,
+            color: p.defaultColor || '4+4', paperKey: p.defaultPaper || 'coated_130',
+            laminationKey: p.defaultLam || 'none',
+            finishing: { scoring: !!p.defaultScoring, folding: !!p.defaultFolding, corners: !!p.defaultCorners, hole: !!p.defaultHole, staples: !!p.defaultStaples, spring: !!p.defaultSpring, plotter: !!p.defaultPlotter, perforation: !!p.defaultPerforation },
+            pkgItems: p.items ? p.items.map(x => ({ id: x.id, qty: x.qty })) : null,
+            calcOpts: calcOptsForProduct(p)
+          },
+          unit: r.unit,
+          total: r.total
+        });
+        addedNames.push(p.name);
+      });
+      saveCart();
+      updateCartBadge();
+      // v22: відкрити модалку КП кошика — як для звичайного кошика
+      openCartModal();
+      showToast('🧰 Merch Box у КП — ' + boxState.items.length + ' позицій × ' + kompl + ' компл. Заповніть дані для відправки на ' + ORDER_EMAIL);
     }
 
     window.addEventListener('DOMContentLoaded', init);
