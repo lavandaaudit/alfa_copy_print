@@ -2583,6 +2583,45 @@
       margin-bottom: 14px; background: #10121a;
     }
     .pack-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* v22 SLIDER: стек слайдів start1.jpg, start2.jpg... з cross-fade */
+    .pack-hero-slides { position: absolute; inset: 0; }
+    .pack-hero-slides .pack-hero-img {
+      opacity: 0; transition: opacity 1.2s ease;
+      will-change: opacity;
+    }
+    .pack-hero-slides .pack-hero-img.active { opacity: 1; }
+    /* fallback-зображення (старий start.jpg) — видимий лише поки слайди не завантажені */
+    .pack-hero-img-fallback { opacity: 1 !important; }
+    .pack-hero-slides.has-slides .pack-hero-img-fallback { display: none; }
+    /* індикатори-точки знизу */
+    .pack-hero-dots {
+      position: absolute; bottom: 14px; right: 18px; z-index: 3;
+      display: flex; gap: 6px;
+      opacity: 0; transition: opacity .3s ease;
+    }
+    .pack-hero-slides.has-slides ~ .pack-hero-dots,
+    .pack-hero-dots.has-slides { opacity: 1; }
+    .pack-hero-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255, 255, 255, .35);
+      cursor: pointer; transition: all .25s ease;
+      border: none; padding: 0;
+    }
+    .pack-hero-dot:hover { background: rgba(255, 255, 255, .65); }
+    .pack-hero-dot.active {
+      background: var(--accent-yellow);
+      width: 26px; border-radius: 4px;
+      box-shadow: 0 0 10px rgba(255, 222, 0, .5);
+    }
+    /* лічильник "1 / 5" */
+    .pack-hero-counter {
+      position: absolute; bottom: 14px; left: 18px; z-index: 3;
+      font-family: var(--font-mono); font-size: 10px; font-weight: 800;
+      color: rgba(255, 255, 255, .7); letter-spacing: .05em;
+      background: rgba(8, 9, 13, .55); padding: 3px 9px; border-radius: 5px;
+      opacity: 0; transition: opacity .3s ease;
+    }
+    .pack-hero-counter.has-slides { opacity: 1; }
     .pack-hero-veil {
       position: absolute; inset: 0;
       background: linear-gradient(95deg, rgba(8,9,13,.95) 0%, rgba(8,9,13,.78) 42%, rgba(8,9,13,.30) 100%);
@@ -3452,13 +3491,18 @@
 
   <!-- VIEW 0: СТАРТОВИЙ ЕКРАН «MERCH BOX» (v22) — конструктор підбору комплекту за критеріями:
        тип боксу → кількість людей → категорія → бюджет → «Підібрати».
-       Користувач може відредагувати свій вибір або обрати готовий набір знизу. Фото старту: start.jpg -->
+       Користувач може відредагувати свій вибір або обрати готовий набір знизу. Фото старту: start1.jpg, start2.jpg... (автозміна) -->
   <main class="view-container active-view" id="viewPack">
     <div class="pack-hero" id="packHero">
-      <img class="pack-hero-img" src="start.jpg" alt="Merch Box — стартовий екран alfa.copy.print" onerror="packHeroMissing()" onload="packHeroLoaded()">
+      <div class="pack-hero-slides" id="packHeroSlides">
+        <!-- слайди додаються динамічно через JS: start1.jpg, start2.jpg... -->
+        <img class="pack-hero-img pack-hero-img-fallback" src="start.jpg" alt="Merch Box — стартовий екран alfa.copy.print" onerror="packHeroMissing()" onload="packHeroLoaded()">
+      </div>
       <div class="pack-hero-veil"></div>
-      <span class="pack-hero-hint" id="packHeroHint">фото старту: start.jpg</span>
+      <span class="pack-hero-hint" id="packHeroHint">фото старту: start1.jpg, start2.jpg…</span>
       <span class="pack-hero-watermark" aria-hidden="true">📦</span>
+      <div class="pack-hero-counter" id="packHeroCounter"></div>
+      <div class="pack-hero-dots" id="packHeroDots" aria-hidden="true"></div>
       <div class="pack-hero-content">
         <div class="pack-hero-kicker">alfa.copy.print · конструктор комплекту</div>
         <h1>Merch <em>Box</em></h1>
@@ -9868,6 +9912,153 @@
       if (hero) hero.classList.remove('pack-hero-noimg');
     }
 
+    // ===================== v22 SLIDER: start1.jpg → start2.jpg → ... → startN.jpg =====================
+    // Користувач заливає файли start1.jpg, start2.jpg, ... start20.jpg поруч з index.html.
+    // Слайдер сам знайде всі наявні (зондуванням), увімкне cross-fade автозміну кожні 5 секунд.
+    // Пауза при наведенні миші; клік на точці — перехід до конкретного слайда.
+    let _heroSlides = [];       // масив URL наявних слайдів
+    let _heroCurrentIdx = 0;    // індекс активного слайда
+    let _heroTimer = null;      // setInterval ID
+    let _heroPaused = false;    // пауза при hover
+    const HERO_SLIDE_INTERVAL = 5000; // 5 секунд на слайд
+    const HERO_MAX_PROBE = 30;  // максимальна кількість файлів для зондування (start1..start30.jpg)
+
+    // Зондування: завантажуємо start1.jpg, start2.jpg... поки не отримаємо помилку (або до HERO_MAX_PROBE)
+    function packHeroInitSlider() {
+      const slides = document.getElementById('packHeroSlides');
+      if (!slides || slides.dataset.probed) return;
+      slides.dataset.probed = '1';
+
+      // паралельне зондування — швидше за послідовне
+      const probes = [];
+      for (let i = 1; i <= HERO_MAX_PROBE; i++) {
+        probes.push(packHeroProbeImage('start' + i + '.jpg', i));
+      }
+      Promise.all(probes).then(results => {
+        const found = results.filter(r => r.ok).sort((a, b) => a.idx - b.idx);
+        if (found.length === 0) {
+          // жодного start1..N.jpg — лишити fallback start.jpg
+          return;
+        }
+        _heroSlides = found.map(r => r.url);
+        packHeroRenderSlides();
+        packHeroStartAutoplay();
+        console.info('[Merch Box slider] знайдено слайдів:', _heroSlides.length);
+      });
+    }
+
+    // Зондування одного зображення — повертає { ok, url, idx } або { ok: false }
+    function packHeroProbeImage(url, idx) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve({ ok: true, url: url, idx: idx });
+        img.onerror = () => resolve({ ok: false, idx: idx });
+        // додаємо ?v=Date.now() щоб уникнути кешування під час розробки
+        img.src = url + '?v=' + Date.now();
+      });
+    }
+
+    // Рендер слайдів у DOM + індикаторів-точок + лічильника
+    function packHeroRenderSlides() {
+      const slides = document.getElementById('packHeroSlides');
+      const dotsHost = document.getElementById('packHeroDots');
+      const counter = document.getElementById('packHeroCounter');
+      if (!slides || !_heroSlides.length) return;
+
+      // очищаємо (включаючи fallback start.jpg)
+      slides.innerHTML = '';
+      slides.classList.add('has-slides');
+      if (dotsHost) dotsHost.classList.add('has-slides');
+      if (counter) counter.classList.add('has-slides');
+
+      // додаємо слайди
+      _heroSlides.forEach((url, i) => {
+        const img = document.createElement('img');
+        img.className = 'pack-hero-img' + (i === 0 ? ' active' : '');
+        img.src = url;
+        img.alt = 'Merch Box — слайд ' + (i + 1);
+        img.dataset.idx = String(i);
+        slides.appendChild(img);
+      });
+
+      // додаємо точки-індикатори
+      if (dotsHost) {
+        dotsHost.innerHTML = '';
+        _heroSlides.forEach((_, i) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'pack-hero-dot' + (i === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', 'Слайд ' + (i + 1));
+          dot.addEventListener('click', () => {
+            packHeroShowSlide(i);
+            packHeroRestartAutoplay();
+          });
+          dotsHost.appendChild(dot);
+        });
+      }
+
+      // оновлюємо лічильник
+      packHeroUpdateCounter();
+
+      // ховаємо "фото старту: ..." підказку та вотермарку — є реальні фото
+      const hint = document.getElementById('packHeroHint');
+      if (hint) hint.style.display = 'none';
+      const watermark = document.querySelector('#packHero .pack-hero-watermark');
+      if (watermark) watermark.style.display = 'none';
+      const hero = document.getElementById('packHero');
+      if (hero) hero.classList.remove('pack-hero-noimg');
+
+      // пауза при hover на весь hero (а не лише на слайди — veil перехоплює pointer events)
+      const heroEl = document.getElementById('packHero');
+      if (heroEl) {
+        heroEl.removeEventListener('mouseenter', packHeroPause);
+        heroEl.removeEventListener('mouseleave', packHeroResume);
+        heroEl.addEventListener('mouseenter', packHeroPause);
+        heroEl.addEventListener('mouseleave', packHeroResume);
+      }
+    }
+
+    function packHeroShowSlide(idx) {
+      if (!_heroSlides.length) return;
+      _heroCurrentIdx = ((idx % _heroSlides.length) + _heroSlides.length) % _heroSlides.length;
+      const imgs = document.querySelectorAll('#packHeroSlides .pack-hero-img');
+      imgs.forEach((img, i) => img.classList.toggle('active', i === _heroCurrentIdx));
+      const dots = document.querySelectorAll('#packHeroDots .pack-hero-dot');
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === _heroCurrentIdx));
+      packHeroUpdateCounter();
+    }
+
+    function packHeroUpdateCounter() {
+      const counter = document.getElementById('packHeroCounter');
+      if (counter && _heroSlides.length) {
+        counter.textContent = (_heroCurrentIdx + 1) + ' / ' + _heroSlides.length;
+      }
+    }
+
+    function packHeroNext() {
+      if (_heroPaused) return;
+      packHeroShowSlide(_heroCurrentIdx + 1);
+    }
+
+    function packHeroStartAutoplay() {
+      if (_heroTimer) clearInterval(_heroTimer);
+      if (_heroSlides.length <= 1) return; // 1 слайд — не крутимо
+      _heroTimer = setInterval(packHeroNext, HERO_SLIDE_INTERVAL);
+    }
+
+    function packHeroRestartAutoplay() {
+      if (_heroTimer) clearInterval(_heroTimer);
+      _heroTimer = null;
+      packHeroStartAutoplay();
+    }
+
+    function packHeroPause() { _heroPaused = true; }
+    function packHeroResume() {
+      _heroPaused = false;
+      // одразу перезапускаємо таймер — щоб після відведення миші пройшло повних 5с до наступної зміни
+      packHeroRestartAutoplay();
+    }
+
     // Кандидати для пакунка — усе, крім готових пакунків
     function packCandidates() { return productsCatalog.filter(p => p.kind !== 'package'); }
 
@@ -10112,7 +10303,7 @@
     }
 
     function packInit() {
-      // Фото start.jpg могло вже завершити завантаження до оголошення функцій — синхронізуємо стан
+      // Фото start.jpg міг уже завантажитися до оголошення функцій — синхронізуємо стан
       const heroImg = document.querySelector('#packHero .pack-hero-img');
       if (heroImg && heroImg.complete) {
         if (heroImg.naturalWidth === 0) packHeroMissing(); else packHeroLoaded();
@@ -10120,6 +10311,9 @@
       packRenderTemplates();
       packRefresh();
       boxInit();
+      // v22 SLIDER: запускаємо зондування start1.jpg..start30.jpg + автозміну
+      // невелика затримка щоб не блокувати перший рендер
+      setTimeout(packHeroInitSlider, 200);
     }
 
     // ===================== v22: КОНСТРУКТОР MERCH BOX =====================
