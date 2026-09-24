@@ -3846,13 +3846,13 @@
           <div class="box-step-label"><span class="box-step-num">3</span><span>Категорія <em>(що в боксі)</em></span></div>
           <div class="box-step-options" id="boxCatOpts">
             <button type="button" class="box-chip" data-cat="all" title="Показати всі категорії">✳️ Усе разом</button>
+            <button type="button" class="box-chip" data-cat="digital" title="Цифровий друк: візитки, флаєри, листівки, буклети">🖨️ Цифровий</button>
+            <button type="button" class="box-chip" data-cat="offset" title="Офсетний друк: каталоги, книги, журнали">🏭 Офсет</button>
             <button type="button" class="box-chip" data-cat="merch" title="Одяг та аксесуари з логотипом">👕 Мерч</button>
-            <button type="button" class="box-chip" data-cat="polygraphy" title="Візитки, бірки, поліграфія">💳 Поліграфія</button>
-            <button type="button" class="box-chip" data-cat="gifts" title="Листівки, календарі, сувеніри">🎁 Подарунок</button>
-            <button type="button" class="box-chip" data-cat="stickers" title="Нахлейки та етикетки">🏷️ Нахлейки</button>
-            <button type="button" class="box-chip" data-cat="advertising" title="Флаєри, купони, тейбл-тенти">📣 Реклама</button>
-            <button type="button" class="box-chip" data-cat="office" title="Бланки, блокноти, папки">🗂️ Офіс</button>
-            <button type="button" class="box-chip" data-cat="booklets" title="Буклети, брошури, каталоги">📖 Буклети</button>
+            <button type="button" class="box-chip" data-cat="pos-material" title="POS матеріали: воблери, шелфтокери, тейбл-тенти">🏪 POS</button>
+            <button type="button" class="box-chip" data-cat="dtf" title="DTF друк на текстиль та інші поверхні">🎨 DTF</button>
+            <button type="button" class="box-chip" data-cat="textile" title="Текстильні вироби під нанесення">🧵 Текстиль</button>
+            <button type="button" class="box-chip" data-cat="fan-shop" title="Брендована сувенірна продукція для фанатів">⚽ Fan shop</button>
           </div>
         </div>
 
@@ -5570,15 +5570,72 @@
 
     // --- Метадані категорій + нумерація виробів ---
     const CATEGORY_META = [
-      { key: 'polygraphy', label: 'Візитки і ділова поліграфія', short: 'Візитки', icon: '💳', desc: 'Візитки (стандарт, євро, soft-touch, зі згином) та бірки/ярлики на картоні 300–350 г/м².' },
-      { key: 'advertising', label: 'Рекламна поліграфія', short: 'Реклама', icon: '📣', desc: 'Флаєри всіх форматів, купони, квитки, воблери, шельтхалтери, тейбл-тенти — все, що продає.' },
-      { key: 'stickers', label: 'Нахлейки та етикетки', short: 'Нахлейки', icon: '🏷️', desc: 'Стікери на папері та вінілі, стікерпаки, етикетки для тари, пломби-нашліпки.' },
-      { key: 'posters', label: 'Постери та афіші', short: 'Постери', icon: '🖼️', desc: 'Постери А4–А3, афіші заходів, навчальні плакати, фотодрук.' },
-      { key: 'booklets', label: 'Буклети та багатосторінкові видання', short: 'Буклети', icon: '📖', desc: 'Буклети зі згинами, брошури на скобі/пружині, каталоги. Тираж до 1000 прим. — далі офсет.' },
-      { key: 'office', label: 'Офісна документація', short: 'Офіс', icon: '🗂️', desc: 'Фірмові бланки, конверти, грамоти, презентації, блокноти, папки, меню.' },
-      { key: 'gifts', label: 'Подарунки та календарі', short: 'Подарунки', icon: '🎁', desc: 'Листівки, запрошення, настільні та настінні календарі, плнінги, сувеніри.' },
-      { key: 'merch', label: 'Мерч з логотипом', short: 'Мерч', icon: '👕', desc: 'Одяг та аксесуари з вашим логотипом. Друк на готових виробах (DTF/термоперенесення): тираж × ціна/шт + макетування (+).' },
-      { key: 'packages', label: 'Готові пакунки', short: 'Пакунки', icon: '📦', desc: 'Комплексні набори поліграфії зі знижкою ~10%. Допечатна підготовка всіх макетів уже включена у ціну.' }
+      { key: 'digital', label: 'Цифровий друк', short: 'Цифровий', icon: '🖨️', desc: 'Малий та середній тираж (1–1000 прим.). Швидко, гнучко, з персоналізацією. Візитки, флаєри, листівки, буклети, стікери.', subs: [
+        { key: 'business-cards',    label: 'Візитки',              icon: '💳' },
+        { key: 'flyers',            label: 'Флаєри',                icon: '📄' },
+        { key: 'postcards',         label: 'Листівки',             icon: '✉️' },
+        { key: 'invitations',       label: 'Запрошення',           icon: '💌' },
+        { key: 'stickers-labels',  label: 'Стікери та етикетки',   icon: '🏷️' },
+        { key: 'posters',          label: 'Постери та афіші',      icon: '🖼️' },
+        { key: 'booklets',         label: 'Буклети та брошури',    icon: '📖' },
+        { key: 'office-print',     label: 'Офісна поліграфія',    icon: '🗂️' },
+        { key: 'tags-labels',       label: 'Бірки та ярлики',      icon: '🏷️' },
+        { key: 'calendars-digital', label: 'Календарі',            icon: '📅' }
+      ] },
+      { key: 'offset', label: 'Офсетний друк', short: 'Офсет', icon: '🏭', desc: 'Великі тиражі від 1000 прим. — найнижча ціна за одиницю. Каталоги, книги, журнали, фірмові бланки.', subs: [
+        { key: 'catalogs',          label: 'Каталоги',                  icon: '📕' },
+        { key: 'books-brochures',  label: 'Книги та брошури',          icon: '📚' },
+        { key: 'magazines',        label: 'Журнали',                   icon: '📰' },
+        { key: 'folders',          label: 'Папки фірмові',             icon: '📁' },
+        { key: 'letterheads',      label: 'Фірмові бланки',            icon: '📄' },
+        { key: 'calendars-offset', label: 'Календарі (великі тиражі)', icon: '📆' },
+        { key: 'large-run-flyers', label: 'Флаєри великим тиражем',    icon: '📋' }
+      ] },
+      { key: 'merch', label: 'Мерч з логотипом', short: 'Мерч', icon: '👕', desc: 'Одяг та аксесуари з вашим логотипом. Друк на готових виробах (DTF/термоперенесення). Тираж × ціна/шт + макетування.', subs: [
+        { key: 'tshirts',        label: 'Футболки',           icon: '👕' },
+        { key: 'hoodies',        label: 'Худі та світшоти',    icon: '🧥' },
+        { key: 'caps-hats',      label: 'Кепки та шапки',      icon: '🧢' },
+        { key: 'bags-backpacks', label: 'Сумки та рюкзаки',    icon: '🎒' },
+        { key: 'drinkware',      label: 'Кружки та флешки',    icon: '🥤' },
+        { key: 'accessories',    label: 'Аксесуари',           icon: '🔑' },
+        { key: 'pins-keychains', label: 'Значки та брелоки',   icon: '📌' }
+      ] },
+      { key: 'pos-material', label: 'POS матеріали', short: 'POS', icon: '🏪', desc: 'Матеріали для точки продажу: воблери, шелфтокери, тейбл-тенти, цінники, диспенсери. Привертає увагу на полиці.', subs: [
+        { key: 'wobblers',     label: 'Воблери',              icon: '🎯' },
+        { key: 'shelftalkers', label: 'Шелфтокери',           icon: '📐' },
+        { key: 'table-tents',  label: 'Тейбл-тенти',          icon: '⛺' },
+        { key: 'doorhangers',  label: 'Дорхенгери',           icon: '🚪' },
+        { key: 'neckhangers',  label: 'Некхенгери',           icon: '🍾' },
+        { key: 'price-tags',   label: 'Цінники та бірки',     icon: '🏷️' },
+        { key: 'dispensers',   label: 'Диспенсери та стійки', icon: '🗂️' },
+        { key: 'stoppers',     label: 'Стопери',              icon: '🛑' }
+      ] },
+      { key: 'dtf', label: 'DTF друк', short: 'DTF', icon: '🎨', desc: 'Direct-to-Film — повнокольорові еластичні принти на текстиль та інші поверхні. Стійкі до прання, будь-якого розміру.', subs: [
+        { key: 'dtf-apparel',      label: 'Принти на одяг',     icon: '👕' },
+        { key: 'dtf-textile',      label: 'Принти на текстиль', icon: '🧵' },
+        { key: 'dtf-transfers',    label: 'Готові трансфери',   icon: '✂️' },
+        { key: 'dtf-large-format', label: 'Великі формати',     icon: '📐' },
+        { key: 'dtf-stickers',     label: 'DTF стікери',        icon: '🏷️' }
+      ] },
+      { key: 'textile', label: 'Текстиль', short: 'Текстиль', icon: '🧵', desc: 'Текстильні вироби під нанесення: футболки, худі, поло, робочий одяг, рушники, постільна білизна, тканинні сумки.', subs: [
+        { key: 'textile-tshirts', label: 'Футболки',          icon: '👕' },
+        { key: 'textile-hoodies', label: 'Худі та світшоти',    icon: '🧥' },
+        { key: 'polo-shirts',     label: 'Поло',              icon: '👕' },
+        { key: 'workwear',        label: 'Робочий одяг',      icon: '🦺' },
+        { key: 'towels',          label: 'Рушники',           icon: '🧖' },
+        { key: 'bed-linen',       label: 'Постільна білизна',  icon: '🛏️' },
+        { key: 'fabric-bags',     label: 'Тканинні сумки',     icon: '👜' }
+      ] },
+      { key: 'fan-shop', label: 'Fan shop', short: 'Fan shop', icon: '⚽', desc: 'Брендована сувенірна продукція для фанатів: значки, брелоки, стікерпаки, прапори, шарфи, аксесуари з символікою.', subs: [
+        { key: 'fan-pins',        label: 'Значки та брелоки', icon: '📌' },
+        { key: 'fan-stickers',    label: 'Стикерпаки',        icon: '🎨' },
+        { key: 'fan-apparel',     label: 'Одяг фаната',       icon: '👕' },
+        { key: 'fan-flags',       label: 'Прапори та банери', icon: '🚩' },
+        { key: 'fan-scarves',     label: 'Шарфи',             icon: '🧣' },
+        { key: 'fan-souvenirs',   label: 'Сувеніри',         icon: '🎁' },
+        { key: 'fan-accessories', label: 'Аксесуари',        icon: '🎒' }
+      ] },
+      { key: 'packages', label: 'Готові пакунки', short: 'Пакунки', icon: '📦', desc: 'Комплексні набори зі знижкою ~10%. Допечатна підготовка всіх макетів уже включена у ціну.', subs: [] }
     ];
     const CATEGORY_KEYS = CATEGORY_META.map(c => c.key);
     const PRODUCT_NUMBERS = {};
@@ -5609,13 +5666,21 @@
           });
         }
         if (Array.isArray(ov.categories) && ov.categories.length) {
-          // Категорії/підкатегорії з адмінки: заміна наявних + додавання нових НА МІСЦІ,
-          // щоб CATEGORY_META/CATEGORY_KEYS (посилання на той самий масив) оновились всюди.
+          // CATEGORY_RESTRUCT v1: адмінка — єдине джерело правди для категорій.
+          // Якщо override має categories, повністю ПОЧИЩАЄМО CATEGORY_META і наповнюємо заново
+          // (замість merge). Інакше при зміні/видаленні категорії в адмінці вона лишалась би на сайті.
+          CATEGORY_META.length = 0;
           ov.categories.forEach(function (c) {
             if (!c || !c.key) return;
-            const meta = { key: c.key, label: c.label || c.key, short: c.short || c.label || c.key, icon: c.icon || '', desc: c.desc || '', subs: Array.isArray(c.subs) ? c.subs : [], color: c.color };
-            const i = CATEGORY_META.findIndex(function (x) { return x.key === c.key; });
-            if (i >= 0) CATEGORY_META[i] = meta; else CATEGORY_META.push(meta);
+            CATEGORY_META.push({
+              key: c.key,
+              label: c.label || c.key,
+              short: c.short || c.label || c.key,
+              icon: c.icon || '',
+              desc: c.desc || '',
+              subs: Array.isArray(c.subs) ? c.subs : [],
+              color: c.color
+            });
           });
           CATEGORY_KEYS.length = 0;
           CATEGORY_META.forEach(function (c) { CATEGORY_KEYS.push(c.key); });
@@ -6061,9 +6126,9 @@
     // v15: кольори квадратів-номерів за категорією («квадрати по кольору»);
     // для нових категорій з адмінки — fallback на meta.color, далі нейтральний
     const CAT_SQ_COLORS = {
-      polygraphy: '#38bdf8', advertising: '#fbbf24', stickers: '#f87171',
-      posters: '#a78bfa', booklets: '#34d399', office: '#94a3b8',
-      gifts: '#f472b6', merch: '#fb923c', packages: '#22d3ee'
+      digital: '#38bdf8', offset: '#a78bfa', merch: '#fb923c',
+      'pos-material': '#fbbf24', dtf: '#f87171', textile: '#34d399',
+      'fan-shop': '#f472b6', packages: '#22d3ee'
     };
 
     function renderProductsList() {
@@ -6589,9 +6654,16 @@
       const allowed = cfg.product?.allowedPapers || Object.keys(prices.paper);
 
       // v18: наліпки — перемикач 2 матеріалів (Raflatac / Оракал) замість дропдауна
+      // CATEGORY_RESTRUCT: раніше перевіряли category === 'stickers', тепер стікери
+      // живуть як підкатегорія 'stickers-labels' всередині 'digital' — перевіряємо обидва варіанти.
       const chipsWrap = document.getElementById('paperMatChips');
       const hint = document.getElementById('paperMatHint');
-      const bothMat = !!(cfg.product && cfg.product.category === 'stickers' &&
+      const isStickerProduct = !!(cfg.product && (
+        cfg.product.category === 'stickers' ||
+        cfg.product.subcategory === 'stickers-labels' ||
+        (cfg.product.subcategory && cfg.product.subcategory.indexOf('sticker') >= 0)
+      ));
+      const bothMat = !!(isStickerProduct &&
         allowed.includes('selfadhesive_paper') && allowed.includes('selfadhesive_vinyl'));
       if (chipsWrap) {
         chipsWrap.style.display = bothMat ? 'flex' : 'none';
@@ -7425,15 +7497,14 @@
     /* ==== TASK 19: «Про виріб» — великий опис (опиши все) ==== */
     const FORMAT_NAMES_S = { '105x148': 'А6', '148x105': 'А6 (альбомна)', '148x210': 'А5', '210x148': 'А5 (альбомна)', '210x297': 'А4', '297x210': 'А4 (альбомна)', '297x420': 'А3', '420x297': 'А3 (альбомна)' };
     const CATEGORY_STORY = {
-      polygraphy: 'Візитки та ділова поліграфія — найважливіший носій вашого бренду: візитка часто перше, що тримає в руках клієнт. Щільний картон 300–350 г/м², рівний крій і насичений CMYK працюють на репутацію. Преміум-варіанти — Soft-Touch-ламінація, скруглені кути або візитка зі згином.',
-      advertising: 'Рекламна поліграфія — усе, що продає: флаєри, купони, квитки, воблери, шельтхалтери, тейбл-тенти. Такі вироби працюють масово, тому ми розкладаємо їх на аркуші А3 максимально щільно: чим більше виробів виходить з аркуша, тим дешевша кожна штука.',
-      stickers: 'Нахлейки та етикетки друкуються на двох самоклейних матеріалах: папір Raflatac — для сухих приміщень (ціновники, маркування, стікерпаки) і плівка Оракал (вініл) — для вулиці, вологи, авто та вітрин (−20…+60 °C). Форма будь-яка — плотерна висічка ріже за контуром.',
-      posters: 'Постери та афіші — повнокольоровий друк зображень на щільному папері. Яскравість дає CMYK-друк, а щільний папір 170–200 г/м² тримає форму на стіні, у рамі або на стенді. Для фотодруку і плакатів великого формату — той самий аркуш А3.',
-      booklets: 'Буклети та багатосторінкові видання друкуються блоком на аркушах А3: сторінки-полоси розкладаються так, щоб після фальцювання та підрізання вийшов готовий буклет. Скріплення — скоба (до 64 сторінок) або пружина КБС; обкладинка — самокришка або окремий щільніший аркуш з ламінацією.',
-      office: 'Офісна документація — бланки, конверти, грамоти, презентації, меню, папки та блокноти у фірмовому стилі. Ці вироби перевидрукуються найчастіше, тому великі тиражі з тиражною знижкою виходять максимально дешево.',
-      gifts: 'Подарунки та календарі — листівки, запрошення, настільні й настінні календарі, планінги, сувеніри. Такі вироби бачать щодня: календар тримає бренд перед очима клієнта цілий рік, а листівка — найдешевший теплий жест для клієнтів.',
+      digital: 'Цифровий друк — малі й середні тиражі (1–1000 прим.). Швидко, гнучко, з можливістю персоналізації кожного примірника. Візитки, флаєри, листівки, буклети, стікери — все, що потрібно сьогодні на завтра. Цифрова машина друкує прямо з PDF, без виготовлення форм.',
+      offset: 'Офсетний друк — масові тиражі від 1000 прим. Найнижча ціна за одиницю при великих обсягах. Каталоги, книги, журнали, фірмові бланки. Потребує виготовлення форм і приладнання, але при тиражі 5000+ стає значно дешевшим за цифровий.',
       merch: 'Мерч з логотипом — готові вироби (одяг, аксесуари), на які наносимо ваш логотип DTF-принтом або термоперенесенням. Принт стійкий до прання й носіння. Формула проста: ціна за штуку × тираж + разове макетування логотипа (+).',
-      packages: 'Готові пакунки — скомплектовані набори поліграфії для бізнесу: усе потрібне одним замовленням зі знижкою ~10%. Склад пакунка можна редагувати, макетування всіх макетів і постдрук уже включені у ціну.'
+      'pos-material': 'POS матеріали — усе для точки продажу: воблери, шелфтокери, тейбл-тенти, цінники, диспенсери. Ці вироби привертають увагу клієнта на полиці та працюють на імпульсні покупки.',
+      dtf: 'DTF друк (Direct-to-Film) — повнокольорові еластичні принти на текстиль та інші поверхні. Стійкі до прання, не тріскаються, не втрачають кольору. Будь-який розмір, будь-який колір, навіть фотографічна якість.',
+      textile: 'Текстиль — вироби під нанесення: футболки, худі, поло, робочий одяг, рушники, постільна білизна, тканинні сумки. Підходить під будь-який метод друку: DTF, шовкографія, вишивка.',
+      'fan-shop': 'Fan shop — брендована сувенірна продукція для фанатів: значки, брелоки, стікерпаки, прапори, шарфи. Дрібниці, що формують ідентичність та прихильність до бренду, команди, гурту.',
+      packages: 'Готові пакунки — скомплектовані набори для бізнесу: усе потрібне одним замовленням зі знижкою ~10%. Склад пакунка можна редагувати, макетування всіх макетів і постдрук уже включені у ціну.'
     };
     const COLOR_STORY = {
       '1+0': 'односторонній чорно-білий друк — найекономніший варіант для бланків, чек-листів та внутрішніх документів',
@@ -7477,7 +7548,7 @@
     function productStoryRowsS(res) {
       const kind = currentProductKind();
       const rows = [];
-      const cat = cfg.product ? cfg.product.category : 'polygraphy';
+      const cat = cfg.product ? cfg.product.category : 'digital';
       const catMeta = CATEGORY_META.find(c => c.key === cat);
       rows.push(['Що це:', CATEGORY_STORY[cat] || (catMeta ? catMeta.desc : 'Друкарський виріб на офсетній машині А3.')]);
       if (kind === 'merch') {
@@ -8329,14 +8400,13 @@
     ];
 
     const AI_CAT_WORDS = {
-      polygraphy: ['візитк', 'визитк', 'бірк', 'бирк', 'ярлик', 'business card'],
-      advertising: ['флаєр', 'флаер', 'листівк', 'реклам', 'купон', 'квитк', 'воблер', 'дверна', 'тейбл', 'стійк', 'стойк'],
-      stickers: ['нахлей', 'наклей', 'стікер', 'стикер', 'етикетк', 'этикетк', 'пломб', 'нашліпк', 'стікерпак'],
-      posters: ['постер', 'афіш', 'афиш', 'плакат', 'фотодрук'],
-      booklets: ['буклет', 'брошур', 'брошю', 'каталог', 'книг', 'сторінк', 'страниц', 'видан', 'багатостор'],
-      office: ['офіс', 'офис', 'бланк', 'конверт', 'грамот', 'диплом', 'сертифікат', 'сертификат', 'папк', 'меню ', 'презентац', 'блокнот', 'кубарик', 'плнінг'],
-      gifts: ['подарун', 'подарок', 'сувенір', 'сувенир', 'открытк', 'запрошен', 'приглашен', 'закладк'],
-      merch: ['мерч', 'футболк', 'реглан', 'лонгслів', 'худі', 'худи', 'жилетк', 'жилет', 'рюкзак', 'одяг', 'одежд', 't-shirt', 'tshirt'],
+      digital: ['цифров', 'візитк', 'визитк', 'бірк', 'бирк', 'ярлик', 'business card', 'флаєр', 'флаер', 'листівк', 'листовк', 'купон', 'квитк', 'стікер', 'стикер', 'етикетк', 'этикетк', 'пломб', 'нашліпк', 'стікерпак', 'постер', 'афіш', 'афиш', 'плакат', 'фотодрук', 'буклет', 'брошур', 'брошю', 'офіс', 'офис', 'бланк', 'конверт', 'меню ', 'блокнот', 'кубарик', 'плнінг', 'запрошен', 'приглашен', 'закладк', 'календар'],
+      offset: ['офсет', 'офсэт', 'каталог', 'книг', 'журнал', 'сторінк', 'страниц', 'багатостор', 'великий тираж', 'бланк тираж', 'фірмові бланки', 'фирменные бланки'],
+      merch: ['мерч', 'футболк', 'реглан', 'лонгслів', 'худі', 'худи', 'жилетк', 'жилет', 'рюкзак', 'одяг', 'одежд', 't-shirt', 'tshirt', 'кепк', 'шапк', 'сумк', 'значк', 'брелок'],
+      'pos-material': ['pos', 'пос', 'воблер', 'шелфтокер', 'шельфталтер', 'тейбл', 'тент', 'дорхенгер', 'некхенгер', 'цінник', 'ценник', 'диспенсер', 'стопер', 'стійк', 'стойк'],
+      dtf: ['dtf', 'direct-to-film', 'термопринт', 'трансфер', 'принт на одяг', 'принт на текстиль'],
+      textile: ['текстиль', 'поло', 'робочий одяг', 'робоча одяг', 'рушник', 'постільна', 'постельное', 'тканинна сумк', 'тканевая сумк'],
+      'fan-shop': ['fan shop', 'фан-шоп', 'фаншоп', 'фанат', 'сувенір', 'сувенир', 'прапор', 'флаг', 'шарф', 'значок', 'пін', 'стікерпак фанат'],
       packages: ['пакунок', 'пакет', 'пакети', 'комплект', 'набір', 'набор', 'пакунки']
     };
 
@@ -8410,7 +8480,7 @@
     // вписує його у бюджет, показує склад і суму. «Перерахувати» — інший
     // рандомний варіант з тими ж відповідями. Результат можна додати в кошик.
     const AI_KIT = { active: false, step: '', cats: new Set(), people: 0, merch: null, budget: 0, filter: 'any', lastKit: null };
-    const AI_KIT_CATS = ['polygraphy', 'advertising', 'stickers', 'posters', 'booklets', 'gifts'];
+    const AI_KIT_CATS = ['digital', 'offset', 'merch', 'pos-material', 'dtf', 'textile', 'fan-shop'];
     function aiKitMeta(k) { return CATEGORY_META.find(m => m.key === k) || { icon: '📄', short: k }; }
 
     function aiKitStart(pushUserLabel) {
@@ -10853,19 +10923,19 @@
       typeName: '',
       typeEmoji: '',
       qty: 10,
-      cat: 'all',         // 'all' | 'merch' | 'polygraphy' | 'gifts' | 'stickers' | 'advertising' | 'office' | 'booklets'
+      cat: 'all',         // 'all' | 'digital' | 'offset' | 'merch' | 'pos-material' | 'dtf' | 'textile' | 'fan-shop'
       budgetPerPerson: 300,
       items: []           // [{ id, qty }] — зібраний бокс
     };
 
     // Опис типів боксу: який емодзі + рекомендація категорій
     const BOX_TYPES = {
-      startup:  { emoji: '🚀', name: 'Стартап-команда',          preferCats: ['polygraphy', 'merch', 'stickers'],  hint: 'візитки + мерч + нахлейки' },
-      event:    { emoji: '🎤', name: 'Подія / конференція',      preferCats: ['advertising', 'office', 'stickers'], hint: 'флаєри + бейджі + нахлейки' },
-      clients:  { emoji: '⭐', name: 'Подарунок клієнтам',       preferCats: ['gifts', 'polygraphy', 'merch'],     hint: 'листівки + мерч + календар' },
-      employees:{ emoji: '👋', name: 'Welcome-kit співробітникам', preferCats: ['merch', 'office', 'polygraphy'],  hint: 'мерч + блокнот + візитки' },
-      promo:    { emoji: '📣', name: 'Промо-роздача',            preferCats: ['advertising', 'stickers', 'gifts'], hint: 'флаєри + нахлейки + сувеніри' },
-      gift:     { emoji: '🎄', name: 'Святковий набір',          preferCats: ['gifts', 'merch', 'polygraphy'],     hint: 'листівки + мерч + календар' }
+      startup:  { emoji: '🚀', name: 'Стартап-команда',          preferCats: ['digital', 'merch', 'pos-material'],  hint: 'візитки + мерч + POS' },
+      event:    { emoji: '🎤', name: 'Подія / конференція',      preferCats: ['digital', 'pos-material', 'merch'],  hint: 'флаєри + POS + бейджі' },
+      clients:  { emoji: '⭐', name: 'Подарунок клієнтам',       preferCats: ['fan-shop', 'merch', 'digital'],       hint: 'сувеніри + мерч + листівки' },
+      employees:{ emoji: '👋', name: 'Welcome-kit співробітникам', preferCats: ['merch', 'digital', 'textile'],       hint: 'мерч + блокнот + футболки' },
+      promo:    { emoji: '📣', name: 'Промо-роздача',            preferCats: ['pos-material', 'digital', 'fan-shop'],hint: 'POS + флаєри + сувеніри' },
+      gift:     { emoji: '🎄', name: 'Святковий набір',          preferCats: ['fan-shop', 'merch', 'digital'],       hint: 'сувеніри + мерч + листівки' }
     };
 
     function boxInit() {
