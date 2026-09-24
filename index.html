@@ -3655,6 +3655,162 @@
       .cp-root .cp-qty-edit { display: none !important; }
       .cp-root .cp-del { visibility: hidden !important; }
     }
+
+    /* ============================================================
+       WIDE-FORMAT CALCULATOR (viewWideFormat) — v1.0
+       Dark theme + yellow accent, consistent with site design
+       ============================================================ */
+    .wf-panel { padding: 0; }
+    .wf-calc-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+    @media (max-width: 1100px) { .wf-calc-grid { grid-template-columns: 1fr; } }
+
+    .wf-controls { display: flex; flex-direction: column; gap: 12px; }
+    .wf-active-banner {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #1a1f2e 0%, #232838 100%);
+      border: 1px solid #2a2f3f; border-left: 3px solid var(--accent-yellow);
+      border-radius: 6px;
+    }
+    .wf-ap-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+    .wf-ap-meta { font-size: 11.5px; color: var(--text-dim); }
+    .wf-ap-price { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--accent-yellow); }
+
+    #viewWideFormat .control-row {
+      background: #161922; border: 1px solid #1e2333; border-radius: 6px;
+      padding: 12px 14px;
+    }
+    #viewWideFormat .control-label {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12.5px; font-weight: 600; color: #cbd5e1;
+      margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    #viewWideFormat .btn-group { display: flex; flex-wrap: wrap; gap: 6px; }
+    #viewWideFormat .opt-chip {
+      background: #1e2333; border: 1px solid #2a3142; color: #cbd5e1;
+      padding: 7px 12px; border-radius: 5px; cursor: pointer;
+      font-size: 12.5px; font-weight: 600; font-family: var(--font-mono);
+      transition: all 0.15s ease;
+    }
+    #viewWideFormat .opt-chip:hover { background: #252b3d; border-color: #3a4258; color: #f1f5f9; }
+    #viewWideFormat .opt-chip.active {
+      background: var(--accent-yellow); border-color: var(--accent-yellow); color: #16181f;
+      box-shadow: 0 0 0 1px var(--accent-yellow), 0 0 12px rgba(255, 222, 0, 0.25);
+    }
+
+    #viewWideFormat .qty-wrap { display: flex; flex-direction: column; gap: 8px; }
+    #viewWideFormat .stepper {
+      display: inline-flex; align-items: stretch; width: fit-content;
+      border: 1px solid #2a3142; border-radius: 5px; overflow: hidden;
+    }
+    #viewWideFormat .stepper button {
+      background: #1e2333; color: #cbd5e1; border: none;
+      padding: 0 12px; font-size: 16px; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    #viewWideFormat .stepper button:hover { background: #252b3d; color: var(--accent-yellow); }
+    #viewWideFormat .stepper .input-box {
+      width: 90px; background: #161922; color: #f1f5f9; border: none;
+      border-left: 1px solid #2a3142; border-right: 1px solid #2a3142;
+      text-align: center; font-family: var(--font-mono); font-weight: 700; font-size: 14px;
+      padding: 7px 0;
+    }
+    .wf-tier-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+    .wf-tier-pill {
+      background: #1a1f2e; border: 1px solid #2a3142; color: #94a3b8;
+      padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-family: var(--font-mono);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .wf-tier-pill:hover { background: #252b3d; color: #cbd5e1; }
+    .wf-tier-pill.active { background: var(--accent-yellow); color: #16181f; border-color: var(--accent-yellow); font-weight: 700; }
+
+    .wf-info-box {
+      background: #161922; border: 1px solid #1e2333; border-radius: 6px;
+      padding: 10px 12px; font-size: 12px; line-height: 1.55; color: var(--text-dim);
+    }
+    .wf-info-box strong { color: #f1f5f9; margin-right: 4px; }
+
+    #wfOptionsBody label {
+      display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #cbd5e1; cursor: pointer;
+      padding: 6px 8px; background: #1a1f2e; border: 1px solid #2a3142; border-radius: 4px;
+    }
+    #wfOptionsBody label:hover { background: #252b3d; }
+    #wfOptionsBody input[type="checkbox"] { accent-color: var(--accent-yellow); width: 16px; height: 16px; cursor: pointer; }
+    #wfOptionsBody .wf-opt-price { margin-left: auto; font-family: var(--font-mono); font-weight: 700; color: var(--accent-yellow); font-size: 11.5px; }
+
+    /* RIGHT COL */
+    .wf-result-col { display: flex; flex-direction: column; gap: 12px; }
+    .wf-result-card {
+      background: linear-gradient(135deg, #1a1f2e 0%, #232838 100%);
+      border: 1px solid #2a3142; border-radius: 6px;
+      padding: 16px;
+    }
+    .wf-result-head {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.4px;
+      margin-bottom: 10px;
+    }
+    .wf-result-code { font-family: var(--font-mono); color: var(--accent-yellow); font-weight: 700; }
+    .wf-result-total {
+      font-family: var(--font-mono); font-size: 32px; font-weight: 800; color: #f1f5f9;
+      line-height: 1.1; margin-bottom: 4px;
+    }
+    .wf-result-unit { font-size: 12.5px; color: var(--text-dim); margin-bottom: 12px; }
+    .wf-result-breakdown {
+      background: #161922; border: 1px solid #1e2333; border-radius: 4px;
+      padding: 8px 10px; font-size: 11.5px; color: #cbd5e1;
+      display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px;
+    }
+    .wf-result-breakdown .row { display: flex; justify-content: space-between; }
+    .wf-result-breakdown .row.total { border-top: 1px dashed #2a3142; padding-top: 4px; margin-top: 2px; font-weight: 700; color: #f1f5f9; }
+    .wf-result-breakdown .row .val { font-family: var(--font-mono); }
+
+    .wf-result-tier-hint {
+      background: rgba(255, 222, 0, 0.08); border: 1px dashed rgba(255, 222, 0, 0.35);
+      color: #fde68a; font-size: 11px; padding: 6px 10px; border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .wf-result-tier-hint:empty { display: none; }
+
+    .wf-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .wf-btn-secondary {
+      background: #1e2333; color: #cbd5e1; border: 1px solid #2a3142;
+      padding: 9px 10px; border-radius: 5px; cursor: pointer;
+      font-size: 12px; font-weight: 600;
+      transition: all 0.15s;
+    }
+    .wf-btn-secondary:hover { background: #252b3d; color: #f1f5f9; border-color: #3a4258; }
+    .wf-btn-primary {
+      grid-column: 1 / -1;
+      background: var(--accent-yellow); color: #16181f; border: none;
+      padding: 11px 16px; border-radius: 5px; cursor: pointer;
+      font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+      transition: all 0.15s;
+    }
+    .wf-btn-primary:hover { background: #fff200; box-shadow: 0 0 14px rgba(255, 222, 0, 0.4); }
+
+    /* QUICK REF TABLE */
+    .wf-quick-ref {
+      background: #161922; border: 1px solid #1e2333; border-radius: 6px; padding: 12px 14px;
+    }
+    .wf-quick-ref-title { font-size: 12.5px; font-weight: 700; color: #cbd5e1; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .wf-quick-ref-table { display: flex; flex-direction: column; gap: 4px; max-height: 320px; overflow-y: auto; }
+    .wf-quick-ref-row {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center;
+      padding: 6px 8px; background: #1a1f2e; border: 1px solid #2a3142; border-radius: 4px;
+      font-size: 11.5px; color: #cbd5e1; cursor: pointer; transition: all 0.15s;
+    }
+    .wf-quick-ref-row:hover { background: #252b3d; border-color: #3a4258; }
+    .wf-quick-ref-row.active { background: rgba(255, 222, 0, 0.08); border-color: var(--accent-yellow); }
+    .wf-quick-ref-row .icon { font-size: 14px; }
+    .wf-quick-ref-row .name { color: #f1f5f9; font-weight: 600; }
+    .wf-quick-ref-row .name small { color: var(--text-dim); font-weight: 400; display: block; font-size: 10.5px; }
+    .wf-quick-ref-row .price { font-family: var(--font-mono); font-weight: 700; color: var(--accent-yellow); font-size: 12px; }
   </style>
 
 </head>
@@ -4475,6 +4631,125 @@
     </div>
   </section>
 
+  <!-- VIEW 4: WIDE-FORMAT PRINT CALCULATOR -->
+  <section class="view-container" id="viewWideFormat">
+    <div class="panel wf-panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+          Калькулятор широкоформатного друку · UV-друк на ПВХ, акрилі, сітілайт
+        </span>
+        <span style="font-size: 11px; color: var(--accent-yellow); font-weight: 700;">10 продуктів · 4 матеріали</span>
+      </div>
+
+      <div class="wf-calc-grid">
+        <!-- LEFT: material + size + qty -->
+        <div class="wf-controls">
+          <!-- Active product display -->
+          <div class="wf-active-banner">
+            <div>
+              <div class="wf-ap-title" id="wfActiveTitle">Друк ПВХ 3мм А2 (420×594)</div>
+              <div class="wf-ap-meta" id="wfActiveMeta">ПВХ 3мм · 420×594 мм · UV-друк</div>
+            </div>
+            <div class="wf-ap-price" id="wfActiveFrom">від 110,00 ₴</div>
+          </div>
+
+          <!-- 1. Material selector -->
+          <div class="control-row">
+            <div class="control-label">
+              <span>1. Матеріал та товщина</span>
+              <span id="wfMaterialLabel" style="color: var(--accent-yellow);">ПВХ 3мм</span>
+            </div>
+            <div class="btn-group" id="wfMaterialBtns">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- 2. Size selector -->
+          <div class="control-row">
+            <div class="control-label">
+              <span>2. Формат (мм)</span>
+              <span id="wfSizeLabel" style="color: var(--accent-yellow);">А2 · 420×594</span>
+            </div>
+            <div class="btn-group" id="wfSizeBtns">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- 3. Quantity -->
+          <div class="control-row">
+            <div class="control-label">
+              <span>3. Тираж (шт)</span>
+              <span id="wfTierLabel" style="color: var(--accent-yellow);">ціна за щаблем</span>
+            </div>
+            <div class="qty-wrap">
+              <div class="stepper">
+                <button type="button" onclick="wfStepQty(-1)" title="−1">−</button>
+                <input type="number" id="wfQtyInput" class="input-box" value="1" min="1" max="200" oninput="wfOnQtyInput()">
+                <button type="button" onclick="wfStepQty(1)" title="+1">+</button>
+              </div>
+              <div class="wf-tier-pills" id="wfTierPills">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Options (cutting for acrylic, lamination for outdoor PVC, etc.) -->
+          <div class="control-row" id="wfOptionsRow">
+            <div class="control-label">
+              <span>4. Опції</span>
+              <span style="color: var(--text-muted);">додатково</span>
+            </div>
+            <div id="wfOptionsBody" style="display: flex; flex-direction: column; gap: 6px;">
+              <!-- Populated by JS based on material -->
+            </div>
+          </div>
+
+          <!-- 5. Description / product info -->
+          <div class="wf-info-box" id="wfInfoBox">
+            <strong>📝 Про матеріал:</strong>
+            <span id="wfInfoText">—</span>
+          </div>
+        </div>
+
+        <!-- RIGHT: live result + actions -->
+        <div class="wf-result-col">
+          <div class="wf-result-card">
+            <div class="wf-result-head">
+              <span>📦 Вартість замовлення</span>
+              <span class="wf-result-code" id="wfResultCode">AM-WF-001</span>
+            </div>
+            <div class="wf-result-total" id="wfResultTotal">180,00 ₴</div>
+            <div class="wf-result-unit" id="wfResultUnit">180,00 ₴ / шт</div>
+
+            <div class="wf-result-breakdown" id="wfResultBreakdown">
+              <!-- Populated by JS -->
+            </div>
+
+            <div class="wf-result-tier-hint" id="wfResultTierHint">
+              <!-- Populated by JS — next tier suggestion -->
+            </div>
+
+            <div class="wf-actions">
+              <button type="button" class="wf-btn-secondary" onclick="wfOpenInCalc()" title="Відкрити цей виріб у основному калькуляторі">↗ У калькуляторі</button>
+              <button type="button" class="wf-btn-secondary" onclick="wfAddToCart()" title="Додати поточний розрахунок у кошик">🛒 У кошик</button>
+              <button type="button" class="wf-btn-secondary" onclick="wfAddToKp()" title="Додати в комерційну пропозицію">📊 В КП</button>
+              <button type="button" class="wf-btn-primary" onclick="wfOrder()" title="Відкрити форму замовлення">✉️ Замовити →</button>
+            </div>
+          </div>
+
+          <!-- Quick reference table: all wide-format products -->
+          <div class="wf-quick-ref">
+            <div class="wf-quick-ref-title">📋 Усі продукти широкоформатного друку</div>
+            <div class="wf-quick-ref-table" id="wfQuickRefTable">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
     </div>
   </div>
   <!-- /.workspace -->
@@ -4497,6 +4772,7 @@
         <div class="sf-col-title">Навігація</div>
         <button class="sf-link" onclick="switchMainView('pack', this)">📦 Ваш пакунок</button>
         <button class="sf-link" onclick="switchMainView('calc', this)">⚡ Калькулятор</button>
+        <button class="sf-link" onclick="switchMainView('wideformat', this)">📐 Широкоформатка</button>
         <button class="sf-link" onclick="switchMainView('database', this)">📋 База виробів</button>
         <button class="sf-link" onclick="switchMainView('a3price', this)">🏷️ alfacopya3ing. · Тарифи А3</button>
         <button class="sf-order" onclick="openModal()">Замовити друк →</button>
@@ -5564,7 +5840,71 @@
   { "id": "pack-retail", "name": "Пакунок «РОЗДРІБ» — магазин", "category": "packages", "icon": "🛒", "kind": "package", "pkgPrice": 6283, "items": [{ "id": "tag-clothing", "qty": 500 }, { "id": "price-tag-retail", "qty": 500 }, { "id": "stickerpack-a5", "qty": 100 }, { "id": "postcard-a6", "qty": 100 }],
     "contents": ["Бірка для одягу — 500 шт", "Цінник роздрібний — 500 шт", "Стікерпак А5 — 100 шт", "Листівка А6 — 100 шт"],
     "desc": "Оформлення точки продажу: бірки та цінники на товар, стікери на пакети і листівки в замовлення.",
-    "defaultW": 50, "defaultH": 90, "defaultPaper": "coated_300", "allowedPapers": [], "defaultColor": "4+0", "minQty": 1, "priceFrom": "6 283,00" }
+    "defaultW": 50, "defaultH": 90, "defaultPaper": "coated_300", "allowedPapers": [], "defaultColor": "4+0", "minQty": 1, "priceFrom": "6 283,00" },
+
+  // ===== ШИРОКОФОРМАТНИЙ ДРУК (UV-друк на твердих носіях + сітілайт) =====
+  // 10 продуктів: 5 ПВХ (3мм А2/А1/А0, 5мм А2/А1) + 4 акрил (А5/А4/А3/А2 з порізкою) + 1 сітілайт UV
+  // Ціни — за щаблями тиражу (tiered). Макетування + included. Калькулятор: viewWideFormat.
+  { "id": "wf-pvh-3mm-a2", "name": "Друк ПВХ 3мм А2 (420×594)", "category": "wide-format", "subcategory": "pvh-print", "icon": "🟦",
+    "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "110,00",
+    "defaultW": 420, "defaultH": 594, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "pvh", "thickness": "3mm", "format": "A2",
+    "tiers": [ {"qty":1,"price":180}, {"qty":5,"price":150}, {"qty":10,"price":130}, {"qty":20,"price":110} ],
+    "desc": "UV-друк на ПВХ-пластині 3 мм (формований лист, білий). А2 — 420×594 мм. Підходить для інтер'єрних табличок, POS-воблерів, виставкових стендів. Термін служби 5+ років у приміщенні, 2–3 роки надворі." },
+  { "id": "wf-pvh-3mm-a1", "name": "Друк ПВХ 3мм А1 (594×841)", "category": "wide-format", "subcategory": "pvh-print", "icon": "🟦",
+    "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "210,00",
+    "defaultW": 594, "defaultH": 841, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "pvh", "thickness": "3mm", "format": "A1",
+    "tiers": [ {"qty":1,"price":350}, {"qty":5,"price":290}, {"qty":10,"price":250}, {"qty":20,"price":210} ],
+    "desc": "UV-друк на ПВХ 3 мм, А1 — 594×841 мм. Стабільний формат для навігаційних стендів, меню-бордів, інфографіки. Можна просвердлити отвори під саморізи чи кріплення." },
+  { "id": "wf-pvh-3mm-a0", "name": "Друк ПВХ 3мм А0 (841×1189)", "category": "wide-format", "subcategory": "pvh-print", "icon": "🟦",
+    "kind": "simple", "minQty": 1, "maxQty": 50, "priceFrom": "390,00",
+    "defaultW": 841, "defaultH": 1189, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "pvh", "thickness": "3mm", "format": "A0",
+    "tiers": [ {"qty":1,"price":650}, {"qty":5,"price":540}, {"qty":10,"price":470}, {"qty":20,"price":390} ],
+    "desc": "UV-друк на ПВХ 3 мм, А0 — 841×1189 мм. Великий стендовий формат для виставок, конференц-зон, фойє. Легкий (1.8 кг/м²), кріпиться на двосторонній скотч чи присоски." },
+  { "id": "wf-pvh-5mm-a2", "name": "Табличка ПВХ 5мм А2 (420×594)", "category": "wide-format", "subcategory": "pvh-signs", "icon": "🟫",
+    "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "145,00",
+    "defaultW": 420, "defaultH": 594, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "pvh", "thickness": "5mm", "format": "A2",
+    "tiers": [ {"qty":1,"price":240}, {"qty":5,"price":200}, {"qty":10,"price":170}, {"qty":20,"price":145} ],
+    "desc": "ПВХ 5 мм — жорсткіший лист для табличок, що підвішуються або кріпляться на відстані від стіни. А2 — 420×594 мм. Стійкий до ударів, не гнеться під власною вагою." },
+  { "id": "wf-pvh-5mm-a1", "name": "Табличка ПВХ 5мм А1 (594×841)", "category": "wide-format", "subcategory": "pvh-signs", "icon": "🟫",
+    "kind": "simple", "minQty": 1, "maxQty": 50, "priceFrom": "275,00",
+    "defaultW": 594, "defaultH": 841, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "pvh", "thickness": "5mm", "format": "A1",
+    "tiers": [ {"qty":1,"price":460}, {"qty":5,"price":380}, {"qty":10,"price":325}, {"qty":20,"price":275} ],
+    "desc": "ПВХ 5 мм, А1 — 594×841 мм. Жорсткий signage-формат для вуличних табличок (з ламінацією), інтер'єрних покажчиків та стендових панелей." },
+  { "id": "wf-acril-3mm-a5", "name": "Друк акрилу 3мм А5 з порізкою (148×210)", "category": "wide-format", "subcategory": "acrylic-print", "icon": "🔷",
+    "kind": "simple", "minQty": 1, "maxQty": 200, "priceFrom": "55,00",
+    "defaultW": 148, "defaultH": 210, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "acril", "thickness": "3mm", "format": "A5", "cuttingIncluded": true,
+    "tiers": [ {"qty":1,"price":90}, {"qty":5,"price":75}, {"qty":10,"price":65}, {"qty":20,"price":55} ],
+    "desc": "UV-друк на прозорому акрилі 3 мм з лазерною порізкою. А5 — 148×210 мм. Преміум-таблички, ключники, інсталяції, номерки. Края ідеально рівні, без задирів." },
+  { "id": "wf-acril-3mm-a4", "name": "Друк акрилу 3мм А4 з порізкою (210×297)", "category": "wide-format", "subcategory": "acrylic-print", "icon": "🔷",
+    "kind": "simple", "minQty": 1, "maxQty": 200, "priceFrom": "90,00",
+    "defaultW": 210, "defaultH": 297, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "acril", "thickness": "3mm", "format": "A4", "cuttingIncluded": true,
+    "tiers": [ {"qty":1,"price":145}, {"qty":5,"price":120}, {"qty":10,"price":105}, {"qty":20,"price":90} ],
+    "desc": "UV-друк на акрилі 3 мм з порізкою. А4 — 210×297 мм. Кабінні таблички, виставкові нумераційні панелі, пам'ятні дощечки. Можна з матовою/shiny-фурнітурою." },
+  { "id": "wf-acril-3mm-a3", "name": "Друк акрилу 3мм А3 з порізкою (297×420)", "category": "wide-format", "subcategory": "acrylic-print", "icon": "🔷",
+    "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "140,00",
+    "defaultW": 297, "defaultH": 420, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "acril", "thickness": "3mm", "format": "A3", "cuttingIncluded": true,
+    "tiers": [ {"qty":1,"price":230}, {"qty":5,"price":190}, {"qty":10,"price":165}, {"qty":20,"price":140} ],
+    "desc": "UV-друк на акрилі 3 мм з порізкою. А3 — 297×420 мм. Інтер'єрні вказівники, декоративні панно, сувенірні дощечки з підсвічуванням по торцю." },
+  { "id": "wf-acril-3mm-a2", "name": "Друк акрилу 3мм А2 з порізкою (420×594)", "category": "wide-format", "subcategory": "acrylic-print", "icon": "🔷",
+    "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "235,00",
+    "defaultW": 420, "defaultH": 594, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "acril", "thickness": "3mm", "format": "A2", "cuttingIncluded": true,
+    "tiers": [ {"qty":1,"price":380}, {"qty":5,"price":315}, {"qty":10,"price":275}, {"qty":20,"price":235} ],
+    "desc": "UV-друк на акрилі 3 мм з порізкою. А2 — 420×594 мм. Архітектурні макети, лобі-борди, інсталяційні панелі. Преміум-якість зі сторони." },
+  { "id": "wf-citylight-uv", "name": "Сітілайт UV 1.2×1.8 м (Blueback 270 г/м²)", "category": "wide-format", "subcategory": "posters-uv", "icon": "🌆",
+    "kind": "simple", "minQty": 1, "maxQty": 50, "priceFrom": "340,00",
+    "defaultW": 1200, "defaultH": 1800, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0",
+    "material": "citylight", "thickness": "blueback", "format": "1.2×1.8м",
+    "tiers": [ {"qty":1,"price":480}, {"qty":3,"price":420}, {"qty":6,"price":380}, {"qty":11,"price":340} ],
+    "desc": "Афіша для сітілайт-конструкцій (ліхтарі з лайтбоксом) 1.2×1.8 м. Папір Blueback 270 г/м² — непросвічуючий, насичені кольори з обох сторін. UV-стійкість 6 міс. на вулиці." }
 
 ];
 
@@ -5635,7 +5975,13 @@
         { key: 'fan-souvenirs',   label: 'Сувеніри',         icon: '🎁' },
         { key: 'fan-accessories', label: 'Аксесуари',        icon: '🎒' }
       ] },
-      { key: 'packages', label: 'Готові пакунки', short: 'Пакунки', icon: '📦', desc: 'Комплексні набори зі знижкою ~10%. Допечатна підготовка всіх макетів уже включена у ціну.', subs: [] }
+      { key: 'packages', label: 'Готові пакунки', short: 'Пакунки', icon: '📦', desc: 'Комплексні набори зі знижкою ~10%. Допечатна підготовка всіх макетів уже включена у ціну.', subs: [] },
+      { key: 'wide-format', label: 'Широкоформатний друк', short: 'Широкоформатка', icon: '📐', desc: 'UV-друк на ПВХ 3мм/5мм (А2/А1/А0), акрилі 3мм (А5/А4/А3/А2 з порізкою) та сітілайт-афіші 1.2×1.8 м. Жорсткі носії для вулиці та інтер\'єру.', subs: [
+        { key: 'pvh-print',      label: 'Друк ПВХ 3мм',           icon: '🟦' },
+        { key: 'pvh-signs',      label: 'Таблички ПВХ 5мм',       icon: '🟫' },
+        { key: 'acrylic-print',  label: 'Друк акрилу з порізкою', icon: '🔷' },
+        { key: 'posters-uv',     label: 'Афіші та сітілайт UV',    icon: '🌆' }
+      ] }
     ];
     const CATEGORY_KEYS = CATEGORY_META.map(c => c.key);
     const PRODUCT_NUMBERS = {};
@@ -5682,6 +6028,24 @@
               color: c.color
             });
           });
+          // WIDE-FORMAT v1.0: захист від втрати категорії «Широкоформатний друк»
+          // Якщо адмінка ще не оновлена (старий catalog-override.js без wide-format) —
+          // категорія додається назад у кінець списку, щоб калькулятор працював.
+          if (!CATEGORY_META.some(function (c) { return c.key === 'wide-format'; })) {
+            CATEGORY_META.push({
+              key: 'wide-format',
+              label: 'Широкоформатний друк',
+              short: 'Широкоформатка',
+              icon: '📐',
+              desc: 'UV-друк на ПВХ 3мм/5мм (А2/А1/А0), акрилі 3мм (А5/А4/А3/А2 з порізкою) та сітілайт-афіші 1.2×1.8 м. Жорсткі носії для вулиці та інтер\'єру.',
+              subs: [
+                { key: 'pvh-print',      label: 'Друк ПВХ 3мм',           icon: '🟦' },
+                { key: 'pvh-signs',      label: 'Таблички ПВХ 5мм',       icon: '🟫' },
+                { key: 'acrylic-print',  label: 'Друк акрилу з порізкою', icon: '🔷' },
+                { key: 'posters-uv',     label: 'Афіші та сітілайт UV',    icon: '🌆' }
+              ]
+            });
+          }
           CATEGORY_KEYS.length = 0;
           CATEGORY_META.forEach(function (c) { CATEGORY_KEYS.push(c.key); });
         }
@@ -5690,6 +6054,25 @@
             if (!p || !p.id || !p.name) return;
             const i = productsCatalog.findIndex(function (x) { return x.id === p.id; });
             if (i >= 0) productsCatalog[i] = p; else productsCatalog.push(p);
+          });
+          // WIDE-FORMAT v1.0: захист від втрати 10 продуктів широкоформатного друку
+          // Якщо override не містить жодного wf-* продукту (старий файл) — додаємо їх у кінець.
+          const WF_FALLBACK = [
+            { "id": "wf-pvh-3mm-a2", "name": "Друк ПВХ 3мм А2 (420×594)", "category": "wide-format", "subcategory": "pvh-print", "icon": "🟦", "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "110,00", "defaultW": 420, "defaultH": 594, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "pvh", "thickness": "3mm", "format": "A2", "tiers": [ {"qty":1,"price":180}, {"qty":5,"price":150}, {"qty":10,"price":130}, {"qty":20,"price":110} ], "desc": "UV-друк на ПВХ-пластині 3 мм (формований лист, білий). А2 — 420×594 мм. Підходить для інтер'єрних табличок, POS-воблерів, виставкових стендів. Термін служби 5+ років у приміщенні, 2–3 роки надворі." },
+            { "id": "wf-pvh-3mm-a1", "name": "Друк ПВХ 3мм А1 (594×841)", "category": "wide-format", "subcategory": "pvh-print", "icon": "🟦", "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "210,00", "defaultW": 594, "defaultH": 841, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "pvh", "thickness": "3mm", "format": "A1", "tiers": [ {"qty":1,"price":350}, {"qty":5,"price":290}, {"qty":10,"price":250}, {"qty":20,"price":210} ], "desc": "UV-друк на ПВХ 3 мм, А1 — 594×841 мм. Стабільний формат для навігаційних стендів, меню-бордів, інфографіки. Можна просвердлити отвори під саморізи чи кріплення." },
+            { "id": "wf-pvh-3mm-a0", "name": "Друк ПВХ 3мм А0 (841×1189)", "category": "wide-format", "subcategory": "pvh-print", "icon": "🟦", "kind": "simple", "minQty": 1, "maxQty": 50, "priceFrom": "390,00", "defaultW": 841, "defaultH": 1189, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "pvh", "thickness": "3mm", "format": "A0", "tiers": [ {"qty":1,"price":650}, {"qty":5,"price":540}, {"qty":10,"price":470}, {"qty":20,"price":390} ], "desc": "UV-друк на ПВХ 3 мм, А0 — 841×1189 мм. Великий стендовий формат для виставок, конференц-зон, фойє. Легкий (1.8 кг/м²), кріпиться на двосторонній скотч чи присоски." },
+            { "id": "wf-pvh-5mm-a2", "name": "Табличка ПВХ 5мм А2 (420×594)", "category": "wide-format", "subcategory": "pvh-signs", "icon": "🟫", "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "145,00", "defaultW": 420, "defaultH": 594, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "pvh", "thickness": "5mm", "format": "A2", "tiers": [ {"qty":1,"price":240}, {"qty":5,"price":200}, {"qty":10,"price":170}, {"qty":20,"price":145} ], "desc": "ПВХ 5 мм — жорсткіший лист для табличок, що підвішуються або кріпляться на відстані від стіни. А2 — 420×594 мм. Стійкий до ударів, не гнеться під власною вагою." },
+            { "id": "wf-pvh-5mm-a1", "name": "Табличка ПВХ 5мм А1 (594×841)", "category": "wide-format", "subcategory": "pvh-signs", "icon": "🟫", "kind": "simple", "minQty": 1, "maxQty": 50, "priceFrom": "275,00", "defaultW": 594, "defaultH": 841, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "pvh", "thickness": "5mm", "format": "A1", "tiers": [ {"qty":1,"price":460}, {"qty":5,"price":380}, {"qty":10,"price":325}, {"qty":20,"price":275} ], "desc": "ПВХ 5 мм, А1 — 594×841 мм. Жорсткий signage-формат для вуличних табличок (з ламінацією), інтер'єрних покажчиків та стендових панелей." },
+            { "id": "wf-acril-3mm-a5", "name": "Друк акрилу 3мм А5 з порізкою (148×210)", "category": "wide-format", "subcategory": "acrylic-print", "icon": "🔷", "kind": "simple", "minQty": 1, "maxQty": 200, "priceFrom": "55,00", "defaultW": 148, "defaultH": 210, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "acril", "thickness": "3mm", "format": "A5", "cuttingIncluded": true, "tiers": [ {"qty":1,"price":90}, {"qty":5,"price":75}, {"qty":10,"price":65}, {"qty":20,"price":55} ], "desc": "UV-друк на прозорому акрилі 3 мм з лазерною порізкою. А5 — 148×210 мм. Преміум-таблички, ключники, інсталяції, номерки. Края ідеально рівні, без задирів." },
+            { "id": "wf-acril-3mm-a4", "name": "Друк акрилу 3мм А4 з порізкою (210×297)", "category": "wide-format", "subcategory": "acrylic-print", "icon": "🔷", "kind": "simple", "minQty": 1, "maxQty": 200, "priceFrom": "90,00", "defaultW": 210, "defaultH": 297, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "acril", "thickness": "3mm", "format": "A4", "cuttingIncluded": true, "tiers": [ {"qty":1,"price":145}, {"qty":5,"price":120}, {"qty":10,"price":105}, {"qty":20,"price":90} ], "desc": "UV-друк на акрилі 3 мм з порізкою. А4 — 210×297 мм. Кабінні таблички, виставкові нумераційні панелі, пам'ятні дощечки. Можна з матовою/shiny-фурнітурою." },
+            { "id": "wf-acril-3mm-a3", "name": "Друк акрилу 3мм А3 з порізкою (297×420)", "category": "wide-format", "subcategory": "acrylic-print", "icon": "🔷", "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "140,00", "defaultW": 297, "defaultH": 420, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "acril", "thickness": "3mm", "format": "A3", "cuttingIncluded": true, "tiers": [ {"qty":1,"price":230}, {"qty":5,"price":190}, {"qty":10,"price":165}, {"qty":20,"price":140} ], "desc": "UV-друк на акрилі 3 мм з порізкою. А3 — 297×420 мм. Інтер'єрні вказівники, декоративні панно, сувенірні дощечки з підсвічуванням по торцю." },
+            { "id": "wf-acril-3mm-a2", "name": "Друк акрилу 3мм А2 з порізкою (420×594)", "category": "wide-format", "subcategory": "acrylic-print", "icon": "🔷", "kind": "simple", "minQty": 1, "maxQty": 100, "priceFrom": "235,00", "defaultW": 420, "defaultH": 594, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "acril", "thickness": "3mm", "format": "A2", "cuttingIncluded": true, "tiers": [ {"qty":1,"price":380}, {"qty":5,"price":315}, {"qty":10,"price":275}, {"qty":20,"price":235} ], "desc": "UV-друк на акрилі 3 мм з порізкою. А2 — 420×594 мм. Архітектурні макети, лобі-борди, інсталяційні панелі. Преміум-якість зі сторони." },
+            { "id": "wf-citylight-uv", "name": "Сітілайт UV 1.2×1.8 м (Blueback 270 г/м²)", "category": "wide-format", "subcategory": "posters-uv", "icon": "🌆", "kind": "simple", "minQty": 1, "maxQty": 50, "priceFrom": "340,00", "defaultW": 1200, "defaultH": 1800, "defaultPaper": "selfadhesive_vinyl", "allowedPapers": [], "defaultColor": "4+0", "material": "citylight", "thickness": "blueback", "format": "1.2×1.8м", "tiers": [ {"qty":1,"price":480}, {"qty":3,"price":420}, {"qty":6,"price":380}, {"qty":11,"price":340} ], "desc": "Афіша для сітілайт-конструкцій (ліхтарі з лайтбоксом) 1.2×1.8 м. Папір Blueback 270 г/м² — непросвічуючий, насичені кольори з обох сторін. UV-стійкість 6 міс. на вулиці." }
+          ];
+          WF_FALLBACK.forEach(function (fp) {
+            if (!productsCatalog.some(function (x) { return x.id === fp.id; })) {
+              productsCatalog.push(fp);
+            }
           });
           for (const k in PRODUCT_NUMBERS) delete PRODUCT_NUMBERS[k];
           productsCatalog.forEach(function (p, i) { PRODUCT_NUMBERS[p.id] = i + 1; });
@@ -6944,6 +7327,7 @@
       if (viewId === 'calc') document.getElementById('viewCalc').classList.add('active-view');
       if (viewId === 'database') document.getElementById('viewDatabase').classList.add('active-view');
       if (viewId === 'a3price') document.getElementById('viewA3Price').classList.add('active-view');
+      if (viewId === 'wideformat') document.getElementById('viewWideFormat').classList.add('active-view');
       // v22: при прямому переході в 'calc' з футера/кнопки — скидаємо режим «Калькулятор боксу»
       // (не стосується packToCalc/boxToCalc — вони викликають enterBoxCalcMode вже ПІСЛЯ switchMainView)
       if (viewId === 'calc' && typeof _calcMode !== 'undefined' && _calcMode === 'box' && !window._keepBoxCalcMode) {
@@ -7442,6 +7826,404 @@
         ? calculatePriceFor(cfg.width, cfg.height, cfg.quantity, cfg.color, cfg.paperKey, cfg.laminationKey, cfg.finishing, currentCalcOpts())
         : calcAnyProduct(cfg.product, cfg.quantity, cfg.pkgItems);
     }
+
+    // ==================================================================
+    // WIDE-FORMAT CALCULATOR ENGINE (viewWideFormat) — v1.0
+    // Standalone calculator for wide-format printing products.
+    // Reads productsCatalog filtered by category='wide-format'.
+    // Has its own state (wfState) — does NOT touch global cfg.
+    // ==================================================================
+    const wfState = {
+      material: 'pvh',     // 'pvh' | 'acril' | 'citylight'  (matches product.material)
+      thickness: '3mm',   // '3mm' | '5mm' | 'blueback'
+      format: 'A2',       // 'A5' | 'A4' | 'A3' | 'A2' | 'A1' | 'A0' | '1.2×1.8м'
+      quantity: 1,
+      options: { lamination: false, holes: false, mountingTape: false, roundedCorners: false },
+      currentProductId: null
+    };
+
+    // Material tabs shown in the calculator (defined explicitly for stable UX ordering)
+    const WF_MATERIAL_GROUPS = [
+      { material: 'pvh',       thickness: '3mm',     label: 'ПВХ 3мм',              icon: '🟦', formats: ['A2','A1','A0'] },
+      { material: 'pvh',       thickness: '5mm',     label: 'ПВХ 5мм (таблички)',   icon: '🟫', formats: ['A2','A1'] },
+      { material: 'acril',     thickness: '3mm',     label: 'Акрил 3мм + порізка',  icon: '🔷', formats: ['A5','A4','A3','A2'] },
+      { material: 'citylight', thickness: 'blueback',label: 'Сітілайт UV',           icon: '🌆', formats: ['1.2×1.8м'] }
+    ];
+
+    // Find product in catalog by material+thickness+format
+    function wfFindProduct(material, thickness, format) {
+      return productsCatalog.find(p => p.category === 'wide-format'
+        && p.material === material && p.thickness === thickness && p.format === format);
+    }
+
+    // Find the WF_MATERIAL_GROUPS entry that matches a given product
+    function wfFindGroupForProduct(p) {
+      if (!p) return null;
+      return WF_MATERIAL_GROUPS.find(g => g.material === p.material && g.thickness === p.thickness) || null;
+    }
+
+    // Format price like "180,00" (Ukrainian style, no currency symbol)
+    function wfFmt(n) { return String(Math.round(n * 100) / 100).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+    // Format price with currency
+    function wfFmtUah(n) { return wfFmt(n) + ' ₴'; }
+
+    // Get current active product (based on wfState)
+    function wfCurrentProduct() {
+      return wfFindProduct(wfState.material, wfState.thickness, wfState.format);
+    }
+
+    // Get price tier for given quantity (returns the matching tier object)
+    function wfTierForQty(p, qty) {
+      if (!p || !p.tiers || !p.tiers.length) return null;
+      const sorted = p.tiers.slice().sort((a, b) => a.qty - b.qty);
+      let rate = sorted[0];
+      for (const t of sorted) if (qty >= t.qty) rate = t;
+      return rate;
+    }
+
+    // Next tier (for "add X more to save Y" hint)
+    function wfNextTier(p, qty) {
+      if (!p || !p.tiers) return null;
+      const sorted = p.tiers.slice().sort((a, b) => a.qty - b.qty);
+      return sorted.find(t => t.qty > qty) || null;
+    }
+
+    // Compute extra cost for selected options (per piece)
+    function wfOptionsCost(p) {
+      if (!p) return 0;
+      let extra = 0;
+      // Acrylic already includes cutting — no extra toggle for it
+      if (wfState.options.lamination) extra += 35;     // protective lamination per piece
+      if (wfState.options.holes) extra += 8;            // drill holes for mounting
+      if (wfState.options.mountingTape) extra += 6;     // double-sided mounting tape
+      if (wfState.options.roundedCorners) extra += 12;  // rounded corners (plotter)
+      return extra;
+    }
+
+    // Main calculate function for wide-format
+    function wfCalculate() {
+      const p = wfCurrentProduct();
+      if (!p) return null;
+      const qty = Math.max(1, Math.floor(wfState.quantity) || 1);
+      const tier = wfTierForQty(p, qty);
+      if (!tier) return null;
+      const baseRate = tier.price;             // per piece
+      const optCost = wfOptionsCost(p);        // per piece (options)
+      const unitPrice = baseRate + optCost;
+      const total = unitPrice * qty;
+      const nextTier = wfNextTier(p, qty);
+      return {
+        product: p,
+        qty,
+        tier,
+        baseRate,
+        optCost,
+        unitPrice,
+        total,
+        nextTier,
+        optionsActive: Object.keys(wfState.options).filter(k => wfState.options[k])
+      };
+    }
+
+    // ====== RENDER FUNCTIONS ======
+    function wfRenderMaterialBtns() {
+      const cont = document.getElementById('wfMaterialBtns');
+      if (!cont) return;
+      cont.innerHTML = '';
+      WF_MATERIAL_GROUPS.forEach((g, i) => {
+        const isActive = (g.material === wfState.material && g.thickness === wfState.thickness);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'opt-chip' + (isActive ? ' active' : '');
+        btn.innerHTML = g.icon + ' ' + g.label;
+        btn.onclick = () => {
+          wfState.material = g.material;
+          wfState.thickness = g.thickness;
+          // pick first available format in this group
+          if (!g.formats.includes(wfState.format)) wfState.format = g.formats[0];
+          wfRenderAll();
+        };
+        cont.appendChild(btn);
+      });
+      const g = WF_MATERIAL_GROUPS.find(gx => gx.material === wfState.material && gx.thickness === wfState.thickness);
+      document.getElementById('wfMaterialLabel').textContent = g ? g.label : '—';
+    }
+
+    function wfRenderSizeBtns() {
+      const cont = document.getElementById('wfSizeBtns');
+      if (!cont) return;
+      cont.innerHTML = '';
+      const g = WF_MATERIAL_GROUPS.find(gx => gx.material === wfState.material && gx.thickness === wfState.thickness);
+      const formats = g ? g.formats : [];
+      formats.forEach(f => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'opt-chip' + (wfState.format === f ? ' active' : '');
+        btn.textContent = f;
+        btn.onclick = () => { wfState.format = f; wfRenderAll(); };
+        cont.appendChild(btn);
+      });
+      const p = wfCurrentProduct();
+      if (p) document.getElementById('wfSizeLabel').textContent = p.format + ' · ' + p.defaultW + '×' + p.defaultH;
+      else document.getElementById('wfSizeLabel').textContent = '—';
+    }
+
+    function wfRenderTierPills() {
+      const cont = document.getElementById('wfTierPills');
+      if (!cont) return;
+      cont.innerHTML = '';
+      const p = wfCurrentProduct();
+      if (!p || !p.tiers) return;
+      const sorted = p.tiers.slice().sort((a, b) => a.qty - b.qty);
+      const qty = wfState.quantity;
+      sorted.forEach(t => {
+        const isActive = (wfTierForQty(p, qty) === t);
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = 'wf-tier-pill' + (isActive ? ' active' : '');
+        pill.textContent = 'від ' + t.qty + ' шт — ' + wfFmtUah(t.price);
+        pill.onclick = () => { wfState.quantity = t.qty; wfRenderAll(); };
+        cont.appendChild(pill);
+      });
+      const cur = wfTierForQty(p, qty);
+      document.getElementById('wfTierLabel').textContent = cur ? ('поточний щабель: ' + wfFmtUah(cur.price) + '/шт') : '—';
+    }
+
+    function wfRenderOptions() {
+      const body = document.getElementById('wfOptionsBody');
+      if (!body) return;
+      body.innerHTML = '';
+      const p = wfCurrentProduct();
+      if (!p) return;
+      // Options available depend on material
+      const opts = [];
+      if (p.material === 'pvh') {
+        opts.push({ key: 'lamination', label: '🎨 Ламінація (захист від UV/подряпин)', price: 35 });
+        opts.push({ key: 'holes', label: '🔌 Свердління отворів під кріплення', price: 8 });
+        opts.push({ key: 'mountingTape', label: '🛠️ Двосторонній монтажний скотч', price: 6 });
+      } else if (p.material === 'acril') {
+        opts.push({ key: 'mountingTape', label: '🛠️ Двосторонній монтажний скотч', price: 6 });
+        opts.push({ key: 'roundedCorners', label: '⭕ Скруглення кутів (R3 мм)', price: 12 });
+      } else if (p.material === 'citylight') {
+        // No options for citylight posters
+        const note = document.createElement('div');
+        note.style.cssText = 'font-size:11.5px;color:var(--text-dim);padding:6px 8px;background:#1a1f2e;border:1px solid #2a3142;border-radius:4px;';
+        note.textContent = 'ℹ️ Сітілайт-афіша постачається як є — без додаткових опцій. Готова до монтажу у лайтбокс 1.2×1.8 м.';
+        body.appendChild(note);
+        return;
+      }
+      opts.forEach(o => {
+        const lbl = document.createElement('label');
+        lbl.innerHTML = '<input type="checkbox" ' + (wfState.options[o.key] ? 'checked' : '') + '>'
+          + '<span>' + o.label + '</span>'
+          + '<span class="wf-opt-price">+' + wfFmtUah(o.price) + '/шт</span>';
+        lbl.querySelector('input').onchange = (e) => {
+          wfState.options[o.key] = e.target.checked;
+          wfRenderAll();
+        };
+        body.appendChild(lbl);
+      });
+      // Hide options row entirely if no opts (citylight case handled by early return)
+      const row = document.getElementById('wfOptionsRow');
+      if (row) row.style.display = opts.length ? '' : 'none';
+    }
+
+    function wfRenderInfo() {
+      const p = wfCurrentProduct();
+      const el = document.getElementById('wfInfoText');
+      if (!p || !el) return;
+      el.textContent = p.desc;
+    }
+
+    function wfRenderActiveBanner() {
+      const p = wfCurrentProduct();
+      if (!p) return;
+      document.getElementById('wfActiveTitle').textContent = p.name;
+      const matLabel = (WF_MATERIAL_GROUPS.find(g => g.material === p.material && g.thickness === p.thickness) || {}).label || p.material;
+      document.getElementById('wfActiveMeta').textContent = matLabel + ' · ' + p.defaultW + '×' + p.defaultH + ' мм · UV-друк';
+      document.getElementById('wfActiveFrom').textContent = 'від ' + p.priceFrom + ' ₴';
+    }
+
+    function wfRenderResult() {
+      const r = wfCalculate();
+      if (!r) return;
+      const p = r.product;
+      // Code
+      const num = PRODUCT_NUMBERS[p.id] || 0;
+      const code = num ? 'AM-' + String(num).padStart(3, '0') : 'AM-WF';
+      document.getElementById('wfResultCode').textContent = code;
+
+      // Total + unit
+      document.getElementById('wfResultTotal').textContent = wfFmtUah(r.total);
+      document.getElementById('wfResultUnit').textContent = wfFmtUah(r.unitPrice) + ' / шт';
+
+      // Breakdown
+      const bd = document.getElementById('wfResultBreakdown');
+      bd.innerHTML = '';
+      const rows = [];
+      rows.push(['<span>Виріб</span>', '<span>' + p.name + '</span>']);
+      rows.push(['<span>Формат</span>', '<span class="val">' + p.defaultW + '×' + p.defaultH + ' мм</span>']);
+      rows.push(['<span>Тираж</span>', '<span class="val">' + r.qty + ' шт</span>']);
+      rows.push(['<span>Щабель ціни</span>', '<span class="val">від ' + r.tier.qty + ' шт — ' + wfFmtUah(r.tier.price) + '/шт</span>']);
+      if (r.optCost > 0) {
+        rows.push(['<span>Опції (' + r.optionsActive.length + ')</span>', '<span class="val">+' + wfFmtUah(r.optCost) + '/шт</span>']);
+      }
+      rows.push(['<span>Ціна за 1 шт</span>', '<span class="val">' + wfFmtUah(r.unitPrice) + '</span>']);
+      rows.push(['<span>РАЗОМ</span>', '<span class="val">' + wfFmtUah(r.total) + '</span>']);
+      bd.innerHTML = rows.map((row, i) => '<div class="row' + (i === rows.length - 1 ? ' total' : '') + '">' + row[0] + '<span class="val-sep">' + row[1] + '</span></div>').join('');
+
+      // Tier hint
+      const hint = document.getElementById('wfResultTierHint');
+      if (r.nextTier) {
+        const needed = r.nextTier.qty - r.qty;
+        const save = (r.unitPrice - r.nextTier.price) * r.qty;
+        if (needed > 0 && save > 0) {
+          hint.innerHTML = '💡 Додайте <strong>' + needed + ' шт</strong> (всього ' + r.nextTier.qty + ') — ціна впаде до <strong>' + wfFmtUah(r.nextTier.price) + '/шт</strong>. Економія: <strong>' + wfFmtUah(save) + '</strong>.';
+        } else if (needed > 0) {
+          hint.innerHTML = '💡 Додайте <strong>' + needed + ' шт</strong> (всього ' + r.nextTier.qty + ') — ціна впаде до <strong>' + wfFmtUah(r.nextTier.price) + '/шт</strong>.';
+        } else {
+          hint.innerHTML = '';
+        }
+      } else {
+        hint.innerHTML = '✓ Це найнижчий щабель ціни — максимальна знижка за тираж.';
+      }
+    }
+
+    function wfRenderQuickRef() {
+      const cont = document.getElementById('wfQuickRefTable');
+      if (!cont) return;
+      cont.innerHTML = '';
+      const wfProducts = productsCatalog.filter(p => p.category === 'wide-format');
+      wfProducts.forEach(p => {
+        const isActive = (wfCurrentProduct() && wfCurrentProduct().id === p.id);
+        const row = document.createElement('div');
+        row.className = 'wf-quick-ref-row' + (isActive ? ' active' : '');
+        row.innerHTML = '<span class="icon">' + p.icon + '</span>'
+          + '<span class="name">' + p.name + '<small>' + (p.material === 'pvh' ? 'ПВХ ' + p.thickness : p.material === 'acril' ? 'Акрил ' + p.thickness + ' + порізка' : p.material === 'citylight' ? 'Сітілайт UV' : p.material) + '</small></span>'
+          + '<span class="price">від ' + p.priceFrom + ' ₴</span>';
+        row.onclick = () => {
+          const g = wfFindGroupForProduct(p);
+          if (g) {
+            wfState.material = g.material;
+            wfState.thickness = g.thickness;
+            wfState.format = p.format;
+            wfRenderAll();
+          }
+        };
+        cont.appendChild(row);
+      });
+    }
+
+    function wfRenderAll() {
+      wfRenderMaterialBtns();
+      wfRenderSizeBtns();
+      wfRenderTierPills();
+      wfRenderOptions();
+      wfRenderInfo();
+      wfRenderActiveBanner();
+      wfRenderResult();
+      wfRenderQuickRef();
+      // Also update qty input to reflect state
+      const qi = document.getElementById('wfQtyInput');
+      if (qi) qi.value = wfState.quantity;
+    }
+
+    // ====== EVENT HANDLERS ======
+    function wfStepQty(delta) {
+      let q = (parseInt(wfState.quantity, 10) || 1) + delta;
+      const p = wfCurrentProduct();
+      const maxQ = p ? (parseInt(p.maxQty, 10) || 200) : 200;
+      q = Math.max(1, Math.min(maxQ, q));
+      wfState.quantity = q;
+      wfRenderAll();
+    }
+    function wfOnQtyInput() {
+      const qi = document.getElementById('wfQtyInput');
+      let q = parseInt(qi.value, 10);
+      if (!isFinite(q) || q < 1) q = 1;
+      const p = wfCurrentProduct();
+      const maxQ = p ? (parseInt(p.maxQty, 10) || 200) : 200;
+      q = Math.min(maxQ, q);
+      wfState.quantity = q;
+      wfRenderAll();
+    }
+
+    // Open current wide-format product in the main calculator
+    function wfOpenInCalc() {
+      const p = wfCurrentProduct();
+      if (!p) return;
+      selectProduct(p);
+      switchMainView('calc', null);
+    }
+
+    // Add current calculation to cart
+    function wfAddToCart() {
+      const r = wfCalculate();
+      if (!r) return;
+      const p = r.product;
+      const num = PRODUCT_NUMBERS[p.id] || 0;
+      const code = num ? 'AM-' + String(num).padStart(3, '0') : 'AM-WF';
+      const item = {
+        id: p.id + '_' + Date.now(),
+        productId: p.id,
+        code: code,
+        name: p.name + ' · ' + p.format + ' ' + p.defaultW + '×' + p.defaultH + ' мм' + (r.optCost > 0 ? ' + опції' : ''),
+        qty: r.qty,
+        unit: r.unitPrice,
+        total: r.total
+      };
+      cart.push(item);
+      try { localStorage.setItem(CART_LS_KEY, JSON.stringify(cart)); } catch (e) {}
+      try { saveCartLS(); } catch (e) {}
+      showToast('🛒 Додано в кошик: ' + item.name + ' ×' + item.qty + ' = ' + wfFmtUah(item.total));
+    }
+
+    // Add to KP (commercial proposal)
+    function wfAddToKp() {
+      const r = wfCalculate();
+      if (!r) return;
+      const p = r.product;
+      const num = PRODUCT_NUMBERS[p.id] || 0;
+      const code = num ? 'AM-' + String(num).padStart(3, '0') : 'AM-WF';
+      if (typeof kpState !== 'undefined' && Array.isArray(kpState)) {
+        kpState.push({
+          id: p.id + '_' + Date.now(),
+          productId: p.id,
+          code: code,
+          name: p.name + ' · ' + p.format + ' ' + p.defaultW + '×' + p.defaultH + ' мм' + (r.optCost > 0 ? ' + опції' : ''),
+          qty: r.qty,
+          unit: r.unitPrice,
+          total: r.total
+        });
+        try { saveKpLS(); } catch (e) {}
+      }
+      showToast('📊 Додано в КП: ' + p.name + ' ×' + r.qty);
+    }
+
+    // Order this calculation
+    function wfOrder() {
+      const r = wfCalculate();
+      if (!r) return;
+      // Sync global cfg to this product so the order modal uses it
+      try { selectProduct(r.product); cfg.quantity = r.qty; } catch (e) {}
+      openModal();
+    }
+
+    // Initialize wide-format calculator (called on DOMContentLoaded)
+    function wfInit() {
+      // Pick first available product to set initial state
+      const firstP = productsCatalog.find(p => p.category === 'wide-format');
+      if (firstP) {
+        wfState.material = firstP.material;
+        wfState.thickness = firstP.thickness;
+        wfState.format = firstP.format;
+      }
+      wfRenderAll();
+    }
+
+    // ==================================================================
+    // END WIDE-FORMAT CALCULATOR ENGINE
+    // ==================================================================
     function finNamesNow() {
       const keys = ['scoring','folding','corners','hole','staples','spring','plotter','perforation'];
       return keys.filter(k => cfg.finishing && cfg.finishing[k]).map(k => prices.finishing[k] ? prices.finishing[k].name : k);
@@ -7504,7 +8286,8 @@
       dtf: 'DTF друк (Direct-to-Film) — повнокольорові еластичні принти на текстиль та інші поверхні. Стійкі до прання, не тріскаються, не втрачають кольору. Будь-який розмір, будь-який колір, навіть фотографічна якість.',
       textile: 'Текстиль — вироби під нанесення: футболки, худі, поло, робочий одяг, рушники, постільна білизна, тканинні сумки. Підходить під будь-який метод друку: DTF, шовкографія, вишивка.',
       'fan-shop': 'Fan shop — брендована сувенірна продукція для фанатів: значки, брелоки, стікерпаки, прапори, шарфи. Дрібниці, що формують ідентичність та прихильність до бренду, команди, гурту.',
-      packages: 'Готові пакунки — скомплектовані набори для бізнесу: усе потрібне одним замовленням зі знижкою ~10%. Склад пакунка можна редагувати, макетування всіх макетів і постдрук уже включені у ціну.'
+      packages: 'Готові пакунки — скомплектовані набори для бізнесу: усе потрібне одним замовленням зі знижкою ~10%. Склад пакунка можна редагувати, макетування всіх макетів і постдрук уже включені у ціну.',
+      'wide-format': 'Широкоформатний друк — UV-друк на жорстких носіях: ПВХ 3 мм (А2/А1/А0) та 5 мм (А2/А1), акрил 3 мм (А5/А4/А3/А2 з порізкою), а також сітілайт-афіші 1.2×1.8 м на Blueback 270 г/м². Окремий калькулятор широкоформатного друку — на вкладці «📐 Широкоформатка». Тиражні знижки вбудовані у щаблі: чим більше штук, тим нижча ціна за одиницю.'
     };
     const COLOR_STORY = {
       '1+0': 'односторонній чорно-білий друк — найекономніший варіант для бланків, чек-листів та внутрішніх документів',
@@ -8407,7 +9190,8 @@
       dtf: ['dtf', 'direct-to-film', 'термопринт', 'трансфер', 'принт на одяг', 'принт на текстиль'],
       textile: ['текстиль', 'поло', 'робочий одяг', 'робоча одяг', 'рушник', 'постільна', 'постельное', 'тканинна сумк', 'тканевая сумк'],
       'fan-shop': ['fan shop', 'фан-шоп', 'фаншоп', 'фанат', 'сувенір', 'сувенир', 'прапор', 'флаг', 'шарф', 'значок', 'пін', 'стікерпак фанат'],
-      packages: ['пакунок', 'пакет', 'пакети', 'комплект', 'набір', 'набор', 'пакунки']
+      packages: ['пакунок', 'пакет', 'пакети', 'комплект', 'набір', 'набор', 'пакунки'],
+      'wide-format': ['широкоформат', 'широкоформатка', 'широкоформатний', 'широкоформатного', 'широкого', 'пвх', 'пvh', 'pvh', 'акрил', 'acril', 'акрила', 'акрилу', 'сітілайт', 'ситилайт', 'citylight', 'афіша uv', 'афіші uv', 'blueback', 'uv-друк', 'uv друк', 'табличка пвх', 'таблички пвх', 'табличка 3мм', 'табличка 5мм', 'табличка 3 мм', 'табличка 5 мм', 'пвх 3мм', 'пвх 5мм', 'пвх 3 мм', 'пвх 5 мм', 'порізка акрилу', 'друк акрил', 'друк пвх', 'порізка']
     };
 
     function aiFindProductByNumber(text) {
@@ -8446,6 +9230,7 @@
       if (rest > 0) lines.push('…та ще ' + rest + '. Усі номери — у каталозі або в базі «База всіх виробів».');
       if (catKey === 'merch') lines.push('Логіка мерчу: тираж × ціна/шт + макетування (+) — разово на замовлення.');
       if (catKey === 'packages') lines.push('Пакунки рахуємо комплектами: 1 комплект = повний набір виробів зі знижкою −10%; макетування всіх макетів уже включено (+). Замовите більше комплектів — кожен виріб отримає тиражну знижку, тож комплект дешевшає.');
+      if (catKey === 'wide-format') lines.push('📐 Широкоформатний друк має окремий калькулятор — вкладка «📐 Широкоформатка» у футері. Ціна за щаблями: чим більше тираж, тим нижча ціна/шт. Макетування включено у ціну. Усі матеріали — ПВХ 3мм/5мм, акрил 3мм з порізкою, сітілайт UV — готові до вулиці та інтер\'єру.');
       lines.push('Напишіть номер виробу (напр. «' + productNo(list[0]) + '») — покажу карточку або одразу оберу в калькуляторі.');
       const hints = shown.slice(0, 2).map(p => ({ label: productNo(p) + ' — ' + p.name, q: productNo(p) }));
       return { text: lines.join('\n'), hints };
@@ -11298,6 +12083,7 @@
 
     window.addEventListener('DOMContentLoaded', init);
     window.addEventListener('DOMContentLoaded', packInit);
+    window.addEventListener('DOMContentLoaded', wfInit);
   </script>
 
   <!-- TASK 22: АДМІНКА — завантаження оверрайду ДО init (класичні скрипти блокують DOMContentLoaded) -->
