@@ -2471,6 +2471,19 @@
       box-shadow: 0 2px 10px rgba(255, 212, 0, .25);
     }
     .btn-photo-catalog:hover { filter: brightness(1.06); box-shadow: 0 4px 16px rgba(255, 212, 0, .4); transform: translateY(-1px); }
+    /* v22: контейнер з двома кнопками в фото-картці калькулятора */
+    .calc-photo-card .photo-label-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    /* v22: кнопка «Merch Box» — акцентна (темна з жовтою обводкою), щоб відрізнялась від «Каталогу» */
+    .btn-photo-merchbox {
+      background: linear-gradient(180deg, #1a2030, #141826);
+      color: #ffd400; border: 1px solid rgba(255, 222, 0, .55);
+      box-shadow: 0 2px 10px rgba(255, 222, 0, .12);
+    }
+    .btn-photo-merchbox:hover {
+      background: linear-gradient(180deg, #222a3d, #181d2e);
+      border-color: var(--accent-yellow); color: var(--accent-yellow-hover);
+      box-shadow: 0 4px 16px rgba(255, 222, 0, .3);
+    }
 
     /* ==== МОДАЛ «ПЕРЕГЛЯД ТОВАРІВ» — сітка в ряди по три ==== */
     .cat-overlay {
@@ -2814,6 +2827,12 @@
     .box-item-desc {
       font-size: 10.5px; color: var(--text-dim); margin-top: 2px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    /* v22 SMART: мітка типу товару — показуємо різноманітність боксу */
+    .box-item-type {
+      display: inline-block; background: rgba(255,222,0,.12); color: var(--accent-yellow);
+      padding: 1px 6px; border-radius: 4px; font-size: 9.5px; font-weight: 700;
+      font-family: var(--font-mono); letter-spacing: .02em;
     }
     .box-item-price { text-align: right; flex-shrink: 0; }
     .box-item-unit {
@@ -5560,7 +5579,10 @@
         const photo = document.createElement('div');
         photo.className = 'calc-photo-card';
         photo.innerHTML =
-          '<div class="photo-label"><span>Прев\u2019ю виробу</span><button type="button" class="btn-photo-catalog" onclick="openCatalogModal()" title="Переглянути всі товари вікном — сітка по 3 в ряду, пошук і категорії">📚 Каталог товарів</button></div>' +
+          '<div class="photo-label"><span>Прев\u2019ю виробу</span><div class="photo-label-actions">' +
+            '<button type="button" class="btn-photo-catalog btn-photo-merchbox" onclick="goToMerchBox()" title="Повернутися до конструктора Merch Box — підбір за типом, кількістю, категорією та бюджетом">🧰 Merch Box</button>' +
+            '<button type="button" class="btn-photo-catalog" onclick="openCatalogModal()" title="Переглянути всі товари вікном — сітка по 3 в ряду, пошук і категорії">📚 Каталог товарів</button>' +
+          '</div></div>' +
           '<div class="photo-grid">' +
             '<div class="mockup-window empty" id="mockupWindow" title="Мокап виробу"></div>' +
           '</div>';
@@ -10046,6 +10068,19 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // v22: повернутися в режим Merch Box (конструктор підбору) з будь-якої точки
+    function goToMerchBox() {
+      switchMainView('pack', null);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // прокрутити до конструктора, щоб одразу потрапити на підбір
+      setTimeout(() => {
+        const builder = document.getElementById('boxBuilder');
+        if (builder && builder.scrollIntoView) {
+          builder.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 250);
+    }
+
     // Перенесення зібраного пакунка у калькулятор (режим «Пакунок», редагування складу доступне)
     function packToCalc() {
       if (!packState.items.length) { showToast('Пакунок порожній — додайте позиції з каталогу'); return; }
@@ -10229,12 +10264,25 @@
         if (p.kind === 'merch' && p.unitPrice) unitPrice = p.unitPrice;
         return { p, unitPrice };
       }).filter(x => x.unitPrice > 0);
-      // 3. Сортуємо за зростанням ціни — щоб набрати максимум позицій у бюджет
-      withUnit.sort((a, b) => a.unitPrice - b.unitPrice);
-      // 4. Жадібний підбір: додаємо товари, поки сума не перевищить бюджет
+
+      // v22 SMART: дедуплікація за типом товару — беремо лише ПО 1 найменшому товару з кожної групи.
+      // Група визначається за першим словом назви («Візитка», «Флаєр», «Наклейка», «Брошура»...).
+      // Це гарантує РІЗНІ товари в боксі: не 4 візитки, а 1 візитка + 1 буклет + 1 наклейка + ...
+      const groups = {}; // { 'Візитка': { p, unitPrice }, 'Флаєр': {...} }
+      withUnit.forEach(item => {
+        const key = boxProductGroupKey(item.p);
+        if (!groups[key] || item.unitPrice < groups[key].unitPrice) {
+          groups[key] = item;
+        }
+      });
+      // масив унікальних товарів (по 1 з кожної групи), сортований за зростанням ціни
+      const unique = Object.values(groups).sort((a, b) => a.unitPrice - b.unitPrice);
+
+      // 3. Жадібний підбір: додаємо по 1 товару з кожної групи, поки сума не перевищить бюджет.
+      //    Спробуємо спочатку дрібні позиції, щоб набрати максимум різноманітності.
       let remaining = budget;
       const picked = [];
-      for (const item of withUnit) {
+      for (const item of unique) {
         if (item.unitPrice <= remaining && picked.length < 6) {
           picked.push({ p: item.p, unitPrice: item.unitPrice });
           remaining -= item.unitPrice;
@@ -10242,12 +10290,12 @@
         if (picked.length >= 5) break;
       }
       // якщо нічого не влізло — беремо хоча б найдешевший
-      if (!picked.length && withUnit.length) {
-        picked.push({ p: withUnit[0].p, unitPrice: withUnit[0].unitPrice });
+      if (!picked.length && unique.length) {
+        picked.push({ p: unique[0].p, unitPrice: unique[0].unitPrice });
       }
-      // 5. Записуємо в стан
+      // 4. Записуємо в стан
       boxState.items = picked.map(x => ({ id: x.p.id, qty: 1 }));
-      // 6. Рендеримо результат
+      // 5. Рендеримо результат
       boxRenderResult(picked);
       // ховаємо кнопку "Підібрати", показуємо "Редагувати"
       const buildBtn = document.getElementById('boxBuildBtn');
@@ -10259,7 +10307,51 @@
       if (result && result.scrollIntoView) {
         setTimeout(() => result.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
       }
-      showToast(boxState.typeEmoji + ' ' + picked.length + ' позицій у вашому Merch Box');
+      const groupsCount = Object.keys(groups).length;
+      showToast(boxState.typeEmoji + ' ' + picked.length + ' різних позицій (з ' + groupsCount + ' типів) у вашому Merch Box');
+    }
+
+    // v22 SMART: визначаємо «групу типу товару» за першим словом назви.
+    // Приклади: «Візитка стандарт» → «Візитка»; «Флаєр А6» → «Флаєр»; «Наклейка кругла» → «Наклейка».
+    // Так бокс міститиме РІЗНІ товари: 1 візитка + 1 буклет + 1 наклейка + 1 блокнот...
+    // Якщо назва однозначна (без пробілу) — група = вся назва.
+    function boxProductGroupKey(p) {
+      if (!p || !p.name) return 'Інше';
+      const name = p.name.trim();
+      // кейс 1: назва починається з категоріального слова + пробіл
+      const m = name.match(/^([^\s\d(]{2,})\s/);
+      if (m) {
+        const first = m[1].toLowerCase();
+        // нормалізуємо синоніми: «Візитка-книжечка» → «Візитка», «Стікерпак» → «Стікерпак»
+        if (first.startsWith('візитк')) return 'Візитка';
+        if (first.startsWith('флаєр') || first.startsWith('флаер')) return 'Флаєр';
+        if (first.startsWith('листівк')) return 'Листівка';
+        if (first.startsWith('наклейк')) return 'Наклейка';
+        if (first.startsWith('буклет') || first.startsWith('євробуклет')) return 'Буклет';
+        if (first.startsWith('брошур')) return 'Брошура';
+        if (first.startsWith('каталог')) return 'Каталог';
+        if (first.startsWith('плакат') || first.startsWith('афіш')) return 'Плакат';
+        if (first.startsWith('блокнот')) return 'Блокнот';
+        if (first.startsWith('сертифікат')) return 'Сертифікат';
+        if (first.startsWith('диплом') || first.startsWith('грамот')) return 'Диплом';
+        if (first.startsWith('запрошен')) return 'Запрошення';
+        if (first.startsWith('календар')) return 'Календар';
+        if (first.startsWith('футболк')) return 'Футболка';
+        if (first.startsWith('реглан') || first.startsWith('лонгслів')) return 'Реглан';
+        if (first.startsWith('худі')) return 'Худі';
+        if (first.startsWith('жилетк')) return 'Жилетка';
+        if (first.startsWith('рюкзак')) return 'Рюкзак';
+        if (first.startsWith('стікерпак')) return 'Стікерпак';
+        if (first.startsWith('папк')) return 'Папка';
+        if (first.startsWith('конверт')) return 'Конверт';
+        if (first.startsWith('меню')) return 'Меню';
+        if (first.startsWith('презентаці')) return 'Презентація';
+        if (first.startsWith('білет') || first.startsWith('квиток')) return 'Квиток';
+        if (first.startsWith('купон')) return 'Купон';
+        return m[1]; // перше слово як група
+      }
+      // кейс 2: однозначна назва без пробілу — група = вся назва (унікальна)
+      return name;
     }
 
     function boxRenderResult(picked) {
@@ -10287,12 +10379,16 @@
           itemsHost.innerHTML = picked.map((x, i) => {
             const num = PRODUCT_NUMBERS[x.p.id] || 0;
             const numStr = num ? '№' + String(num).padStart(3, '0') : '';
+            const groupKey = boxProductGroupKey(x.p); // показуємо тип товару для розуміння різноманітності
             return '<div class="box-item">' +
               '<div class="box-item-num">' + (i + 1) + '</div>' +
               '<div class="box-item-icon">' + (x.p.icon || '📦') + '</div>' +
               '<div class="box-item-info">' +
                 '<div class="box-item-name">' + (numStr ? '<span class="box-item-no">' + numStr + '</span> ' : '') + x.p.name + '</div>' +
-                '<div class="box-item-desc">' + (x.p.desc || productSubLine(x.p) || '') + '</div>' +
+                '<div class="box-item-desc">' +
+                  '<span class="box-item-type" title="Тип товару">' + groupKey + '</span>' +
+                  (x.p.desc ? ' · ' + x.p.desc : (productSubLine(x.p) ? ' · ' + productSubLine(x.p) : '')) +
+                '</div>' +
               '</div>' +
               '<div class="box-item-price">' +
                 '<div class="box-item-unit">' + formatUAH(x.unitPrice) + ' / шт</div>' +
