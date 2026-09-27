@@ -3254,6 +3254,36 @@
     .pack-tpl-meta { font-size: 9.5px; color: var(--text-dim); line-height: 1.45; }
     .pack-tpl-meta b { color: var(--accent-yellow); font-weight: 700; }
 
+    /* v23: «Готові набори» — повна ширина на верху сторінки */
+    .pack-tpl-top-panel { margin: 14px 0; }
+    .pack-tpl-grid-wide { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 900px) { .pack-tpl-grid-wide { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .pack-tpl-grid-wide { grid-template-columns: 1fr; } }
+    .pack-tpl-grid-wide .pack-tpl-card { padding: 14px 14px; }
+    .pack-tpl-grid-wide .pack-tpl-icon { font-size: 26px; }
+    .pack-tpl-grid-wide .pack-tpl-name { font-size: 13px; }
+    .pack-tpl-grid-wide .pack-tpl-meta { font-size: 11px; }
+
+    /* v23: нижній бейдж «Готові вироби · від 1 робочого дня» */
+    .pack-bottom-strip {
+      margin: 24px 0 8px;
+      padding: 16px;
+      text-align: center;
+      border-top: 1px dashed var(--border);
+      border-bottom: 1px dashed var(--border);
+    }
+    .pack-bottom-strip .pack-badge {
+      display: inline-block;
+      padding: 8px 18px;
+      background: rgba(255,222,0,.08);
+      border: 1px solid rgba(255,222,0,.35);
+      border-radius: 999px;
+      color: var(--accent-yellow);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
     /* Цінова панель пакунка */
     .pack-price-total {
       font-family: var(--font-display); font-size: 27px; font-weight: 800; color: var(--accent-yellow);
@@ -3760,12 +3790,6 @@
         <p class="pack-hero-sub">Підберіть ідеальний набір поліграфії та мерчу під вашу задачу: оберіть тип боксу, кількість людей, категорію та бюджет — система запропонує готовий комплект. Знижка за комплект <strong>−10%</strong>, допечатна підготовка всіх макетів уже включена (+).</p>
         <div class="pack-hero-badges">
           <span class="pack-badge hot">−10% за комплект</span>
-          <span class="pack-badge">Готові вироби · від 1 робочого дня</span>
-        </div>
-        <div class="pack-hero-actions">
-          <button class="btn-pack-primary" onclick="packFocusAdd()">📦 Зібрати пакунок</button>
-          <button class="btn-pack-ghost" onclick="packGoCalc()">⚡ Калькулятор</button>
-          <button class="btn-pack-catalog" onclick="openCatalogModal()" title="Переглянути всі товари вікном — сітка по 3 в ряду, пошук і категорії">📚 Каталог товарів</button>
         </div>
       </div>
     </div>
@@ -3796,117 +3820,21 @@
     </div>
 
     <!-- v22 NEW: КОНСТРУКТОР MERCH BOX — підбір за 4 критеріями -->
-    <div class="boxbuilder" id="boxBuilder">
-      <div class="boxbuilder-head">
-        <div class="boxbuilder-title">
-          <span class="boxbuilder-emoji">🧰</span>
-          <div>
-            <div class="boxbuilder-name">Конструктор Merch Box</div>
-            <div class="boxbuilder-sub">Оберіть 4 параметри — система підбере товари з бази <span id="boxBuilderCount">—</span> виробів</div>
-          </div>
-        </div>
-        <button type="button" class="boxbuilder-reset" onclick="boxReset()" title="Скинути всі фільтри">↺ Скинути</button>
+        <!-- v23: ГОТОВІ НАБОРИ — перенесено на самий верх (повна ширина) -->
+    <div class="pack-panel pack-tpl-top-panel">
+      <div class="pack-panel-header">
+        <span class="pack-panel-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Готові набори зараз у наявності
+        </span>
+        <span class="pack-panel-hint">1 клік — набір у конструкторі</span>
       </div>
-
-      <div class="boxbuilder-grid">
-        <!-- Крок 1: Тип боксу -->
-        <div class="box-step" data-step="1">
-          <div class="box-step-label"><span class="box-step-num">1</span><span>Тип боксу <em>(для кого)</em></span></div>
-          <div class="box-step-options" id="boxTypeOpts">
-            <button type="button" class="box-chip" data-box="startup" title="Для нової команди">🚀 Стартап-команда</button>
-            <button type="button" class="box-chip" data-box="event" title="Для учасників події/конференції">🎤 Подія / конференція</button>
-            <button type="button" class="box-chip" data-box="clients" title="Для топ-клієнтів">⭐ Подарунок клієнтам</button>
-            <button type="button" class="box-chip" data-box="employees" title="Для нових співробітників">👋 Welcome-kit співробітникам</button>
-            <button type="button" class="box-chip" data-box="promo" title="Роздача потенційним клієнтам">📣 Промо-роздача</button>
-            <button type="button" class="box-chip" data-box="gift" title="Святковий набір">🎄 Святковий набір</button>
-          </div>
-        </div>
-
-        <!-- Крок 2: Кількість людей -->
-        <div class="box-step" data-step="2">
-          <div class="box-step-label"><span class="box-step-num">2</span><span>Кількість людей <em>(комплектів)</em></span></div>
-          <div class="box-qty-row">
-            <div class="stepper box-stepper">
-              <button type="button" class="step-btn" onclick="boxStepQty(-1)" aria-label="Менше">−</button>
-              <input type="number" id="boxQtyInput" class="qty-input" value="10" min="1" max="500" oninput="boxOnQty(this.value)" aria-label="Кількість людей">
-              <button type="button" class="step-btn" onclick="boxStepQty(1)" aria-label="Більше">+</button>
-            </div>
-            <div class="box-qty-presets">
-              <button type="button" class="box-preset" onclick="boxSetQty(5)">5</button>
-              <button type="button" class="box-preset" onclick="boxSetQty(10)">10</button>
-              <button type="button" class="box-preset" onclick="boxSetQty(25)">25</button>
-              <button type="button" class="box-preset" onclick="boxSetQty(50)">50</button>
-              <button type="button" class="box-preset" onclick="boxSetQty(100)">100</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Крок 3: Категорія -->
-        <div class="box-step" data-step="3">
-          <div class="box-step-label"><span class="box-step-num">3</span><span>Категорія <em>(що в боксі)</em></span></div>
-          <div class="box-step-options" id="boxCatOpts">
-            <button type="button" class="box-chip" data-cat="all" title="Показати всі категорії">✳️ Усе разом</button>
-            <button type="button" class="box-chip" data-cat="digital" title="Цифровий друк: візитки, флаєри, листівки, буклети">🖨️ Цифровий</button>
-            <button type="button" class="box-chip" data-cat="offset" title="Офсетний друк: каталоги, книги, журнали">🏭 Офсет</button>
-            <button type="button" class="box-chip" data-cat="merch" title="Одяг та аксесуари з логотипом">👕 Мерч</button>
-            <button type="button" class="box-chip" data-cat="pos-material" title="POS матеріали: воблери, шелфтокери, тейбл-тенти">🏪 POS</button>
-            <button type="button" class="box-chip" data-cat="dtf" title="DTF друк на текстиль та інші поверхні">🎨 DTF</button>
-            <button type="button" class="box-chip" data-cat="textile" title="Текстильні вироби під нанесення">🧵 Текстиль</button>
-            <button type="button" class="box-chip" data-cat="fan-shop" title="Брендована сувенірна продукція для фанатів">⚽ Fan shop</button>
-          </div>
-        </div>
-
-        <!-- Крок 4: Бюджет -->
-        <div class="box-step" data-step="4">
-          <div class="box-step-label"><span class="box-step-num">4</span><span>Бюджет <em>на 1 особу</em></span></div>
-          <div class="box-budget-row">
-            <input type="range" id="boxBudgetRange" min="50" max="2000" step="50" value="300" oninput="boxOnBudget(this.value)" class="box-range" aria-label="Бюджет на одну людину">
-            <div class="box-budget-val"><b id="boxBudgetVal">300</b> ₴ / особу</div>
-          </div>
-          <div class="box-budget-presets">
-            <button type="button" class="box-preset" onclick="boxSetBudget(100)">100 ₴</button>
-            <button type="button" class="box-preset" onclick="boxSetBudget(300)">300 ₴</button>
-            <button type="button" class="box-preset" onclick="boxSetBudget(500)">500 ₴</button>
-            <button type="button" class="box-preset" onclick="boxSetBudget(1000)">1000 ₴</button>
-            <button type="button" class="box-preset" onclick="boxSetBudget(2000)">2000 ₴</button>
-          </div>
-          <div class="box-budget-total">≈ <b id="boxTotalEst">3000</b> ₴ за весь бокс</div>
-        </div>
-      </div>
-
-      <div class="boxbuilder-cta">
-        <button type="button" class="btn-box-build" id="boxBuildBtn" onclick="boxBuild()">
-          <span class="btn-box-build-icon">✨</span>
-          <span>Підібрати Merch Box</span>
-        </button>
-        <button type="button" class="btn-box-edit" id="boxEditBtn" onclick="boxEditMode()" style="display:none;">✎ Редагувати вибір</button>
-      </div>
-
-      <!-- Результат підбору -->
-      <div class="box-result" id="boxResult" style="display:none;">
-        <div class="box-result-head">
-          <div class="box-result-title">
-            <span id="boxResultEmoji">📦</span>
-            <div>
-              <div class="box-result-name" id="boxResultName">Merch Box</div>
-              <div class="box-result-meta" id="boxResultMeta">—</div>
-            </div>
-          </div>
-          <div class="box-result-price">
-            <div class="box-result-total" id="boxResultTotal">0 ₴</div>
-            <div class="box-result-unit" id="boxResultUnit">≈ 0 ₴ / особу</div>
-          </div>
-        </div>
-        <div class="box-result-items" id="boxResultItems"></div>
-        <div class="box-result-actions">
-          <button type="button" class="btn-box-tocart" onclick="boxToCalc()">🧺 Зібрати в калькуляторі →</button>
-          <button type="button" class="btn-box-order" onclick="boxOrderNow()">🛒 Замовити цей бокс</button>
-          <button type="button" class="btn-box-redo" onclick="boxEditMode()">↺ Змінити параметри</button>
-        </div>
+      <div class="pack-panel-body">
+        <div class="pack-tpl-grid pack-tpl-grid-wide" id="packTplGrid"></div>
       </div>
     </div>
 
-    <div class="pack-layout">
+<div class="pack-layout">
 
       <!-- ЛІВА КОЛОНКА: склад пакунка + готові шаблони -->
       <div class="pack-main">
@@ -3928,18 +3856,6 @@
           </div>
         </div>
 
-        <div class="pack-panel" style="margin-top:14px;">
-          <div class="pack-panel-header">
-            <span class="pack-panel-title">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              Готові набори зараз у наявності
-            </span>
-            <span class="pack-panel-hint">1 клік — набір у конструкторі</span>
-          </div>
-          <div class="pack-panel-body">
-            <div class="pack-tpl-grid" id="packTplGrid"></div>
-          </div>
-        </div>
       </div>
 
       <!-- ПРАВА КОЛОНКА: ціна пакунка (sticky) -->
@@ -3995,6 +3911,119 @@
       </aside>
 
     </div>
+
+    <div class="boxbuilder" id="boxBuilder">
+      <div class="boxbuilder-head">
+        <div class="boxbuilder-title">
+          <span class="boxbuilder-emoji">🧰</span>
+          <div>
+            <div class="boxbuilder-name">Конструктор Merch Box</div>
+            <div class="boxbuilder-sub">Оберіть 4 параметри — система підбере товари з бази <span id="boxBuilderCount">—</span> виробів</div>
+          </div>
+        </div>
+        <button type="button" class="boxbuilder-reset" onclick="boxReset()" title="Скинути всі фільтри">↺ Скинути</button>
+      </div>
+
+      <div class="boxbuilder-grid">
+        <!-- Крок 1: Тип боксу -->
+        <div class="box-step" data-step="1">
+          <div class="box-step-label"><span class="box-step-num">1</span><span>Тип боксу <em>(для кого)</em></span></div>
+          <div class="box-step-options" id="boxTypeOpts">
+            <button type="button" class="box-chip" data-box="startup" title="Для нової команди">🚀 Стартап-команда</button>
+            <button type="button" class="box-chip" data-box="event" title="Для учасників події/конференції">🎤 Подія / конференція</button>
+            <button type="button" class="box-chip" data-box="clients" title="Для топ-клієнтів">⭐ Подарунок клієнтам</button>
+            <button type="button" class="box-chip" data-box="employees" title="Для нових співробітників">👋 Welcome-kit співробітникам</button>
+            <button type="button" class="box-chip" data-box="promo" title="Роздача потенційним клієнтам">📣 Промо-роздача</button>
+            <button type="button" class="box-chip" data-box="gift" title="Святковий набір">🎄 Святковий набір</button>
+          </div>
+        </div>
+
+        <!-- Крок 2: Кількість людей -->
+        <div class="box-step" data-step="2">
+          <div class="box-step-label"><span class="box-step-num">2</span><span>Кількість людей <em>(комплектів)</em></span></div>
+          <div class="box-qty-row">
+            <div class="stepper box-stepper">
+              <button type="button" class="step-btn" onclick="boxStepQty(-1)" aria-label="Менше">−</button>
+              <input type="number" id="boxQtyInput" class="qty-input" value="10" min="1" max="500" oninput="boxOnQty(this.value)" aria-label="Кількість людей">
+              <button type="button" class="step-btn" onclick="boxStepQty(1)" aria-label="Більше">+</button>
+            </div>
+            <div class="box-qty-presets">
+              <button type="button" class="box-preset" onclick="boxSetQty(5)">5</button>
+              <button type="button" class="box-preset" onclick="boxSetQty(10)">10</button>
+              <button type="button" class="box-preset" onclick="boxSetQty(25)">25</button>
+              <button type="button" class="box-preset" onclick="boxSetQty(50)">50</button>
+              <button type="button" class="box-preset" onclick="boxSetQty(100)">100</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Крок 3: Категорія -->
+        <div class="box-step" data-step="3">
+          <div class="box-step-label"><span class="box-step-num">3</span><span>Категорія <em>(що в боксі)</em></span></div>
+          <div class="box-step-options" id="boxCatOpts">
+            <button type="button" class="box-chip" data-cat="all" title="Показати всі категорії">✳️ Усе разом</button>
+            <button type="button" class="box-chip" data-cat="digital" title="Цифровий друк: візитки, флаєри, листівки, буклети, стікери, постери">🖨️ Цифровий</button>
+            <button type="button" class="box-chip" data-cat="offset" title="Офсетний друк: каталоги, книги, журнали, буклети великим тиражем">🏭 Офсет</button>
+            <button type="button" class="box-chip" data-cat="merch" title="Одяг та аксесуари з логотипом">👕 Мерч</button>
+            <button type="button" class="box-chip" data-cat="pos-material" title="POS матеріали: воблери, шелфтокери, тейбл-тенти, цінники">🏪 POS</button>
+            <button type="button" class="box-chip" data-cat="textile" title="Текстильні вироби під нанесення">🧵 Текстиль</button>
+          </div>
+        </div>
+
+        <!-- Крок 4: Бюджет -->
+        <div class="box-step" data-step="4">
+          <div class="box-step-label"><span class="box-step-num">4</span><span>Бюджет <em>на 1 особу</em></span></div>
+          <div class="box-budget-row">
+            <input type="range" id="boxBudgetRange" min="50" max="2000" step="50" value="300" oninput="boxOnBudget(this.value)" class="box-range" aria-label="Бюджет на одну людину">
+            <div class="box-budget-val"><b id="boxBudgetVal">300</b> ₴ / особу</div>
+          </div>
+          <div class="box-budget-presets">
+            <button type="button" class="box-preset" onclick="boxSetBudget(100)">100 ₴</button>
+            <button type="button" class="box-preset" onclick="boxSetBudget(300)">300 ₴</button>
+            <button type="button" class="box-preset" onclick="boxSetBudget(500)">500 ₴</button>
+            <button type="button" class="box-preset" onclick="boxSetBudget(1000)">1000 ₴</button>
+            <button type="button" class="box-preset" onclick="boxSetBudget(2000)">2000 ₴</button>
+          </div>
+          <div class="box-budget-total">≈ <b id="boxTotalEst">3000</b> ₴ за весь бокс</div>
+        </div>
+      </div>
+
+      <div class="boxbuilder-cta">
+        <button type="button" class="btn-box-build" id="boxBuildBtn" onclick="boxBuild()">
+          <span class="btn-box-build-icon">✨</span>
+          <span>Підібрати Merch Box</span>
+        </button>
+        <button type="button" class="btn-box-edit" id="boxEditBtn" onclick="boxEditMode()" style="display:none;">✎ Редагувати вибір</button>
+      </div>
+
+      <!-- Результат підбору -->
+      <div class="box-result" id="boxResult" style="display:none;">
+        <div class="box-result-head">
+          <div class="box-result-title">
+            <span id="boxResultEmoji">📦</span>
+            <div>
+              <div class="box-result-name" id="boxResultName">Merch Box</div>
+              <div class="box-result-meta" id="boxResultMeta">—</div>
+            </div>
+          </div>
+          <div class="box-result-price">
+            <div class="box-result-total" id="boxResultTotal">0 ₴</div>
+            <div class="box-result-unit" id="boxResultUnit">≈ 0 ₴ / особу</div>
+          </div>
+        </div>
+        <div class="box-result-items" id="boxResultItems"></div>
+        <div class="box-result-actions">
+          <button type="button" class="btn-box-tocart" onclick="boxToCalc()">🧺 Зібрати в калькуляторі →</button>
+          <button type="button" class="btn-box-order" onclick="boxOrderNow()">🛒 Замовити цей бокс</button>
+          <button type="button" class="btn-box-redo" onclick="boxEditMode()">↺ Змінити параметри</button>
+        </div>
+      </div>
+    </div>
+    <!-- v23: ГОТОВІ ВИРОБИ — перенесено в самий низ сторінки -->
+    <div class="pack-bottom-strip">
+      <span class="pack-badge">Готові вироби · від 1 робочого дня</span>
+    </div>
+
   </main>
 
   <!-- VIEW 1: COMPACT PRO CALCULATOR WORKSPACE -->
@@ -5690,6 +5719,24 @@
             if (!p || !p.id || !p.name) return;
             const i = productsCatalog.findIndex(function (x) { return x.id === p.id; });
             if (i >= 0) productsCatalog[i] = p; else productsCatalog.push(p);
+          });
+          // v23: нормалізуємо категорії — продукти з адмінки можуть мати «невідомі» категорії
+          // (gifts/office/polygraphy/advertising/stickers/posters/booklets). Мапимо їх на валідні
+          // основні категорії, щоб фільтри конструктора Merch Box бачили всі 127 товарів.
+          const CAT_NORMALIZE = {
+            'gifts':       'digital',
+            'office':      'pos-material',
+            'polygraphy':  'digital',
+            'advertising': 'digital',
+            'stickers':    'digital',
+            'posters':     'digital',
+            'booklets':    'offset'
+          };
+          productsCatalog.forEach(function (p) {
+            if (p && CAT_NORMALIZE[p.category]) {
+              p._origCategory = p.category; // зберігаємо оригінал для діагностики
+              p.category = CAT_NORMALIZE[p.category];
+            }
           });
           for (const k in PRODUCT_NUMBERS) delete PRODUCT_NUMBERS[k];
           productsCatalog.forEach(function (p, i) { PRODUCT_NUMBERS[p.id] = i + 1; });
@@ -10288,7 +10335,7 @@
     // ===================== TASK 23: СТАРТОВИЙ ЕКРАН «ВАШ ПАКУНОК» =====================
     // Чистий калькулятор-пакунок: користувач одразу збирає власний набір зі знижкою −10%.
     // Стан окремий від cfg (калькулятора) — переноситься туди кнопкою «Зібрати в калькуляторі».
-    const packState = { items: [], kompl: 1 };
+    const packState = { items: [], kompl: 1, boxName: '' }; // v23: boxName — коротка назва для банера
 
     // Фото старту start.jpg: якщо файлу ще немає — градієнт-заглушка з вотермаркою
     function packHeroMissing() {
@@ -10628,6 +10675,9 @@
       if (!p || p.kind !== 'package') return;
       packState.items = (p.items || []).map(it => ({ id: it.id, qty: it.qty }));
       packState.kompl = 1;
+      // v23: вилучаємо коротку назву набору (напр. «СТАРТ», «КОНФЕРЕНЦІЯ») для банера калькулятора
+      const m = (p.name || '').match(/«([^»]+)»/);
+      packState.boxName = m ? m[1] : p.name.replace(/^Пакунок\s*/, '').slice(0, 24);
       const inp = document.getElementById('packKomplInput');
       if (inp) inp.value = 1;
       packRefresh();
@@ -10639,6 +10689,7 @@
     function packClear() {
       packState.items = [];
       packState.kompl = 1;
+      packState.boxName = ''; // v23: скидаємо назву боксу
       const inp = document.getElementById('packKomplInput');
       if (inp) inp.value = 1;
       packRefresh();
@@ -10684,11 +10735,17 @@
       const kompl = packState.kompl || 1;
       const sub = document.getElementById('boxCalcBannerSub');
       const tag = document.getElementById('boxCalcBannerTag');
+      // v23: тег банера відображає коротку назву боксу:
+      //   - якщо бокс зібрано в конструкторі (source='box') — «Merch Box · КОНФЕРЕНЦІЯ» тощо
+      //   - якщо це готовий набір (source='pack') — «Merch Box · СТАРТ» тощо
+      //   - без назви — «Merch Box»
+      const label = (packState.boxName || '').trim();
+      const tagText = label ? ('— Merch Box · ' + label) : '— Merch Box';
       if (source === 'box') {
-        if (tag) tag.textContent = '— Merch Box';
+        if (tag) tag.textContent = tagText;
         if (sub) sub.textContent = itemsCount + ' позицій × ' + kompl + ' компл. · додавайте або видаляйте товари прямо тут, ціна перерахується';
       } else {
-        if (tag) tag.textContent = '— конструктор пакунка';
+        if (tag) tag.textContent = tagText;
         if (sub) sub.textContent = itemsCount + ' позицій × ' + kompl + ' компл. · редагуйте склад — ціна перерахується';
       }
       banner.style.display = '';
@@ -10817,7 +10874,8 @@
       try {
         localStorage.setItem('alfa_pack_state', JSON.stringify({
           items: packState.items,
-          kompl: packState.kompl
+          kompl: packState.kompl,
+          boxName: packState.boxName || '' // v23
         }));
       } catch (e) {}
     }
@@ -10831,6 +10889,7 @@
         if (parsed && Array.isArray(parsed.items)) {
           packState.items = parsed.items.filter(it => it && it.id);
           packState.kompl = Math.max(1, parseInt(parsed.kompl, 10) || 1);
+          packState.boxName = parsed.boxName || ''; // v23
         }
       } catch (e) {}
     }
@@ -10923,19 +10982,22 @@
       typeName: '',
       typeEmoji: '',
       qty: 10,
-      cat: 'all',         // 'all' | 'digital' | 'offset' | 'merch' | 'pos-material' | 'dtf' | 'textile' | 'fan-shop'
+      cat: 'all',         // 'all' | 'digital' | 'offset' | 'merch' | 'pos-material' | 'textile'
       budgetPerPerson: 300,
       items: []           // [{ id, qty }] — зібраний бокс
     };
 
-    // Опис типів боксу: який емодзі + рекомендація категорій
+    // Опис типів боксу: емодзі + коротке ім'я + рекомендовані категорії + виключення груп товарів
+    // v23: preferCats — тільки валідні категорії каталогу (digital/offset/merch/pos-material/textile).
+    //      excludeGroups — групи товарів (за boxProductGroupKey), що НЕ мають потрапляти в цей тип боксу.
+    //      Приклад: для «конференції» виключаємо стікери/наклейки та роздрібні POS — вони не потрібні учасникам.
     const BOX_TYPES = {
-      startup:  { emoji: '🚀', name: 'Стартап-команда',          preferCats: ['digital', 'merch', 'pos-material'],  hint: 'візитки + мерч + POS' },
-      event:    { emoji: '🎤', name: 'Подія / конференція',      preferCats: ['digital', 'pos-material', 'merch'],  hint: 'флаєри + POS + бейджі' },
-      clients:  { emoji: '⭐', name: 'Подарунок клієнтам',       preferCats: ['fan-shop', 'merch', 'digital'],       hint: 'сувеніри + мерч + листівки' },
-      employees:{ emoji: '👋', name: 'Welcome-kit співробітникам', preferCats: ['merch', 'digital', 'textile'],       hint: 'мерч + блокнот + футболки' },
-      promo:    { emoji: '📣', name: 'Промо-роздача',            preferCats: ['pos-material', 'digital', 'fan-shop'],hint: 'POS + флаєри + сувеніри' },
-      gift:     { emoji: '🎄', name: 'Святковий набір',          preferCats: ['fan-shop', 'merch', 'digital'],       hint: 'сувеніри + мерч + листівки' }
+      startup:   { emoji: '🚀', name: 'Стартап-команда',           short: 'СТАРТАП',     preferCats: ['digital', 'merch', 'pos-material'], excludeGroups: [],                                                                  hint: 'візитки + мерч + POS' },
+      event:     { emoji: '🎤', name: 'Подія / конференція',       short: 'КОНФЕРЕНЦІЯ', preferCats: ['digital', 'pos-material', 'merch'],  excludeGroups: ['Наклейка', 'Стікерпак', 'Етикетка', 'Плакат', 'Афіша', 'Постер', 'Цінник', 'Бірка', 'Воблер', 'Шелфтокер', 'Тейбл-тент', 'Некхенгер', 'Дорхенгер', 'Костер', 'Меню', 'Плейсмет'], hint: 'бейджі + буклети + програма' },
+      clients:   { emoji: '⭐', name: 'Подарунок клієнтам',        short: 'КЛІЄНТАМ',    preferCats: ['merch', 'digital', 'textile'],       excludeGroups: ['Бірка', 'Цінник', 'Воблер', 'Шелфтокер', 'Тейбл-тент', 'Некхенгер', 'Дорхенгер', 'Костер', 'Плакат', 'Афіша', 'Постер'], hint: 'мерч + листівки + сувеніри' },
+      employees: { emoji: '👋', name: 'Welcome-kit співробітникам', short: 'WELCOME',     preferCats: ['merch', 'digital', 'textile'],       excludeGroups: ['Бірка', 'Цінник', 'Воблер', 'Шелфтокер', 'Тейбл-тент', 'Некхенгер', 'Дорхенгер', 'Костер', 'Плакат', 'Афіша', 'Постер', 'Наклейка', 'Стікерпак', 'Етикетка'], hint: 'мерч + блокнот + футболки' },
+      promo:     { emoji: '📣', name: 'Промо-роздача',             short: 'ПРОМО',       preferCats: ['pos-material', 'digital', 'merch'],  excludeGroups: ['Брошура', 'Каталог', 'Книга', 'Меню', 'Плейсмет'],                  hint: 'POS + флаєри + сувеніри' },
+      gift:      { emoji: '🎄', name: 'Святковий набір',           short: 'СВЯТО',       preferCats: ['merch', 'digital', 'textile'],       excludeGroups: ['Бірка', 'Цінник', 'Воблер', 'Шелфтокер', 'Тейбл-тент', 'Некхенгер', 'Дорхенгер', 'Костер', 'Плакат', 'Афіша', 'Постер'], hint: 'сувеніри + мерч + листівки' }
     };
 
     function boxInit() {
@@ -11048,6 +11110,12 @@
         const prefer = BOX_TYPES[boxState.type].preferCats;
         pool = pool.filter(p => prefer.indexOf(p.category) >= 0);
       }
+      // v23: виключаємо групи товарів, що не відповідають типу боксу
+      // (наприклад, для конференції — стікери та наклейки не потрібні)
+      const excludeGroups = (BOX_TYPES[boxState.type] && BOX_TYPES[boxState.type].excludeGroups) || [];
+      if (excludeGroups.length) {
+        pool = pool.filter(p => excludeGroups.indexOf(boxProductGroupKey(p)) < 0);
+      }
       // 2. Для кожного товару рахуємо ціну за 1 шт (одиницю)
       const withUnit = pool.map(p => {
         let unitPrice = 0;
@@ -11109,9 +11177,19 @@
     // Приклади: «Візитка стандарт» → «Візитка»; «Флаєр А6» → «Флаєр»; «Наклейка кругла» → «Наклейка».
     // Так бокс міститиме РІЗНІ товари: 1 візитка + 1 буклет + 1 наклейка + 1 блокнот...
     // Якщо назва однозначна (без пробілу) — група = вся назва.
+    // v23: додатково перевіряємо повну назву на ключові слова стікерів/етикеток/пломб,
+    // щоб усі товари цього типу групувались у «Наклейка» (або «Стікерпак») незалежно від
+    // першого слова («Маркувальний стікер» → «Наклейка»; «Гарантійна пломба» → «Наклейка»).
     function boxProductGroupKey(p) {
       if (!p || !p.name) return 'Інше';
       const name = p.name.trim();
+      const lower = name.toLowerCase();
+      // v23: спершу — повнотекстова перевірка на стікери/наклейки/пломби/етикетки
+      if (lower.indexOf('стікерпак') >= 0 || lower.indexOf('стикерпак') >= 0) return 'Стікерпак';
+      if (lower.indexOf('наклейк') >= 0 ||
+          lower.indexOf('стікер') >= 0 || lower.indexOf('стикер') >= 0 ||
+          lower.indexOf('пломб') >= 0 ||
+          lower.indexOf('етикетк') >= 0) return 'Наклейка';
       // кейс 1: назва починається з категоріального слова + пробіл
       const m = name.match(/^([^\s\d(]{2,})\s/);
       if (m) {
@@ -11142,6 +11220,10 @@
         if (first.startsWith('презентаці')) return 'Презентація';
         if (first.startsWith('білет') || first.startsWith('квиток')) return 'Квиток';
         if (first.startsWith('купон')) return 'Купон';
+        if (first.startsWith('бейдж')) return 'Бейдж';
+        if (first.startsWith('папк')) return 'Папка';
+        if (first.startsWith('меню') || first.startsWith('плейсмет')) return 'Меню';
+        if (first.startsWith('плакат') || first.startsWith('афіш') || first.startsWith('постер')) return 'Плакат';
         return m[1]; // перше слово як група
       }
       // кейс 2: однозначна назва без пробілу — група = вся назва (унікальна)
@@ -11149,7 +11231,7 @@
     }
 
     function boxRenderResult(picked) {
-      const meta = BOX_TYPES[boxState.type] || { emoji: '📦', name: 'Merch Box' };
+      const meta = BOX_TYPES[boxState.type] || { emoji: '📦', name: 'Merch Box', short: '' };
       const result = document.getElementById('boxResult');
       const nameEl = document.getElementById('boxResultName');
       const metaEl = document.getElementById('boxResultMeta');
@@ -11158,7 +11240,8 @@
       const unitEl = document.getElementById('boxResultUnit');
       const itemsHost = document.getElementById('boxResultItems');
       if (emojiEl) emojiEl.textContent = meta.emoji;
-      if (nameEl) nameEl.textContent = meta.name;
+      // v23: заголовок результату — «Merch Box · КОРОТКА НАЗВА» або просто «Merch Box»
+      if (nameEl) nameEl.textContent = meta.short ? ('Merch Box · ' + meta.short) : (meta.name || 'Merch Box');
       if (metaEl) metaEl.textContent = boxState.qty + ' осіб · ' + boxState.budgetPerPerson + ' ₴/особу · ' +
         (boxState.cat === 'all' ? 'рекомендовані категорії' : 'категорія: ' + boxState.cat) +
         (meta.hint ? ' · ' + meta.hint : '');
@@ -11233,6 +11316,9 @@
       }
       packState.items = boxState.items.map(it => ({ id: it.id, qty: it.qty || 1 }));
       packState.kompl = boxState.qty;
+      // v23: коротка назва типу боксу для банера калькулятора
+      const meta = BOX_TYPES[boxState.type] || {};
+      packState.boxName = meta.short || meta.name || '';
       const inp = document.getElementById('packKomplInput');
       if (inp) inp.value = boxState.qty;
       packRefresh();
